@@ -1,21 +1,21 @@
 @extends('layouts.admin')
-@section('title', '登録済みのvital一覧')
+@section('title', '登録済みの入浴状況一覧')
 
 @section('content')
     <div class="container">
         <div class="row">
-            <h2>vital一覧</h2>
+            <h2>入浴状況一覧</h2>
         </div>
         <div class="row">
             <div class="col-md-4">
-                <a href="{{ route('admin.vital.add') }}" role="button" class="btn btn-primary">新規作成</a>
+                <a href="{{ route('admin.bath.add') }}" role="button" class="btn btn-primary">新規作成</a>
             </div>
             <div class="col-md-8">
-                <form action="{{ route('admin.vital.index') }}" method="get">
+                <form action="{{ route('admin.bath.index') }}" method="get">
                     <div class="form-group row">
                         <label class="col-md-2">名前</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" name="cond_title" value="{{ $cond_title }}">
+                            <input type="text" class="form-control" name="cond_name" value="{{ $cond_name }}">
                         </div>
                         <div class="col-md-2">
                             @csrf
@@ -26,38 +26,32 @@
             </div>
         </div>
         <div class="row">
-            <div class="list-vital col-md-12 mx-auto">
+            <div class="list-bath col-md-12 mx-auto">
                 <div class="row">
                     <table class="table table-dark">
                         <thead>
                             <tr>
                                 <th width="10%">ID</th>
-                                <th width="20%">時間</th>
-                                <th width="20%">体温</th>
-                                <th width="15%">血圧</th>
-                                <th width="15%"></th>
-                                <th width="10%">操作</th>
+                                <th width="40%">時間</th>
+                                <th width="40%">入浴方法</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($posts as $vital)
+                            @foreach($baths as $bath)
                                 <tr>
-                                    <th>{{ $vital->id }}</th>
-                                    <td>{{ Str::limit($vital->vital_time, 100) }}</td>
-                                    <td>{{ Str::limit($vital->vital_kt, 250) }}</td>
-                                    <td>{{ Str::limit($vital->vital_bp_u, 250) }}</td>
-                                    <td>{{ Str::limit($vital->vital_bp_d, 250) }}</td>
+                                    <th>{{ $bath->id }}</th>
+                                    <td>{{ Str::limit($bath->bath_time, 100) }}</td>
+                                    <td>{{ Str::limit($bath->bath_method, 100) }}</td>
                                     <td>
                                         <div>
-                                            <a href="{{ route('admin.vital.edit', ['id' => $vital->id]) }}">編集</a>
+                                            <a href="{{ route('admin.bath.edit', ['id' => $bath->id]) }}">編集</a>
                                         </div>
                                         <div>
-                                            <a href="{{ route('admin.vital.delete', ['id' => $vital->id]) }}">削除</a>
-                                        </div>
+                                            <a href="{{ route('admin.bath.delete', ['id' => $bath->id]) }}">削除</a>
+                                        </div>                                        
                                     </td>
                                 </tr>
                             @endforeach
-
                         </tbody>
                     </table>
                 </div>

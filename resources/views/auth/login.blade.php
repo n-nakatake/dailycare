@@ -12,14 +12,14 @@
                             @csrf
 
                             <div class="form-group row">
-                                <label for="user_code" class="col-sm-4 col-form-label text-md-right">{{ __('messages.user_code') }}</label>
+                                <label for="email" class="col-sm-4 col-form-label text-md-right">{{ __('messages.email') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="user_coder" type="user_code" class="form-control{{ $errors->has('user_code') ? ' is-invalid' : '' }}" name="user_code" value="{{ old('user_code') }}" required autofocus>
+                                    <input id="email" type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
 
-                                    @if ($errors->has('user_code'))
+                                    @if ($errors->has('email'))
                                         <span class="invalid-feedback">
-                                            <strong>{{ $errors->first('user_code') }}</strong>
+                                            <strong>{{ $errors->first('email') }}</strong>
                                         </span>
                                     @endif
                                 </div>

@@ -17,9 +17,17 @@ class CreateVitalTable extends Migration
     {
         Schema::create('vitals', function (Blueprint $table) {
             $table->id();
-            $table->string('title'); // ニュースのタイトルを保存するカラム
-            $table->string('body');  // ニュースの本文を保存するカラム
-            $table->string('image_path')->nullable();  // 画像のパスを保存するカラム
+            $table->string('resident_id'); // 利用者ID
+            $table->string('vital_rocorder'); // 記録者
+            $table->dateTime('vital_time');   // 時間
+            $table->double('vital_kt',3,1)->nullable();   // 体温
+            $table->integer('vital_bp_u')->nullable();    // 血圧（上）
+            $table->integer('vital_bp_d')->nullable();    // 血圧（下）
+            $table->integer('vital_hr')->nullable();      // 心拍数
+            $table->double('vital_height',4,1)->nullable();   // 身長
+            $table->double('vital_weight',4,1)->nullable();   // 体重
+            $table->text('vital_note')->nullable();           // 特記
+            $table->string('vital_image_path')->nullable();  // 画像のパスを保存するカラム
             $table->timestamps();
         });
     }

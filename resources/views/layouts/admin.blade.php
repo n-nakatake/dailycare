@@ -54,7 +54,7 @@
                             @else
                                 <li class="nav-item dropdown">
                                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        {{ Auth::user()->name }} <span class="caret"></span>
+                                        {{ Auth::user()->user_code }} <span class="caret"></span>
                                      </a>
     
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">

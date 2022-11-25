@@ -24,14 +24,14 @@ class CreateProfileTable extends Migration
             $table->string('resident_level');            // 介護度
             $table->date('resident_level_start');        // 有効期間開始日
             $table->date('resident_level_end');          // 有効期間終了日
-            $table->string('key_person_name',30);     // キーパーソン_名
-            $table->string('key_person_relation');    // キーパーソン_続柄
-            $table->string('key_person_adress');      // キーパーソン_住所
-            $table->string('key_person_tel1');        // キーパーソン_連絡先1
-            $table->string('key_person_tel2');        // キーパーソン_連絡先2
-            $table->string('key_person_mail');        // キーパーソン_メールアドレス
+            $table->string('key_person_name',30)->nullable();     // キーパーソン_名
+            $table->string('key_person_relation')->nullable();    // キーパーソン_続柄
+            $table->string('key_person_adress')->nullable();      // キーパーソン_住所
+            $table->string('key_person_tel1')->nullable();        // キーパーソン_連絡先1
+            $table->string('key_person_tel2')->nullable();        // キーパーソン_連絡先2
+            $table->string('key_person_mail')->nullable();        // キーパーソン_メールアドレス
             $table->string('image_path')->nullable();  // 画像のパスを保存するカラム
-            $table->date('resident_note');             // 特記
+            $table->text('resident_note')->nullable();             // 特記
             $table->timestamps();
         });
     }

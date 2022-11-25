@@ -6,16 +6,19 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Vital;
 use App\Models\History;
+use App\Models\User;
 use Carbon\Carbon;
 
 class VitalController extends Controller
 {
-    public function add()
+    public function add(int $residentId)
     {
-        return view('admin.vital.create');
+        $users = User::all();
+        
+        return view('admin.vital.create', ['users' => $users, 'residentId' => $residentId]);
     }
 
-    public function create(Request $request)
+    public function create(Request $request, int $residentId)
     {
         // Validationを行う
         $this->validate($request, Vital::$rules);
@@ -25,9 +28,9 @@ class VitalController extends Controller
         // フォームから画像が送信されてきたら、保存して、$vital->image_path に画像のパスを保存する
         if (isset($form['image'])) {
             $path = $request->file('image')->store('public/image');
-            $vital->image_path = basename($path);
+            $vital->vital_image_path = basename($path);
         } else {
-            $vital->image_path = null;
+            $vital->vital_image_path = null;
         }
 
         // フォームから送信されてきた_tokenを削除する
@@ -42,7 +45,7 @@ class VitalController extends Controller
         return redirect('admin/vital/create');
     }
 
-    public function index(Request $request)
+    public function index(Request $request, $residentId)
     {
         $cond_title = $request->cond_title;
         if ($cond_title != '') {
@@ -55,7 +58,7 @@ class VitalController extends Controller
         return view('admin.vital.index', ['posts' => $posts, 'cond_title' => $cond_title]);
     }    
     
-    public function edit(Request $request)
+    public function edit(Request $request, $residentId)
     {
         // Vital Modelからデータを取得する
         $vital = Vital::find($request->id);
@@ -65,7 +68,7 @@ class VitalController extends Controller
         return view('admin.vital.edit', ['vital_form' => $vital]);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $residentId)
     {
         // Validationをかける
         $this->validate($request, Vital::$rules);
@@ -75,12 +78,12 @@ class VitalController extends Controller
         $vital_form = $request->all();
 
         if ($request->remove == 'true') {
-            $vital_form['image_path'] = null;
+            $vital_form['vital_image_path'] = null;
         } elseif ($request->file('image')) {
             $path = $request->file('image')->store('public/image');
-            $vital_form['image_path'] = basename($path);
+            $vital_form['vital_image_path'] = basename($path);
         } else {
-            $vital_form['image_path'] = $vital->image_path;
+            $vital_form['vital_image_path'] = $vital->vital_image_path;
         }
 
         unset($vital_form['image']);
@@ -99,7 +102,7 @@ class VitalController extends Controller
         return redirect('admin/vital');
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request, $residentId)
     {
         // 該当するVital Modelを取得
         $vital = Vital::find($request->id);

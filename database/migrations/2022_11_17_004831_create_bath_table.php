@@ -13,11 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('histories', function (Blueprint $table) {
+        Schema::create('baths', function (Blueprint $table) {
             $table->id();
             $table->string('resident_id'); // 利用者ID
-            $table->bigInteger('vital_id');
-            $table->string('edited_at');
+            $table->string('bath_rocorder'); // 記録者
+            $table->dateTime('bath_time');   // 時間
+            $table->string('bath_method');   // 入浴方法
+            $table->text('bath_note')->nullable();   // 特記
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('histories');
+        Schema::dropIfExists('baths');
     }
 };

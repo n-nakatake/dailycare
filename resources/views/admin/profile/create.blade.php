@@ -174,10 +174,15 @@
                             <!--@endif   -->
                         </div>                        
                     </div>      
-                    
+                    <div class="form-group row">
+                        <label class="col-md-2" for="title">画像</label>
+                        <div class="col-md-10">
+                            <input type="file" class="form-control-file" name="image">
+                        </div>
+                    </div>                    
                     @csrf
                     <div class="col-md-3 mx-auto">
-                        <button class="btn btn-primary col-md-12" type="submit">更新</button>
+                        <button class="btn btn-primary col-md-12" type="submit">登録</button>
                     </div>
                     <!--<input type="submit" class="col-md-4 btn btn-primary"  value="更新">-->
 

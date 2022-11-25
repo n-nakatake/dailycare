@@ -33,7 +33,9 @@
                             <tr>
                                 <th width="10%">ID</th>
                                 <th width="20%">名前</th>
-                                <th width="50%">性別</th>
+                                <th width="20%">性別</th>
+                                <th width="20%">誕生日（年齢）</th>
+                                <th width="20%">介護度</th>
                                 <th width="10%">操作</th>
                             </tr>
                         </thead>
@@ -41,8 +43,30 @@
                             @foreach($profiles as $profile)
                                 <tr>
                                     <th>{{ $profile->id }}</th>
-                                    <td>{{ Str::limit($profile->name, 100) }}</td>
-                                    <td>{{ Str::limit($profile->gender, 100) }}</td>
+                                    <td>{{ Str::limit($profile->resident_last_name, 100) }} {{ Str::limit($profile->resident_first_name, 100) }}</td>
+                                    @if ($profile->resident_gender == 1 )
+                                        <td>男性</td>
+                                    @else
+                                        <td>女性</td>
+                                    @endif
+                                    <td>{{toWareki('KX年m月d日', str_replace("-","",$profile->resident_birthday))}}</td>
+                                    @if ($profile->resident_level == 1 )
+                                        <td>要介護１</td>
+                                    @elseif ($profile->resident_level == 2 )
+                                        <td>要介護２</td>
+                                    @elseif ($profile->resident_level == 3 )
+                                        <td>要介護３</td>
+                                    @elseif ($profile->resident_level == 4 )
+                                        <td>要介護４</td>
+                                    @elseif ($profile->resident_level == 5 )
+                                        <td>要介護５</td>
+                                    @elseif ($profile->resident_level == 6 )
+                                        <td>要支援１</td>
+                                    @elseif ($profile->resident_level == 7 )
+                                        <td>要支援２</td>
+                                    @elseif ($profile->resident_level == 8 )
+                                        <td>該当なし</td>
+                                    @endif                                      
                                     <td>
                                         <div>
                                             <a href="{{ route('admin.profile.edit', ['id' => $profile->id]) }}">編集</a>
