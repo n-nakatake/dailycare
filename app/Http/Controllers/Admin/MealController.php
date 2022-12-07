@@ -6,18 +6,24 @@ use App\Models\MealHistory;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Meal;
+use App\Models\Resident;
 use Carbon\Carbon;
 
 class MealController extends Controller
 {
     //
-    public function add(int $residentId))
+    public function add(int $residentId)
     {
         $users = User::all();
-        return view('admin.meal.create', ['users' => $users, 'residentId' => $residentId]);
+        $residents = Resident::all();
+        $residentName = $residents->where('id', $residentId)->first()->last_name . $residents->where('id', $residentId)->first()->first_name;
+        $filteredResidents = $residents->filter(function ($resident, $key) use($residentId) {
+            return $resident->id !== $residentId;
+        });
+        return view('admin.meal.create', ['users' => $users, 'residents' => $filteredResidents, 'residentId' => $residentId, 'residentName' => $residentName]);
     }
     
-    public function create(Request $request, int $residentId)
+    public function create(Request $request)
     {
         // Validationを行う
         $this->validate($request, Meal::$rules);
@@ -31,7 +37,7 @@ class MealController extends Controller
         $meal->fill($form);
         $meal->save();
 
-        return redirect('admin/meal/create');
+        return redirect('admin/meal/create/' . $request->resident_id);
     }
 
     public function edit(Request $request, $residentId)
@@ -48,7 +54,7 @@ class MealController extends Controller
     {
         // Validationをかける
         $this->validate($request, Meal::$rules);
-        // Profile Modelからデータを取得する
+        // Resident Modelからデータを取得する
         $meal = Meal::find($request->id);
         // 送信されてきたフォームデータを格納する
         $meal_form = $request->all();

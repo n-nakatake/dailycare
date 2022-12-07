@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Vital;
 use App\Models\History;
 use App\Models\User;
+use App\Models\Resident;
 use Carbon\Carbon;
 
 class VitalController extends Controller
@@ -14,11 +15,15 @@ class VitalController extends Controller
     public function add(int $residentId)
     {
         $users = User::all();
-        
-        return view('admin.vital.create', ['users' => $users, 'residentId' => $residentId]);
+        $residents = Resident::all();
+        $residentName = $residents->where('id', $residentId)->first()->last_name . $residents->where('id', $residentId)->first()->first_name;
+        $filteredResidents = $residents->filter(function ($resident, $key) use($residentId) {
+            return $resident->id !== $residentId;
+        });
+        return view('admin.vital.create', ['users' => $users, 'residents' => $filteredResidents, 'residentId' => $residentId, 'residentName' => $residentName]);
     }
 
-    public function create(Request $request, int $residentId)
+    public function create(Request $request)
     {
         // Validationを行う
         $this->validate($request, Vital::$rules);
@@ -42,7 +47,7 @@ class VitalController extends Controller
         $vital->fill($form);
         $vital->save();
 
-        return redirect('admin/vital/create');
+        return redirect('admin/vital/create/' . $request->resident_id);
     }
 
     public function index(Request $request, $residentId)

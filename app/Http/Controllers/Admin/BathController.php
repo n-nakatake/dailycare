@@ -6,18 +6,24 @@ use App\Models\BathHistory;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Bath;
+use App\Models\Resident;
 use Carbon\Carbon;
 
 class BathController extends Controller
 {
     //
-    public function add(int $residentId))
+    public function add(int $residentId)
     {
         $users = User::all();
-        return view('admin.bath.create', ['users' => $users, 'residentId' => $residentId]);
+        $residents = Resident::all();
+        $residentName = $residents->where('id', $residentId)->first()->last_name . $residents->where('id', $residentId)->first()->first_name;
+        $filteredResidents = $residents->filter(function ($resident, $key) use($residentId) {
+            return $resident->id !== $residentId;
+        });
+        return view('admin.bath.create', ['users' => $users, 'residents' => $filteredResidents, 'residentId' => $residentId, 'residentName' => $residentName]);
     }
 
-    public function create(Request $request, int $residentId)
+    public function create(Request $request)
     {
         // Validationを行う
         $this->validate($request, Bath::$rules);
@@ -31,7 +37,7 @@ class BathController extends Controller
         $bath->fill($form);
         $bath->save();
 
-        return redirect('admin/bath/create');
+        return redirect('admin/bath/create/' . $request->resident_id);
     }
 
     public function edit(Request $request, $residentId)
@@ -47,7 +53,7 @@ class BathController extends Controller
     {
         // Validationをかける
         $this->validate($request, Bath::$rules);
-        // Profile Modelからデータを取得する
+        // Resident Modelからデータを取得する
         $bath = Bath::find($request->id);
         // 送信されてきたフォームデータを格納する
         $bath_form = $request->all();

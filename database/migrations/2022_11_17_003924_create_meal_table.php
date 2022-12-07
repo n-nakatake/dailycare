@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('meals', function (Blueprint $table) {
             $table->id();
-            $table->string('resident_id'); // 利用者ID
+            $table->bigInteger('resident_id'); // 利用者ID
             $table->string('meal_rocorder'); // 記録者
             $table->dateTime('meal_time');   // 時間
             $table->string('meal_bld');      // 朝食、昼食、夜食

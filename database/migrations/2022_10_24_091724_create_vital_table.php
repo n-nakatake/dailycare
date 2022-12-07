@@ -17,7 +17,7 @@ class CreateVitalTable extends Migration
     {
         Schema::create('vitals', function (Blueprint $table) {
             $table->id();
-            $table->string('resident_id'); // 利用者ID
+            $table->integer('resident_id'); // 利用者ID
             $table->string('vital_rocorder'); // 記録者
             $table->dateTime('vital_time');   // 時間
             $table->double('vital_kt',3,1)->nullable();   // 体温

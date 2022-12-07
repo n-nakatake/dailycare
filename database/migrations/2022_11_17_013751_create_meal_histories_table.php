@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('meal_histories', function (Blueprint $table) {
             $table->id();
-            $table->string('resident_id'); // 利用者ID
+            $table->bigInteger('resident_id'); // 利用者ID
             $table->bigInteger('meal_id');
             $table->string('edited_at');
             $table->timestamps();

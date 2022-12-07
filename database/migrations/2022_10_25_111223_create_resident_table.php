@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProfileTable extends Migration
+class CreateResidentTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,17 @@ class CreateProfileTable extends Migration
      */
     public function up()
     {
-        Schema::create('profiles', function (Blueprint $table) {
+        Schema::create('residents', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('resident_last_name', 20);    // 性
-            $table->string('resident_first_name', 20);   // 名
-            $table->string('resident_last_name_k', 20);  // 性（フリガナ）
-            $table->string('resident_first_name_K', 20); // 名（フリガナ）
-            $table->date('resident_birthday');           // 誕生日
-            $table->string('resident_gender', 3);        // 性別
-            $table->string('resident_level');            // 介護度
-            $table->date('resident_level_start');        // 有効期間開始日
-            $table->date('resident_level_end');          // 有効期間終了日
+            $table->string('last_name', 20);    // 性
+            $table->string('first_name', 20);   // 名
+            $table->string('last_name_k', 20);  // 性（フリガナ）
+            $table->string('first_name_K', 20); // 名（フリガナ）
+            $table->date('birthday');           // 誕生日
+            $table->string('gender', 3);        // 性別
+            $table->string('level');            // 介護度
+            $table->date('level_start');        // 有効期間開始日
+            $table->date('level_end');          // 有効期間終了日
             $table->string('key_person_name',30)->nullable();     // キーパーソン_名
             $table->string('key_person_relation')->nullable();    // キーパーソン_続柄
             $table->string('key_person_adress')->nullable();      // キーパーソン_住所
@@ -31,7 +31,7 @@ class CreateProfileTable extends Migration
             $table->string('key_person_tel2')->nullable();        // キーパーソン_連絡先2
             $table->string('key_person_mail')->nullable();        // キーパーソン_メールアドレス
             $table->string('image_path')->nullable();  // 画像のパスを保存するカラム
-            $table->text('resident_note')->nullable();             // 特記
+            $table->text('note')->nullable();             // 特記
             $table->timestamps();
         });
     }
@@ -43,6 +43,6 @@ class CreateProfileTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('profiles');
+        Schema::dropIfExists('residents');
     }
 };

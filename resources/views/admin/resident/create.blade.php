@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-md-8 mx-auto">
                 <h2>入居者プロフィール</h2>
-                <form action="{{ route('admin.profile.create') }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('admin.resident.create') }}" method="post" enctype="multipart/form-data">
 
                     @if (count($errors) > 0)
                         <ul>
@@ -19,30 +19,30 @@
                     <div class="form-group row">
                         <label class="col-md-2">氏名</label>
                         <div class="col-md-5">
-                            <input type="text" class="form-control" name="resident_last_name" value="{{ old('resident_last_name') }}">
-                            @if ($errors->has('resident_last_name'))
-                        　　　　<p style="color: red;">{{$errors->first('resident_last_name')}}</p>
+                            <input type="text" class="form-control" name="last_name" value="{{ old('last_name') }}">
+                            @if ($errors->has('last_name'))
+                        　　　　<p style="color: red;">{{$errors->first('last_name')}}</p>
                             @endif                        
                         </div>
                         <div class="col-md-5">
-                            <input type="text" class="form-control" name="resident_first_name" value="{{ old('resident_first_name') }}">
-                            @if ($errors->has('resident_first_name'))
-                        　　　　<p style="color: red;">{{$errors->first('resident_first_name')}}</p>
+                            <input type="text" class="form-control" name="first_name" value="{{ old('first_name') }}">
+                            @if ($errors->has('first_name'))
+                        　　　　<p style="color: red;">{{$errors->first('first_name')}}</p>
                             @endif                        
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-2">氏名（フリガナ）</label>
                         <div class="col-md-5">
-                            <input type="text" class="form-control" name="resident_last_name_k" value="{{ old('resident_last_name_k') }}">
-                            @if ($errors->has('resident_last_name_K'))
-                        　　　　<p style="color: red;">{{$errors->first('resident_last_name_K')}}</p>
+                            <input type="text" class="form-control" name="last_name_k" value="{{ old('last_name_k') }}">
+                            @if ($errors->has('last_name_K'))
+                        　　　　<p style="color: red;">{{$errors->first('last_name_K')}}</p>
                             @endif                        
                         </div>
                         <div class="col-md-5">
-                            <input type="text" class="form-control" name="resident_first_name_K" value="{{ old('resident_first_name_K') }}">
-                            @if ($errors->has('resident_first_name_k'))
-                        　　　　<p style="color: red;">{{$errors->first('resident_first_name_K')}}</p>
+                            <input type="text" class="form-control" name="first_name_K" value="{{ old('first_name_K') }}">
+                            @if ($errors->has('first_name_k'))
+                        　　　　<p style="color: red;">{{$errors->first('first_name_K')}}</p>
                             @endif                        
                         </div> 
                     </div>                    
@@ -50,22 +50,22 @@
                     <div class="form-group row">
                         <label class="col-md-2">誕生日</label>
                         <div class="col-md-5">
-                            <input type="date" class="form-control" name="resident_birthday" value="{{ old('resident_birthday') }}">
-                            @if ($errors->has('resident_birthday'))
-                        　　　　<p style="color: red;">{{$errors->first('resident_birthday')}}</p>
+                            <input type="date" class="form-control" name="birthday" value="{{ old('birthday') }}">
+                            @if ($errors->has('birthday'))
+                        　　　　<p style="color: red;">{{$errors->first('birthday')}}</p>
                             @endif                        
                         </div>
 
                         <label class="col-md-1">性別</label>
                         <div class="col-md-4">
-                            <select  class="form-control" name="resident_gender">
+                            <select  class="form-control" name="gender">
                                 <option value="">選択してください</option>
-                                <option value="1" {{ old('resident_gender') === '1' ? 'selected' : ''}}>男性</option>
-                                <option value="2" {{ old('resident_gender') === '2' ? 'selected' : ''}}>女性</option>
+                                <option value="1" {{ old('gender') === '1' ? 'selected' : ''}}>男性</option>
+                                <option value="2" {{ old('gender') === '2' ? 'selected' : ''}}>女性</option>
                             </select>
-                            @if ($errors->has('resident_gender'))
+                            @if ($errors->has('gender'))
                         　　　　<span class="invalid-feedback">
-                            　　<strong>{{$errors->first('resident_gender')}}</strong>
+                            　　<strong>{{$errors->first('gender')}}</strong>
                         　　　　</span>
                             @endif                        
                         </div>
@@ -74,20 +74,20 @@
                     <div class="form-group row">
                         <label class="col-md-2">介護度</label>
                         <div class="col-md-4">
-                            <select  class="form-control" name="resident_level">
+                            <select  class="form-control" name="level">
                                 <option value="">選択してください</option>
-                                <option value="1" {{ old('resident_level') === '1' ? 'selected' : ''}}>要介護１</option>
-                                <option value="2" {{ old('resident_level') === '2' ? 'selected' : ''}}>要介護２</option>
-                                <option value="3" {{ old('resident_level') === '3' ? 'selected' : ''}}>要介護３</option>
-                                <option value="4" {{ old('resident_level') === '4' ? 'selected' : ''}}>要介護４</option>
-                                <option value="5" {{ old('resident_level') === '5' ? 'selected' : ''}}>要介護５</option>
-                                <option value="6" {{ old('resident_level') === '6' ? 'selected' : ''}}>要支援１</option>
-                                <option value="7" {{ old('resident_level') === '7' ? 'selected' : ''}}>要支援２</option>
-                                <option value="8" {{ old('resident_level') === '8' ? 'selected' : ''}}>該当なし</option>
+                                <option value="1" {{ old('level') === '1' ? 'selected' : ''}}>要介護１</option>
+                                <option value="2" {{ old('level') === '2' ? 'selected' : ''}}>要介護２</option>
+                                <option value="3" {{ old('level') === '3' ? 'selected' : ''}}>要介護３</option>
+                                <option value="4" {{ old('level') === '4' ? 'selected' : ''}}>要介護４</option>
+                                <option value="5" {{ old('level') === '5' ? 'selected' : ''}}>要介護５</option>
+                                <option value="6" {{ old('level') === '6' ? 'selected' : ''}}>要支援１</option>
+                                <option value="7" {{ old('level') === '7' ? 'selected' : ''}}>要支援２</option>
+                                <option value="8" {{ old('level') === '8' ? 'selected' : ''}}>該当なし</option>
                             </select>
-                            @if ($errors->has('resident_level'))
+                            @if ($errors->has('level'))
                         　　　　<span class="invalid-feedback">
-                            　　<strong>{{$errors->first('resident_level')}}</strong>
+                            　　<strong>{{$errors->first('level')}}</strong>
                         　　　　</span>
                             @endif                        
                         </div>
@@ -96,16 +96,16 @@
                     <div class="form-group row">
                         <label class="col-md-2">認定期間開始日</label>
                         <div class="col-md-4">
-                            <input type="date" class="form-control" name="resident_level_start" value="{{ old('resident_level_start') }}">
-                            @if ($errors->has('resident_level_start'))
-                        　　　　<p style="color: red;">{{$errors->first('resident_level_start')}}</p>
+                            <input type="date" class="form-control" name="level_start" value="{{ old('level_start') }}">
+                            @if ($errors->has('level_start'))
+                        　　　　<p style="color: red;">{{$errors->first('level_start')}}</p>
                             @endif                        
                         </div>
                         <label class="col-md-2">認定期間終了日</label>
                         <div class="col-md-4">
-                            <input type="date" class="form-control" name="resident_level_end" value="{{ old('resident_level_end') }}">
-                            @if ($errors->has('resident_level_end'))
-                        　　　　<p style="color: red;">{{$errors->first('resident_level_end')}}</p>
+                            <input type="date" class="form-control" name="level_end" value="{{ old('level_end') }}">
+                            @if ($errors->has('level_end'))
+                        　　　　<p style="color: red;">{{$errors->first('level_end')}}</p>
                             @endif                        
                         </div>
                     </div>    
@@ -168,9 +168,9 @@
                     <div class="form-group row">
                         <label class="col-md-2">特記</label>
                         <div class="col-md-10">
-                            <textarea class="form-control" name="resident_note" rows="10">{{ old('resident_note') }}</textarea>
-                            <!--@if ($errors->has('resident_note'))-->
-                        　　　　<!--<p>{{$errors->first('resident_note')}}</p>-->
+                            <textarea class="form-control" name="note" rows="10">{{ old('note') }}</textarea>
+                            <!--@if ($errors->has('note'))-->
+                        　　　　<!--<p>{{$errors->first('note')}}</p>-->
                             <!--@endif   -->
                         </div>                        
                     </div>      

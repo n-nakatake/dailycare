@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-md-8 mx-auto">
                 <h2>vital新規登録</h2>
-                <form action="{{ route('admin.vital.create', ['residentId->']) }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('admin.vital.create') }}" method="post" enctype="multipart/form-data">
 
                     @if (count($errors) > 0)
                         <ul>
@@ -16,6 +16,18 @@
                             @endforeach
                         </ul>
                     @endif
+                    <div class="form-group row">
+                        <label class="col-md-1">利用者</label>
+                        <div class="col-md-4">
+                            <select  class="form-control" name="resident_id">
+                                @foreach($residents as $resident)
+                                    <option value="{{$residentId}}">{{$residentName}}</option>
+                                    <option value="{{$resident->id}}" {{ (int) old('resident_id') === $resident->id ? 'selected' : ''}}>{{ $resident->last_name . $resident->first_name }}</option>  
+                                @endforeach
+                            </select>
+                        </div>
+                        <label class="col-md-1">様</label>
+                    </div>
                     <div class="form-group row">
                         <label class="col-md-1">記録者</label>
                         <div class="col-md-4">

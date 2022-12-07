@@ -12,6 +12,7 @@ class Vital extends Model
     protected $guarded = array('id');
 
     public static $rules = array(
+        'resident_id' => 'required',
         'vital_rocorder' => 'required',
         'vital_time' => 'required',
      );    
