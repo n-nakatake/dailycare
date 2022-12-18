@@ -17,10 +17,7 @@ class BathController extends Controller
         $users = User::all();
         $residents = Resident::all();
         $residentName = $residents->where('id', $residentId)->first()->last_name . $residents->where('id', $residentId)->first()->first_name;
-        $filteredResidents = $residents->filter(function ($resident, $key) use($residentId) {
-            return $resident->id !== $residentId;
-        });
-        return view('admin.bath.create', ['users' => $users, 'residents' => $filteredResidents, 'residentId' => $residentId, 'residentName' => $residentName]);
+        return view('admin.bath.create', ['users' => $users, 'residents' => $residents, 'residentId' => $residentId, 'residentName' => $residentName]);
     }
 
     public function create(Request $request)

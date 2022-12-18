@@ -17,10 +17,10 @@ class VitalController extends Controller
         $users = User::all();
         $residents = Resident::all();
         $residentName = $residents->where('id', $residentId)->first()->last_name . $residents->where('id', $residentId)->first()->first_name;
-        $filteredResidents = $residents->filter(function ($resident, $key) use($residentId) {
+        /*$filteredResidents = $residents->filter(function ($resident, $key) use($residentId) {
             return $resident->id !== $residentId;
-        });
-        return view('admin.vital.create', ['users' => $users, 'residents' => $filteredResidents, 'residentId' => $residentId, 'residentName' => $residentName]);
+        });*/
+        return view('admin.vital.create', ['users' => $users, 'residents' => $residents, 'residentId' => $residentId, 'residentName' => $residentName]);
     }
 
     public function create(Request $request)
@@ -52,15 +52,34 @@ class VitalController extends Controller
 
     public function index(Request $request, $residentId)
     {
-        $cond_title = $request->cond_title;
-        if ($cond_title != '') {
+        $residents = Resident::all();
+        $residentName = $residents->where('id', $residentId)->first()->last_name . $residents->where('id', $residentId)->first()->first_name;
+        
+        $date = $request->date;
+        $vitals = [];
+        $date = '202211';
+        if ($date != '') {
+            $splitedDate = str_split($date, 4);
+            $year = $splitedDate[0];
+            $month = $splitedDate[1];
+            $lastDay = Carbon::create($year, $month, 1)->lastOfMonth()->day;
             // 検索されたら検索結果を取得する
-            $posts = Vital::where('title', $cond_title)->get();
+            $vitals = Vital::where('resident_id', $residentId)->whereBetween('vital_time', [
+                    $year . '-' . $month . '-01 00:00:00',
+                    $year . '-' . $month . '-' . $lastDay . ' 23:59:59'
+                ])->get();
         } else {
             // それ以外はすべてのvitalを取得する
-            $posts = Vital::all();
+            $vitals = Vital::where('resident_id', $residentId)->get();
         }
-        return view('admin.vital.index', ['posts' => $posts, 'cond_title' => $cond_title]);
+        $vitalsByDay = [];
+        if ($vitals !== []){
+            foreach($vitals as $vital){
+                $vitalDate = str_split($vital->vital_time, 10)[0];
+                $vitalsByDay[$vitalDate][] = $vital;
+            }
+        }
+        return view('admin.vital.index', ['vitals' => $vitalsByDay, 'date' => $date, 'residents' => $residents, 'residentId' => $residentId, 'residentName' => $residentName]);
     }    
     
     public function edit(Request $request, $residentId)

@@ -7,20 +7,26 @@
             <h2>vital一覧</h2>
         </div>
         <div class="row">
-            <div class="col-md-4">
-                <a href="{{ route('admin.vital.add') }}" role="button" class="btn btn-primary">新規作成</a>
+            <div class="col-md-3">
+                <a href="{{ route('admin.vital.add', ['residentId' => $residentId]) }}" role="button" class="btn btn-primary">新規作成</a>
             </div>
-            <div class="col-md-8">
-                <form action="{{ route('admin.vital.index') }}" method="get">
+            <div class="col-md-9">
+                <form action="{{ route('admin.vital.index', ['residentId' => $residentId]) }}" method="get">
                     <div class="form-group row">
-                        <label class="col-md-2">名前</label>
-                        <div class="col-md-8">
-                            <input type="text" class="form-control" name="cond_title" value="{{ $cond_title }}">
+                        <label class="col-md-1">名前</label>
+                        <div class="col-md-3">
+                            <select  class="form-control" name="resident_id">
+                                @foreach($residents as $resident)
+                                    <option value="{{$resident->id}}" {{ ((int)old('resident_id') === $resident->id  || $residentId === $resident->id) ? 'selected' : ''}}>{{ $resident->last_name . $resident->first_name }}</option>  
+                                @endforeach
+                            </select>
                         </div>
-                        <div class="col-md-2">
-                            @csrf
-                            <input type="submit" class="btn btn-primary" value="検索">
+                        <label class="col-md-1"></label>
+                        <label class="col-md-1">表示月</label>
+                        <div class="col-md-3">
+                            <input type="month" class="form-control" name="vital_ym" value="{{ old('vital_ym') }}">
                         </div>
+
                     </div>
                 </form>
             </div>
@@ -31,31 +37,58 @@
                     <table class="table table-dark">
                         <thead>
                             <tr>
-                                <th width="10%">ID</th>
+                                <th width="10%">日付</th>
                                 <th width="20%">時間</th>
                                 <th width="20%">体温</th>
-                                <th width="15%">血圧</th>
-                                <th width="15%"></th>
+                                <th width="20%">血圧（上）</th>
+                                <th width="20%">血圧（下）</th>
                                 <th width="10%">操作</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($posts as $vital)
-                                <tr>
-                                    <th>{{ $vital->id }}</th>
-                                    <td>{{ Str::limit($vital->vital_time, 100) }}</td>
-                                    <td>{{ Str::limit($vital->vital_kt, 250) }}</td>
-                                    <td>{{ Str::limit($vital->vital_bp_u, 250) }}</td>
-                                    <td>{{ Str::limit($vital->vital_bp_d, 250) }}</td>
-                                    <td>
-                                        <div>
-                                            <a href="{{ route('admin.vital.edit', ['id' => $vital->id]) }}">編集</a>
-                                        </div>
-                                        <div>
-                                            <a href="{{ route('admin.vital.delete', ['id' => $vital->id]) }}">削除</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                            @foreach($vitals as $vital)
+                                @php
+                                    $vitalCount = count($vital);
+                                @endphp
+                                @if($vitalCount === 1 )
+                                    <tr>
+                                        <td>{{ str_split($vital[0]->vital_time, 10)[0] }}</td>
+                                        <td>{{ str_split($vital[0]->vital_time, 10)[1] }}</td>
+                                        <td>{{ $vital[0]->vital_kt}}</td>
+                                        <td>{{ $vital[0]->vital_bp_u}}</td>
+                                        <td>{{ $vital[0]->vital_bp_d}}</td>
+                                        <td>
+                                            <div>
+                                                <a href="{{ route('admin.vital.edit', ['residentId' => $vital[0]->id]) }}">編集</a>
+                                            </div>
+                                            <div>
+                                                <a href="{{ route('admin.vital.delete', ['residentId' => $vital[0]->id]) }}">削除</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @else
+                                    @foreach($vital as $vitalTime)
+                                        <tr>
+                                            @if ($loop->first)
+                                                <!--<td rowspan="$vitalCount">str_split($vitalTime->vital_time, 10)[0] </td>-->
+                                                <td rowspan={{$vitalCount}}>{{str_split($vitalTime->vital_time, 10)[0]}}
+                                                </td>
+                                            @endif
+                                            <td>{{ str_split($vitalTime->vital_time, 10)[1] }}</td>
+                                            <td>{{ $vitalTime->vital_kt}}</td>
+                                            <td>{{ $vitalTime->vital_bp_u}}</td>
+                                            <td>{{ $vitalTime->vital_bp_d}}</td>
+                                            <td>
+                                                <div>
+                                                    <a href="{{ route('admin.vital.edit', ['residentId' => $vitalTime->id]) }}">編集</a>
+                                                </div>
+                                                <div>
+                                                    <a href="{{ route('admin.vital.delete', ['residentId' => $vitalTime->id]) }}">削除</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                             @endforeach
 
                         </tbody>

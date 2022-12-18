@@ -21,8 +21,7 @@
                         <div class="col-md-4">
                             <select  class="form-control" name="resident_id">
                                 @foreach($residents as $resident)
-                                    <option value="{{$residentId}}">{{$residentName}}</option>
-                                    <option value="{{$resident->id}}" {{ (int) old('resident_id') === $resident->id ? 'selected' : ''}}>{{ $resident->last_name . $resident->first_name }}</option>  
+                                    <option value="{{$resident->id}}" {{ ((int)old('resident_id') === $resident->id  || $residentId === $resident->id) ? 'selected' : ''}}>{{ $resident->last_name . $resident->first_name }}</option>  
                                 @endforeach
                             </select>
                         </div>

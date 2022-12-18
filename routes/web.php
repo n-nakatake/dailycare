@@ -27,14 +27,6 @@ use App\Http\Controllers\Admin\SummaryController;
     Route::get('vital/create', 'add')->middleware('auth');
 });*/
 
-Route::controller(VitalController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
-    Route::get('vital/create/{residentId}', 'add')->name('vital.add');
-    Route::post('vital/create', 'create')->name('vital.create');
-    Route::get('vital/{residentId}', 'index')->name('vital.index');
-    Route::get('vital/edit/{residentId}', 'edit')->name('vital.edit');
-    Route::post('vital/edit/{residentId}', 'update')->name('vital.update');
-    Route::get('vital/delete/{residentId}', 'delete')->name('vital.delete');
-});
 
 Route::controller(ResidentController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('resident/create', 'add')->name('resident.add');
@@ -43,6 +35,15 @@ Route::controller(ResidentController::class)->prefix('admin')->name('admin.')->m
     Route::get('resident/edit', 'edit')->name('resident.edit');
     Route::post('resident/edit', 'update')->name('resident.update');
     Route::get('resident/delete', 'delete')->name('resident.delete');
+});
+
+Route::controller(VitalController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::get('vital/create/{residentId}', 'add')->name('vital.add');
+    Route::post('vital/create', 'create')->name('vital.create');
+    Route::get('vital/{residentId}', 'index')->name('vital.index');
+    Route::get('vital/edit/{residentId}', 'edit')->name('vital.edit');
+    Route::post('vital/edit/{residentId}', 'update')->name('vital.update');
+    Route::get('vital/delete/{residentId}', 'delete')->name('vital.delete');
 });
 
 Route::controller(MealController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
