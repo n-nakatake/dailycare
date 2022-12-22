@@ -53,13 +53,15 @@ class VitalController extends Controller
     public function index(Request $request, $residentId)
     {
         $residents = Resident::all();
+        $residentId = $request->resident_id ? (int)$request->resident_id : $residentId; 
         $residentName = $residents->where('id', $residentId)->first()->last_name . $residents->where('id', $residentId)->first()->first_name;
         
-        $date = $request->date;
+        $date = $request->vital_ym;
         $vitals = [];
-        $date = '202211';
+        //$date = '202212';
         if ($date != '') {
-            $splitedDate = str_split($date, 4);
+            $splitedDate = explode("-", $date);
+            //$splitedDate = str_split($date, 4);
             $year = $splitedDate[0];
             $month = $splitedDate[1];
             $lastDay = Carbon::create($year, $month, 1)->lastOfMonth()->day;
@@ -79,25 +81,27 @@ class VitalController extends Controller
                 $vitalsByDay[$vitalDate][] = $vital;
             }
         }
+
         return view('admin.vital.index', ['vitals' => $vitalsByDay, 'date' => $date, 'residents' => $residents, 'residentId' => $residentId, 'residentName' => $residentName]);
     }    
     
-    public function edit(Request $request, $residentId)
+    public function edit(Request $request, $residentId, $vitalId)
     {
+        $users = User::all();
         // Vital Modelからデータを取得する
-        $vital = Vital::find($request->id);
+        $vital = Vital::find($request->vitalId);
         if (empty($vital)) {
             abort(404);
         }
-        return view('admin.vital.edit', ['vital_form' => $vital]);
+        return view('admin.vital.edit', ['vitalForm' => $vital, 'users' => $users]);
     }
 
-    public function update(Request $request, $residentId)
+    public function update(Request $request, $residentId, $vitalId)
     {
         // Validationをかける
         $this->validate($request, Vital::$rules);
         // Vital Modelからデータを取得する
-        $vital = Vital::find($request->id);
+        $vital = Vital::find($vitalId);
         // 送信されてきたフォームデータを格納する
         $vital_form = $request->all();
 
@@ -119,11 +123,12 @@ class VitalController extends Controller
 
         // 以下を追記
         $history = new History();
+        $history->resident_id = $vital->resident_id;
         $history->vital_id = $vital->id;
         $history->edited_at = Carbon::now();
         $history->save();
 
-        return redirect('admin/vital');
+        return redirect('admin/vital/' . $residentId);
     }
 
     public function delete(Request $request, $residentId)

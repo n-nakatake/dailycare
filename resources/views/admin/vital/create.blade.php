@@ -30,15 +30,15 @@
                     <div class="form-group row">
                         <label class="col-md-1">記録者</label>
                         <div class="col-md-4">
-                            <select  class="form-control" name="vital_rocorder">
+                            <select  class="form-control" name="user_id">
                                 <option value="">選択してください</option>
                                 @foreach($users as $user)
-                                    <option value="{{$user->id}}" {{ (int) old('vital_rocorder') === $user->id ? 'selected' : ''}}>{{ $user->last_name . $user->first_name }}</option>  
+                                    <option value="{{$user->id}}" {{ (int) old('user_id') === $user->id ? 'selected' : ''}}>{{ $user->last_name . $user->first_name }}</option>  
                                 @endforeach
                             </select>
-                            @if ($errors->has('vital_rocorder'))
+                            @if ($errors->has('user_id'))
                         　　　　<span class="invalid-feedback">
-                            　　<strong>{{$errors->first('vital_rocorder')}}</strong>
+                            　　<strong>{{$errors->first('user_id')}}</strong>
                         　　　　</span>
                             @endif                        
                         </div>

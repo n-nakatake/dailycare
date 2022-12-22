@@ -17,16 +17,18 @@
                         <div class="col-md-3">
                             <select  class="form-control" name="resident_id">
                                 @foreach($residents as $resident)
-                                    <option value="{{$resident->id}}" {{ ((int)old('resident_id') === $resident->id  || $residentId === $resident->id) ? 'selected' : ''}}>{{ $resident->last_name . $resident->first_name }}</option>  
+                                    <option value="{{$resident->id}}" {{ $residentId === $resident->id ? 'selected' : ''}}>{{ $resident->last_name . $resident->first_name }}</option>  
                                 @endforeach
                             </select>
                         </div>
                         <label class="col-md-1"></label>
                         <label class="col-md-1">表示月</label>
                         <div class="col-md-3">
-                            <input type="month" class="form-control" name="vital_ym" value="{{ old('vital_ym') }}">
+                            <input type="month" class="form-control" name="vital_ym" value="{{ $date }}">
                         </div>
-
+                        <div class="col-md-1">
+                            <input type="submit" class="btn btn-primary" value="更新">
+                        </div>
                     </div>
                 </form>
             </div>
@@ -59,10 +61,10 @@
                                         <td>{{ $vital[0]->vital_bp_d}}</td>
                                         <td>
                                             <div>
-                                                <a href="{{ route('admin.vital.edit', ['residentId' => $vital[0]->id]) }}">編集</a>
+                                                <a href="{{ route('admin.vital.edit', ['residentId' => $vital[0]->resident_id,'vitalId' =>  $vital[0]->id]) }}">編集</a>
                                             </div>
                                             <div>
-                                                <a href="{{ route('admin.vital.delete', ['residentId' => $vital[0]->id]) }}">削除</a>
+                                                <a href="{{ route('admin.vital.delete', ['residentId' => $vital[0]->resident_id,'vitalId' =>  $vital[0]->id]) }}">削除</a>
                                             </div>
                                         </td>
                                     </tr>
@@ -80,10 +82,10 @@
                                             <td>{{ $vitalTime->vital_bp_d}}</td>
                                             <td>
                                                 <div>
-                                                    <a href="{{ route('admin.vital.edit', ['residentId' => $vitalTime->id]) }}">編集</a>
+                                                    <a href="{{ route('admin.vital.edit', ['residentId' => $vitalTime->resident_id,'vitalId' => $vitalTime->id]) }}">編集</a>
                                                 </div>
                                                 <div>
-                                                    <a href="{{ route('admin.vital.delete', ['residentId' => $vitalTime->id]) }}">削除</a>
+                                                    <a href="{{ route('admin.vital.delete', ['residentId' => $vitalTime->resident_id,'vitalId' => $vitalTime->id]) }}">削除</a>
                                                 </div>
                                             </td>
                                         </tr>

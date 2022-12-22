@@ -24,10 +24,9 @@ return [
     'resident_level_start' => '有効期間開始日',
     'resident_level_end' => '有効期間終了日',    
 
-    'meal_rocorder' => '記録者',
+    'user_id' => '記録者',
     'meal_time' => '記録時間',    
     
-    'bath_rocorder' => '記録者',
     'bath_time' => '記録時間',
     'bath_method' => '入浴方法',    
     ];

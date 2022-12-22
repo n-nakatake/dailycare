@@ -13,7 +13,7 @@ class Vital extends Model
 
     public static $rules = array(
         'resident_id' => 'required',
-        'vital_rocorder' => 'required',
+        'user_id' => 'required',
         'vital_time' => 'required',
      );    
 

@@ -41,9 +41,9 @@ Route::controller(VitalController::class)->prefix('admin')->name('admin.')->midd
     Route::get('vital/create/{residentId}', 'add')->name('vital.add');
     Route::post('vital/create', 'create')->name('vital.create');
     Route::get('vital/{residentId}', 'index')->name('vital.index');
-    Route::get('vital/edit/{residentId}', 'edit')->name('vital.edit');
-    Route::post('vital/edit/{residentId}', 'update')->name('vital.update');
-    Route::get('vital/delete/{residentId}', 'delete')->name('vital.delete');
+    Route::get('vital/edit/{residentId}/{vitalId}', 'edit')->name('vital.edit');
+    Route::post('vital/edit/{residentId}/{vitalId}', 'update')->name('vital.update');
+    Route::get('vital/delete/{residentId}/{vitalId}', 'delete')->name('vital.delete');
 });
 
 Route::controller(MealController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
