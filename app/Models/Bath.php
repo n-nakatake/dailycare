@@ -12,7 +12,8 @@ class Bath extends Model
     protected $guarded = array('id');
 
     public static $rules = array(
-        'bath_rocorder' => 'required',
+        'resident_id' => 'required',
+        'user_id' => 'required',
         'bath_time' => 'required',
         'bath_method' => 'required',
      );    

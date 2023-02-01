@@ -6,9 +6,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 mx-auto">
-                <h2>入浴状況更新</h2>
-                <form action="{{ route('admin.bath.update') }}" method="post" enctype="multipart/form-data">
-
+                <h2>入浴状況の編集</h2>
+                <form action="{{ route('admin.bath.update',['residentId' => $bathForm->resident_id,'bathId' => $bathForm->id] ) }}" method="post" enctype="multipart/form-data">
                     @if (count($errors) > 0)
                         <ul>
                             @foreach($errors->all() as $e)
@@ -17,23 +16,24 @@
                         </ul>
                     @endif
                     <div class="form-group row">
+                        <input type="hidden" name="resident_id" value="{{ $bathForm->resident_id }}">
                         <label class="col-md-1">記録者</label>
                         <div class="col-md-3">
-                            <select  class="form-control" name="bath_rocorder">
+                            <select  class="form-control" name="user_id">
+                                <option value="">選択してください</option>
                                 @foreach($users as $user)
-                                    <option value="">選択してください</option>
-                                    <option value="{{$user->id}}" {{ (int) old('meal_rocorder') === $user->id ? 'selected' : ''}}>{{ $user->last_name . $user->first_name }}</option>  
+                                    <option value="{{$bathForm->user_id}}"
+                                    @if (old('user_id'))
+                                        {{ (int) old('user_id') === $user->id ? 'selected' : ''}}>{{ $user->last_name . $user->first_name }}</option>
+                                    @else
+                                        {{ $bathForm->user_id === $user->id ? 'selected' : ''}}>{{ $user->last_name . $user->first_name }}</option>
+                                    @endif
                                 @endforeach
                             </select>
-                            @if ($errors->has('bath_rocorder'))
-                        　　　　<span class="invalid-feedback">
-                            　　<strong>{{$errors->first('bath_rocorder')}}</strong>
-                        　　　　</span>
-                            @endif                        
                         </div>
                         <label class="col-md-1">日時</label>
                         <div class="col-md-3">
-                            <input type="datetime-local" class="form-control" name="bath_time" value="{{ old('bath_time') }}">
+                            <input type="datetime-local" class="form-control" name="bath_time" value="{{ old('bath_time') ? old('bath_time') : $bathForm->bath_time   }}">
                         </div>
                         <label class="col-md-1">方法</label>
                         <div class="col-md-3">
@@ -61,26 +61,9 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <div class="col-md-10">
-                            <input type="hidden" name="id" value="{{ $meal_form->id }}">
-                            @csrf
-                            <input type="submit" class="btn btn-primary" value="更新">
-                        </div>
-                    </div>
-
-                <div class="row mt-5">
-                    <div class="col-md-4 mx-auto">
-                        <h2>編集履歴</h2>
-                        <ul class="list-group">
-                            @if ($meal_form->$meal_form != NULL)
-                                @foreach ($$meal_form_form->$meal_form_histories as $mealhistory)
-                                    <li class="list-group-item">{{ $mealhistory->edited_at }}</li>
-                                @endforeach
-                            @endif
-                        </ul>
-                    </div>
-                </div>                    
+                    @csrf
+                    <input type="submit" class="btn btn-primary" value="更新">
+                    
                     <!--<input type="submit" class="col-md-4 btn btn-primary"  value="更新">-->
 
                 </form>

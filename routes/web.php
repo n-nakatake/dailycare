@@ -50,18 +50,18 @@ Route::controller(MealController::class)->prefix('admin')->name('admin.')->middl
     Route::get('meal/create/{residentId}', 'add')->name('meal.add');
     Route::post('meal/create', 'create')->name('meal.create');
     Route::get('meal/{residentId}', 'index')->name('meal.index');
-    Route::get('meal/edit/{residentId}', 'edit')->name('meal.edit');
-    Route::post('meal/edit/{residentId}', 'update')->name('meal.update');
-    Route::get('meal/delete/{residentId}', 'delete')->name('meal.delete');
+    Route::get('meal/edit/{residentId}/{mealId', 'edit')->name('meal.edit');
+    Route::post('meal/edit/{residentId}/{mealId', 'update')->name('meal.update');
+    Route::get('meal/delete/{residentId}/{mealId', 'delete')->name('meal.delete');
 });
 
 Route::controller(BathController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('bath/create/{residentId}', 'add')->name('bath.add');
     Route::post('bath/create', 'create')->name('bath.create');
     Route::get('bath/{residentId}', 'index')->name('bath.index');
-    Route::get('bath/edit/{residentId}', 'edit')->name('bath.edit');
-    Route::post('bath/edit/{residentId}', 'update')->name('bath.update');
-    Route::get('bath/delete/{residentId}', 'delete')->name('bath.delete');
+    Route::get('bath/edit/{residentId}/{bathId}', 'edit')->name('bath.edit');
+    Route::post('bath/edit/{residentId}/{bathId', 'update')->name('bath.update');
+    Route::get('bath/delete/{residentId}/{bathId', 'delete')->name('bath.delete');
 });
 
 

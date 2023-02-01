@@ -12,7 +12,8 @@ class Meal extends Model
     protected $guarded = array('id');
 
     public static $rules = array(
-        'meal_rocorder' => 'required',
+        'resident_id' => 'required',
+        'user_id' => 'required',
         'meal_time' => 'required',
      );    
 

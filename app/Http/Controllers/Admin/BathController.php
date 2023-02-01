@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use App\Models\BathHistory;
 use Illuminate\Http\Request;
@@ -11,7 +12,6 @@ use Carbon\Carbon;
 
 class BathController extends Controller
 {
-    //
     public function add(int $residentId)
     {
         $users = User::all();
@@ -37,49 +37,89 @@ class BathController extends Controller
         return redirect('admin/bath/create/' . $request->resident_id);
     }
 
-    public function edit(Request $request, $residentId)
+    public function edit(Request $request, $residentId, $vitalId)
     {
-        // Bath Modelからデータを取得する
-        $bath = Bath::find($request->id);
+        $users = User::all();
+        // bath Modelからデータを取得する
+        $bath = Bath::find($request->bathId);
         if (empty($bath)) {
-            abort(404);    
+            abort(404);
         }
-        return view('admin.bath.edit', ['bath_form' => $bath]);    }
-
-    public function update(Request $request, $residentId)
-    {
-        // Validationをかける
-        $this->validate($request, Bath::$rules);
-        // Resident Modelからデータを取得する
-        $bath = Bath::find($request->id);
-        // 送信されてきたフォームデータを格納する
-        $bath_form = $request->all();
-
-        unset($bath_form['remove']);
-        unset($bath_form['_token']);
-        
-        // 該当するデータを上書きして保存する
-        $bath->fill($bath_form)->save();
-
-        // プロフィール履歴テーブルにデータを保存
-        $bathhistory = new BathHistory();
-        $bathhistory->bath_id = $bath->id;
-        $bathhistory->edited_at = Carbon::now();
-        $bathhistory->save();
-
-        return redirect('admin/bath/edit?id='. $request->id);
+        return view('admin.bath.edit', ['bathForm' => $bath, 'users' => $users]);
     }
+
     
     public function index(Request $request, $residentId)
     {
-        $cond_name = $request->cond_name;
-        if ($cond_name != '') {
-            $baths = Bath::where('name', $cond_name)->get();
+        $residents = Resident::all();
+        $residentId = $request->resident_id ? (int)$request->resident_id : $residentId; 
+        $residentName = $residents->where('id', $residentId)->first()->last_name . $residents->where('id', $residentId)->first()->first_name;
+        
+        $date = $request->bath_ym;
+        $baths = [];
+
+        if ($date != '') {
+            $splitedDate = explode("-", $date);
+            $year = $splitedDate[0];
+            $month = $splitedDate[1];
+            $lastDay = Carbon::create($year, $month, 1)->lastOfMonth()->day;
+            // 検索されたら検索結果を取得する
+            $baths = Bath::where('resident_id', $residentId)->whereBetween('bath_time', [
+                    $year . '-' . $month . '-01 00:00:00',
+                    $year . '-' . $month . '-' . $lastDay . ' 23:59:59'
+                ])->get();
         } else {
-            $baths = Bath::all();
+            // それ以外はすべてのbathを取得する
+            $baths = Bath::where('resident_id', $residentId)->get();
         }
-        return view('admin.bath.index', ['baths' => $baths, 'cond_name' => $cond_name]);
-    }     
+        $bathsByDay = [];
+        if ($baths !== []){
+            foreach($baths as $bath){
+                $bathDate = str_split($bath->bath_time, 10)[0];
+                $bathsByDay[$bathDate][] = $bath;
+            }
+        }
+
+        return view('admin.bath.index', ['baths' => $bathsByDay, 'date' => $date, 'residents' => $residents, 'residentId' => $residentId, 'residentName' => $residentName]);    
+        } 
+    
+    
+    public function update(Request $request, $residentId, $bathId)
+    {
+        // Validationをかける
+        $this->validate($request, Bath::$rules);
+        // Bath Modelからデータを取得する
+        $bath = Bath::find($bathId);
+        // 送信されてきたフォームデータを格納する
+        $bath_form = $request->all();
+
+        if ($request->remove == 'true') {
+            $bath_form['bath_image_path'] = null;
+        } elseif ($request->file('image')) {
+            $path = $request->file('image')->store('public/image');
+            $bath_form['bath_image_path'] = basename($path);
+        } else {
+            $bath_form['bath_image_path'] = $bath->bath_image_path;
+        }
+
+        unset($bath_form['image']);
+        unset($bath_form['remove']);
+        unset($bath_form['_token']);
+
+        // 該当するデータを上書きして保存する
+        $bath->fill($bath_form)->save();
+
+        // 以下を追記
+        $history = new History();
+        $history->resident_id = $bath->resident_id;
+        $history->bath_id = $bath->id;
+        $history->edited_at = Carbon::now();
+        $history->save();
+
+//        return redirect('admin/bath/edit?id=' . $residentId);
+        return redirect('admin/bath/' . $residentId);
+    }
+    
     
     public function delete(Request $request, $residentId)
     {

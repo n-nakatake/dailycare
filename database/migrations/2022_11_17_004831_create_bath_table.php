@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('baths', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('resident_id'); // 利用者ID
-            $table->string('bath_rocorder'); // 記録者
+            $table->integer('user_id'); // 記録者
             $table->dateTime('bath_time');   // 時間
             $table->string('bath_method');   // 入浴方法
             $table->text('bath_note')->nullable();   // 特記
