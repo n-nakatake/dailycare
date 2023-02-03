@@ -29,4 +29,4 @@ return [
     
     'bath_time' => '記録時間',
     'bath_method' => '入浴方法',    
-    ];
+];

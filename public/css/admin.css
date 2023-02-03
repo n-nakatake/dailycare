@@ -48,3 +48,15 @@ body {
   border-color: #fff;
   background-color: #000;
 }
+
+.w-5rem {
+  width: 5rem;
+}
+.w-4rem {
+  width: 4rem;
+}
+.error {
+  margin-top: 5px;
+  margin-left: 4rem;
+  padding: 0;
+}

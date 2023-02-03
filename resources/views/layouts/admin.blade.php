@@ -15,6 +15,7 @@
         <!-- Scripts -->
          {{-- Laravel標準で用意されているJavascriptを読み込みます --}}
         <script src="{{ secure_asset('js/app.js') }}" defer></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 
         <!-- Fonts -->
         <link rel="dns-prefetch" href="https://fonts.gstatic.com">
@@ -81,5 +82,8 @@
                 @yield('content')
             </main>
         </div>
+        <script>
+            @yield('script')
+        </script>
     </body>
 </html>

@@ -85,5 +85,30 @@ if (! function_exists('toWareki')) {
     
         return $result;
     }
+}
 
+if (! function_exists('getBathMethodName')) {
+    /**
+     * @param string $bathMethodId 入浴方法番号
+     *
+     * @return string $result 入浴方法名
+     */
+    function getBathMethodName($bathMethodId)
+    {
+        $bathMethodList = [
+            '1' => '一般浴',
+            '2' => 'シャワー浴',
+            '3' => 'ストレッチャー浴',
+            '4' => '機械浴',
+            '5' => '清拭',
+            '6' => '陰洗',
+            '7' => 'その他',
+        ];
+        
+        if (!array_key_exists($bathMethodId, $bathMethodList)) {
+            return '';
+        }
+
+        return $bathMethodList[$bathMethodId];
+    }
 }
