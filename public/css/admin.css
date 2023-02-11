@@ -49,14 +49,22 @@ body {
   background-color: #000;
 }
 
+.w-4rem {
+  width: 4rem;
+}
 .w-5rem {
   width: 5rem;
 }
-.w-4rem {
-  width: 4rem;
+.w-10rem {
+  width: 10rem;
 }
 .error {
   margin-top: 5px;
   margin-left: 4rem;
+  padding: 0;
+}
+.error-left {
+  margin-top: 5px;
+  margin-left: -1rem;
   padding: 0;
 }

@@ -1,5 +1,13 @@
 <?php
 
+
+use App\Http\Controllers\Admin\AttendanceController;
+use App\Http\Controllers\Admin\BathController;
+use App\Http\Controllers\Admin\MealController;
+use App\Http\Controllers\Admin\ResidentController;
+use App\Http\Controllers\Admin\SummaryController;
+use App\Http\Controllers\Admin\VitalController;
+use App\Http\Controllers\Admin\TopController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,16 +25,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-use App\Http\Controllers\Admin\VitalController;
-use App\Http\Controllers\Admin\ResidentController;
-use App\Http\Controllers\Admin\MealController;
-use App\Http\Controllers\Admin\BathController;
-use App\Http\Controllers\Admin\SummaryController;
-
 /*Route::controller(VitalController::class)->prefix('admin')->group(function() {
     Route::get('vital/create', 'add')->middleware('auth');
 });*/
 
+
+Route::controller(TopController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::get('/', 'index')->name('top.index');
+});
 
 Route::controller(ResidentController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('resident/create', 'add')->name('resident.add');
@@ -64,6 +70,12 @@ Route::controller(BathController::class)->prefix('admin')->name('admin.')->middl
     Route::get('bath/delete/{residentId}/{bathId}', 'delete')->name('bath.delete');
 });
 
+Route::controller(AttendanceController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::get('attendance/create', 'add')->name('attendance.add');
+    Route::post('attendance/create', 'create')->name('attendance.create');
+    Route::get('attendance/edit/{attendanceDate}', 'edit')->name('attendance.edit');
+    Route::post('attendance/edit', 'update')->name('attendance.update');
+});
 
 Route::controller(SummaryController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('summary', 'index')->name('summary.index');
