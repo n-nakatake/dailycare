@@ -43,7 +43,8 @@ class BathController extends Controller
         $bath->fill($form);
         $bath->save();
 
-        return redirect('admin/bath/' . $request->resident_id);
+        return redirect(route('admin.bath.index', ['residentId' => $request->resident_id]))
+            ->with('message', '入浴状況を登録しました。');
     }
     
     public function index(Request $request, $residentId)
@@ -75,7 +76,12 @@ class BathController extends Controller
             }
         }
 
-        return view('admin.bath.index', ['baths' => $bathsByDay, 'date' => $date, 'residents' => $residents, 'residentId' => $residentId]);
+        return view('admin.bath.index', [
+            'baths' => $bathsByDay,
+            'date' => $date,
+            'residents' => $residents,
+            'residentId' => $residentId,
+        ]);
     }
     
     public function edit(Request $request, $residentId, $bathId)
@@ -87,7 +93,11 @@ class BathController extends Controller
             abort(404);
         }
 
-        return view('admin.bath.edit', ['bathForm' => $bath, 'users' => $users, 'bathMethods' => Bath::BATH_METHODS]);
+        return view('admin.bath.edit', [
+            'bathForm' => $bath,
+            'users' => $users,
+            'bathMethods' => Bath::BATH_METHODS,
+        ]);
     }
 
     public function update(Request $request, $residentId, $bathId)
@@ -107,16 +117,17 @@ class BathController extends Controller
         // 該当するデータを上書きして保存する
         $bath->fill($form)->save();
 
-        return redirect('admin/bath/' . $residentId);
+        return redirect(route('admin.bath.index', ['residentId' => $residentId]))
+            ->with('message', '入浴状況を更新しました。');
     }
 
     public function delete(Request $request, $residentId, $bathId)
     {
         // 該当するBath Modelを取得
         $bath = bath::find($bathId);
-        // 削除する
         $bath->delete();
 
-        return redirect('admin/bath/' . $residentId);
+        return redirect(route('admin.bath.index', ['residentId' => $residentId]))
+            ->with('message', '入浴状況を削除しました。');
     }
 }

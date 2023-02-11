@@ -6,6 +6,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-11 mx-auto">
+                @if ($errors->isNotEmpty())
+                    <div class="alert alert-danger">
+                        入浴状況の登録に失敗しました。
+                    </div> 
+                @endif
                 <h2>入浴状況の登録</h2>
                 <form class="mt-5" action="{{ route('admin.bath.create') }}" method="post" enctype="multipart/form-data">
                     <div class="form-group row">
@@ -97,6 +102,7 @@
                     </div>
                     @csrf
                     <div class="text-center mt-5">
+                        <a class="col-md-3 btn btn-secondary me-5" href="{{ route('admin.bath.index', ['residentId' => $residentId]) }}">キャンセル</a>
                         <input type="submit" class="btn btn-primary col-md-3" value="登録">
                     </div>
                 </form>

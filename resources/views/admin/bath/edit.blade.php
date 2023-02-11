@@ -6,6 +6,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-11 mx-auto">
+                @if ($errors->isNotEmpty())
+                    <div class="alert alert-danger">
+                        入浴状況の更新に失敗しました。
+                    </div> 
+                @endif
                 <h2>入浴状況の編集</h2>
                 <div class="row">
                     <div class="col-md-12 text-end">
@@ -109,7 +114,7 @@
                     </div>
                     @csrf
                     <div class="text-center mt-5">
-                        <input type="button" class="col-md-3 btn btn-secondary me-5" onclick="history.back()" value="キャンセル">
+                        <a class="col-md-3 btn btn-secondary me-5" href="{{ route('admin.bath.index', ['residentId' => $bathForm->resident_id]) }}">キャンセル</a>
                         <input type="submit" class="col-md-3 btn btn-primary" value="更新">
                     </div>
                 </form>
