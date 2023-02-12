@@ -6,14 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AttendanceRequest;
 use App\Models\Attendance;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AttendanceController extends Controller
 {
     public function add()
     {
-        $users = User::all()->sortBy('id');
+        $users = User::where('office_id', Auth::user()->office_id)->get()->sortBy('id');
 
         return view('admin.attendance.create', ['users' => $users]);
     }
@@ -30,9 +32,13 @@ class AttendanceController extends Controller
 
     public function edit(string $attendanceDate)
     {
-        $users = User::all();
+        $officeId = Auth::user()->office_id;
+        $users = User::where('office_id', $officeId)->get()->sortBy('id');
         // bath Modelからデータを取得する
-        $attendances = Attendance::where('attendance_date', $attendanceDate)->orderBy('id')->get();
+        $attendances = Attendance::where('attendance_date', $attendanceDate)
+            ->where('office_id', $officeId)
+            ->orderBy('id')
+            ->get();
         if ($attendances->isEmpty()) {
             abort(404);
         }
@@ -75,7 +81,7 @@ class AttendanceController extends Controller
 
         try {
             DB::beginTransaction();
-            Attendance::where('attendance_date', $attendanceDate)->delete();
+            Attendance::where('office_id', Auth::user()->office_id)->where('attendance_date', $attendanceDate)->delete();
             Attendance::insert($attendancesAfter);
             DB::commit();
         } catch (Throwable $e) {
@@ -95,36 +101,49 @@ class AttendanceController extends Controller
     {
         $attendanceMembers = [];
         $form = $request->all();
+        $now = Carbon::now();
+        $officeId = Auth::user()->office_id;
 
         if (isset($form['day_shift_user_id']) && !empty($form['day_shift_user_id'])) {
             foreach ($form['day_shift_user_id'] as $userId) {
                 $attendanceMembers[] = [
+                    'office_id' => $officeId,
                     'attendance_date' => $form['attendance_date'],
                     'user_id' => $userId,
                     'part_time_member' => null,
                     'attendance_type' => Attendance::ATTENDANCE_TYPE_DAY_SHIFT,
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ];
             }
         }
 
         if (isset($form['part_time_member']) && !empty($form['part_time_member'])) {
             foreach ($form['part_time_member'] as $partTimeMember) {
-                $attendanceMembers[] = [
-                    'attendance_date' => $form['attendance_date'],
-                    'user_id' => null,
-                    'part_time_member' => $partTimeMember,
-                    'attendance_type' => Attendance::ATTENDANCE_TYPE_DAY_SHIFT,
-                ];
+                if (!empty($partTimeMember)) {
+                    $attendanceMembers[] = [
+                        'office_id' => $officeId,
+                        'attendance_date' => $form['attendance_date'],
+                        'user_id' => null,
+                        'part_time_member' => $partTimeMember,
+                        'attendance_type' => Attendance::ATTENDANCE_TYPE_DAY_SHIFT,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
+                }
             }
         }
     
         if (isset($form['night_shift_user_id']) && !empty($form['night_shift_user_id'])) {
             foreach ($form['night_shift_user_id'] as $userId) {
                 $attendanceMembers[] = [
+                    'office_id' => $officeId,
                     'attendance_date' => $form['attendance_date'],
                     'user_id' => $userId,
                     'part_time_member' => null,
                     'attendance_type' => Attendance::ATTENDANCE_TYPE_NIGHT_SHIFT,
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ];
             }
         }
