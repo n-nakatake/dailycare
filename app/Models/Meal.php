@@ -11,16 +11,38 @@ class Meal extends Model
 
     protected $guarded = array('id');
 
-    public static $rules = array(
-        'resident_id' => 'required',
-        'user_id' => 'required',
-        'meal_time' => 'required',
-     );    
+    public const MEAL_BLD_OPTIONS = [
+        1 => '朝食',
+        2 => '昼食',
+        3 => '夜食',
+    ];
+
+    public const MEAL_INTAKE_OPTIONS = [
+        1 => '10%',
+        2 => '20%',
+        3 => '30%',
+        4 => '40%',
+        5 => '50%',
+        6 => '60%',
+        7 => '70%',
+        8 => '80%',
+        9 => '90%',
+        10 => '完食',
+    ];
 
     // Meal Modelに関連付けを行う
     public function mealhistories()
     {
         return $this->hasMany('App\Models\MealHistory');
     } 
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     
+    public function resident()
+    {
+        return $this->belongsTo(Resident::class);
+    }
 }
