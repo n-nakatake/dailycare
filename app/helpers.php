@@ -1,4 +1,6 @@
 <?php declare(strict_types=1);
+use Carbon\Carbon;
+use App\Models\Meal;
 
 if (! function_exists('toWareki')) {
     /**
@@ -110,5 +112,69 @@ if (! function_exists('getBathMethodName')) {
         }
 
         return $bathMethodList[$bathMethodId];
+    }
+}
+
+if (! function_exists('getAttendanceMemberName')) {
+    /**
+     * @param Attendance $attendance 出勤者
+     *
+     * @return string $result 出勤者名
+     */
+    function getAttendanceMemberName($attendance)
+    {
+        if ($attendance->user_id > 0) {
+            return $attendance->user->last_name . $attendance->user->first_name;
+        }
+
+        return $attendance->part_time_member;
+    }
+}
+
+if (! function_exists('getAge')) {
+    /**
+     * @param string $birthday 誕生日
+     *
+     * @return int $result 年齢
+     */
+    function getAge(string $birthday)
+    {
+        return Carbon::parse($birthday)->age;
+    }
+}
+
+if (! function_exists('getTime')) {
+    /**
+     * @param string $date 日時（yyyy-mm-dd HH:ii）
+     *
+     * @return string 時間（H:ii）
+     */
+    function getTime(string $date)
+    {
+        return Carbon::parse($date)->format('G:i');
+    }
+}
+
+if (! function_exists('formatDate')) {
+    /**
+     * @param string $date 日にち（yyyy-mm-dd || yyyy-mm-dd HH:ii）
+     *
+     * @return string m月d日
+     */
+    function formatDate(string $date)
+    {
+        return Carbon::parse($date)->format('n月j日');
+    }
+}
+
+if (! function_exists('formatDatetime')) {
+    /**
+     * @param string $date 日時（yyyy-mm-dd HH:ii）
+     *
+     * @return string 日時（m月d日 H:ii）
+     */
+    function formatDatetime(string $date)
+    {
+        return Carbon::parse($date)->format('n月j日 G:i');
     }
 }
