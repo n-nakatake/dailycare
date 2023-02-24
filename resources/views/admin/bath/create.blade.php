@@ -56,7 +56,15 @@
                     <div class="form-group row">
                         <label class="w-5rem">日時</label>
                         <div class="col-md-3">
-                            <input type="date" class="form-control" name="bath_date" value="{{ old('bath_date') ? old('bath_date') : date("Y-m-d") }}">
+                            <input type="date" class="form-control" name="bath_date" value=
+                                 @if(old('bath_date'))
+                                    "{{ old('bath_date') }}"
+                                 @elseif(request()->input('date'))
+                                    "{{ request()->input('date') }}"
+                                 @else
+                                    "{{ date("Y-m-d") }}"
+                                 @endif
+                            >
                         </div>
                         <div class="col-md-3">
                             <input type="time" class="form-control" name="bath_time" value="{{ old('bath_time') ? old('bath_time') : date("H:i")}}">
@@ -77,13 +85,13 @@
                         <div class="col-md-3">
                             <select  class="form-control" name="bath_method">
                                 <option value="">選択してください</option>
-                                @foreach ($bathMethods as $id => $name)
+                                @foreach ($bathMethods as $id => $option)
                                     <option value="{{ $id }}" 
                                         @if (!empty(old('bath_method')))
                                             {{ (int) old('bath_method') === $id ? 'selected' : ''}}
                                         @endif
                                     >
-                                        {{ $name }}
+                                        {{ $option }}
                                     </option>
                                 @endforeach
                             </select>
@@ -97,12 +105,12 @@
                     <div class="form-group row">
                         <label class="w-5rem">特記</label>
                         <div class="col-md-10">
-                            <textarea class="form-control" name="bath_note" rows="20">{{ old('bath_note') }}</textarea>
+                            <textarea class="form-control" name="bath_note" rows="5">{{ old('bath_note') }}</textarea>
                         </div>
                     </div>
                     @csrf
                     <div class="text-center mt-5">
-                        <a class="col-md-3 btn btn-secondary me-5" href="{{ route('admin.bath.index', ['residentId' => $residentId]) }}">キャンセル</a>
+                        <a class="col-md-3 btn btn-secondary me-5" href="{{ session('fromUrl') ? session('fromUrl') : route('admin.bath.index', ['residentId' => $residentId]) }}">キャンセル</a>
                         <input type="submit" class="btn btn-primary col-md-3" value="登録">
                     </div>
                 </form>

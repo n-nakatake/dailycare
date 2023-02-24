@@ -31,14 +31,14 @@
                         </div>
                         <label class="w-5rem ms-5">表示月</label>
                         <div class="col-md-3 ps-0">
-                            <input type="month" id="bathYm" class="form-control" name="bath_ym" value="{{ $date }}">
+                            <input type="month" id="bathYm" class="form-control" name="bath_ym" value="{{ $dateYm }}">
                         </div>
                     </div>
                 </form>
             </div>
         </div>
         <div class="row">
-            <div class="list-bath col-md-12 mx-auto">
+            <div class="col-md-12 mx-auto">
                 <div class="row">
                     <table class="table table-dark">
                         <thead>
@@ -50,66 +50,44 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($baths as $bath)
-                                @php
-                                    $bathCount = count($bath);
-                                @endphp
-                                @if($bathCount === 1)
+                            @foreach($datesOfMonth as $date)
+                                @if (! isset($baths[$date]))
                                     <tr>
-                                        <td>{{ substr($bath[0]->bath_time, 0, 10) }}</td>
-                                        <td>{{ substr($bath[0]->bath_time, 11, 5) }}</td>
-                                        <td>{{ getBathMethodName($bath[0]->bath_method) }}</td>
+                                        <td>{{ formatDate($date) }}</td>
+                                        <td></td>
+                                        <td></td>
                                         <td>
                                             <div>
-                                                <a class="btn btn-primary me-2" href="{{ route('admin.bath.edit', ['residentId' => $bath[0]->resident_id,'bathId' => $bath[0]->id]) }}">編集</a>
-                                                <!-- Button trigger modal -->
-                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal{{ $bath[0]->id }}">
-                                                  削除
-                                                </button>
-                                                <!-- Modal -->
-                                                <div class="modal fade text-dark" id="confirmModal{{ $bath[0]->id }}" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered">
-                                                        <div class="modal-content">
-                                                            <div class="modal-body">
-                                                                <p>{{ substr($bath[0]->bath_time, 0, -3) }}の入浴データを削除してよろしいですか？</p>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-                                                                <button type="button" class="btn btn-danger" onclick="location.href='{{ route('admin.bath.delete', ['residentId' => $bath[0]->resident_id,'bathId' => $bath[0]->id]) }}'">削除</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <a class="btn btn-primary me-2" href="{{ route('admin.bath.add', ['residentId' => $residentId,'date' => $date]) }}">登録</a>
                                             </div>
                                         </td>
                                     </tr>
                                 @else
-                                    @foreach($bath as $bathTime)
+                                    @php
+                                        $bathCount = count($baths[$date]);
+                                    @endphp
+                                    @if($bathCount === 1)
                                         <tr>
-                                            @if ($loop->first)
-                                                <td rowspan={{$bathCount}}>
-                                                    {{ substr($bathTime->bath_time, 0, 10) }}
-                                                </td>
-                                            @endif
-                                            <td>{{ substr($bathTime->bath_time, 11, 5) }}</td>
-                                            <td>{{ getBathMethodName($bathTime->bath_method) }}</td>
+                                            <td>{{ formatDate($baths[$date][0]->bath_time, 0, 10) }}</td>
+                                            <td>{{ getTime($baths[$date][0]->bath_time) }}</td>
+                                            <td>{{ getBathMethodName($baths[$date][0]->bath_method) }}</td>
                                             <td>
                                                 <div>
-                                                    <a class="btn btn-primary me-2" href="{{ route('admin.bath.edit', ['residentId' => $bathTime->resident_id,'bathId' =>  $bathTime->id]) }}">編集</a>
-                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal{{ $bathTime->id }}">
+                                                    <a class="btn btn-primary me-2" href="{{ route('admin.bath.edit', ['residentId' => $residentId,'bathId' => $baths[$date][0]->id]) }}">編集</a>
+                                                    <!-- Button trigger modal -->
+                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal{{ $baths[$date][0]->id }}">
                                                       削除
                                                     </button>
-                                                    
                                                     <!-- Modal -->
-                                                    <div class="modal fade text-dark" id="confirmModal{{ $bathTime->id }}" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                                                    <div class="modal fade text-dark" id="confirmModal{{ $baths[$date][0]->id }}" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
                                                         <div class="modal-dialog modal-dialog-centered">
                                                             <div class="modal-content">
                                                                 <div class="modal-body">
-                                                                    <p>{{ substr($bathTime->bath_time, 0, -3) }}の入浴データを削除してよろしいですか？</p>
+                                                                    <p>{{ formatDatetime($baths[$date][0]->bath_time, 0, 10) }}の入浴データを削除してよろしいですか？</p>
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-                                                                    <button type="button" class="btn btn-danger" onclick="location.href='{{ route('admin.bath.delete', ['residentId' => $bathTime->resident_id,'bathId' => $bathTime->id]) }}'">削除</a>
+                                                                    <button type="button" class="btn btn-danger" onclick="location.href='{{ route('admin.bath.delete', ['residentId' => $residentId,'bathId' => $baths[$date][0]->id]) }}'">削除</a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -117,7 +95,42 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @else
+                                        @foreach($baths[$date] as $bathTime)
+                                            <tr>
+                                                @if ($loop->first)
+                                                    <td rowspan={{$bathCount}}>
+                                                        {{ formatDate($bathTime->bath_time, 0, 10) }}
+                                                    </td>
+                                                @endif
+                                                <td>{{ getTime($bathTime->bath_time) }}</td>
+                                                <td>{{ getBathMethodName($bathTime->bath_method) }}</td>
+                                                <td>
+                                                    <div>
+                                                        <a class="btn btn-primary me-2" href="{{ route('admin.bath.edit', ['residentId' => $residentId,'bathId' =>  $bathTime->id]) }}">編集</a>
+                                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal{{ $bathTime->id }}">
+                                                          削除
+                                                        </button>
+                                                        
+                                                        <!-- Modal -->
+                                                        <div class="modal fade text-dark" id="confirmModal{{ $bathTime->id }}" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog modal-dialog-centered">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-body">
+                                                                        <p>{{ formatDate($bathTime->bath_time, 0, 10) . ' ' . getTime($bathTime->bath_time) }}の入浴データを削除してよろしいですか？</p>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                                                                        <button type="button" class="btn btn-danger" onclick="location.href='{{ route('admin.bath.delete', ['residentId' => $residentId,'bathId' => $bathTime->id]) }}'">削除</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
                                 @endif
                             @endforeach
                         </tbody>

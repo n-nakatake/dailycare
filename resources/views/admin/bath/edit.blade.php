@@ -15,7 +15,7 @@
                 <div class="row">
                     <div class="col-md-12 text-end">
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal{{ $bathForm->id }}">
-                          削除
+                            削除
                         </button>
                     </div>
                     <!-- Modal -->
@@ -23,7 +23,7 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-body">
-                                    <p>{{ substr($bathForm->bath_time, 0, -3) }}の入浴データを削除してよろしいですか？</p>
+                                    <p>{{ formatDatetime($bathForm->bath_time) }}のデータを削除してよろしいですか？</p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
@@ -109,12 +109,12 @@
                     <div class="form-group row">
                         <label class="w-5rem">特記</label>
                         <div class="col-md-10">
-                            <textarea class="form-control" name="bath_note" rows="20">{{ old('bath_note') ? old('bath_note') : $bathForm->bath_note }}</textarea>
+                            <textarea class="form-control" name="bath_note" rows="5">{{ old('bath_note') ? old('bath_note') : $bathForm->bath_note }}</textarea>
                         </div>
                     </div>
                     @csrf
                     <div class="text-center mt-5">
-                        <a class="col-md-3 btn btn-secondary me-5" href="{{ route('admin.bath.index', ['residentId' => $bathForm->resident_id]) }}">キャンセル</a>
+                        <a class="col-md-3 btn btn-secondary me-5" href="{{ session('fromUrl') ? session('fromUrl') : route('admin.bath.index', ['residentId' => $bathForm->resident_id]) }}">キャンセル</a>
                         <input type="submit" class="col-md-3 btn btn-primary" value="更新">
                     </div>
                 </form>

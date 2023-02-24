@@ -28,6 +28,7 @@ class Bath extends Model
         'bath_date' => 'required|date_format:Y-m-d',
         'bath_time' => 'required|date_format:H:i',
         'bath_method' => 'required|in:1,2,3,4,5,6,7',
+        'bath_note' => 'nullable|max:2000',
     ];
 
     public function user()
