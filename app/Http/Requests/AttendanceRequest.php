@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Attendance;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class AttendanceRequest extends FormRequest
 {
@@ -52,13 +53,16 @@ class AttendanceRequest extends FormRequest
         });
         
         // 登録時に同じ日付のデータが既にある場合エラーにする
-        $isCreate = strpos($this->path(), 'create') !== false ? true : false;
-        $sameDateAttendance = Attendance::where('attendance_date', $this->input('attendance_date'))->get();
-        $routing = route('admin.attendance.edit', ['attendanceDate' => $this->input('attendance_date')]);
-        $validator->after(function ($validator) use ($isCreate, $sameDateAttendance, $routing) {
-            if ($isCreate && $sameDateAttendance->count() > 0) {
-                $validator->errors()->add('attendance_date', '指定された日付の出勤者は<a href="' . $routing . '">既に登録済み</a>です');
-            }
-        });
+        if (!is_null($this->input('attendance_date'))) {
+            $isCreate = strpos($this->path(), 'create') !== false ? true : false;
+            $sameDateAttendance = Attendance::where('office_id', Auth::user()->office_id)
+                ->where('attendance_date', $this->input('attendance_date'))->get();
+            $routing = route('admin.attendance.edit', ['attendanceDate' => $this->input('attendance_date')]);
+            $validator->after(function ($validator) use ($isCreate, $sameDateAttendance, $routing) {
+                if ($isCreate && $sameDateAttendance->count() > 0) {
+                    $validator->errors()->add('attendance_date', '指定された日付の出勤者は<a href="' . $routing . '">既に登録済み</a>です');
+                }
+            });
+        }
     }
 }
