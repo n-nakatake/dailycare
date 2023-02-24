@@ -3,17 +3,55 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Vital;
-use App\Models\History;
-use App\Models\User;
+use App\Models\Attendance;
+use App\Models\Meal;
 use App\Models\Resident;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class TopController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('admin.top.index');
+        $targetDate = $request->date ? $request->date : date('Y-m-d');
+
+        // 出勤者データ
+        $officeId = Auth::user()->office_id;
+        $attendances = Attendance::where('attendance_date', $targetDate)
+            ->where('office_id', $officeId)
+            ->get();
+        $dayShiftMembers = $attendances->where('attendance_type', Attendance::ATTENDANCE_TYPE_DAY_SHIFT)->sortBy('id');
+        $nightShiftMembers = $attendances->where('attendance_type', Attendance::ATTENDANCE_TYPE_NIGHT_SHIFT)->sortBy('id');
+
+        // 利用者データ
+        $residents = Resident::where('office_id', Auth::user()->office_id)
+            ->with([
+                'vitals' => function ($query) use ($targetDate) {
+                    $query->where('vital_time', '>', $targetDate . ' 00:00:00')
+                        ->where('vital_time', '<=', $targetDate . ' 23:59:59')
+                        ->orderByDesc('vital_time');
+                },
+                'meals' => function ($query) use ($targetDate) {
+                    $query->where('meal_time', '>', $targetDate . ' 00:00:00')
+                        ->where('meal_time', '<=', $targetDate . ' 23:59:59')
+                        ->orderByDesc('meal_time');
+                },
+                'baths' => function ($query) use ($targetDate) {
+                    $query->where('bath_time', '>', $targetDate . ' 00:00:00')
+                        ->where('bath_time', '<=', $targetDate . ' 23:59:59');
+                }
+            ])
+            ->orderBy('last_name_k')
+            ->orderBy('first_name_k')
+            ->get();
+
+        return view('admin.top.index', [
+            'dayShiftMembers' => $dayShiftMembers,
+            'nightShiftMembers' => $nightShiftMembers,
+            'residents' => $residents,
+            'mealBldOptions' => Meal::MEAL_BLD_OPTIONS,
+            'mealIntakeOptions' => Meal::MEAL_INTAKE_OPTIONS,
+        ]);
     }
 }
