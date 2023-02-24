@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\BathController;
+use App\Http\Controllers\Admin\EditPasswordController;
 use App\Http\Controllers\Admin\MealController;
 use App\Http\Controllers\Admin\ResidentController;
 use App\Http\Controllers\Admin\SummaryController;
@@ -22,13 +23,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('admin/');;
 });
-
-/*Route::controller(VitalController::class)->prefix('admin')->group(function() {
-    Route::get('vital/create', 'add')->middleware('auth');
-});*/
-
 
 Route::controller(TopController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/', 'index')->name('top.index');
@@ -81,6 +77,9 @@ Route::controller(SummaryController::class)->prefix('admin')->name('admin.')->mi
     Route::get('summary', 'index')->name('summary.index');
 });
 
-Auth::routes();
+Route::controller(EditPasswordController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::get('password/edit', 'edit')->name('password.edit');
+    Route::post('password/edit', 'update')->name('password.update');
+});
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Auth::routes();
