@@ -6,12 +6,27 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">{{ __('ユーザー登録') }}</div>
-    
                     <div class="card-body">
                         <form method="POST" action="{{ route('register') }}">
                             @csrf
 
-    
+                            @if (Auth::user()->super_admin_flag)
+                                <div class="form-group row">
+                                    <label for="office_id" class="col-md-4 col-form-label text-md-right">事業所</label>
+                                    <div class="col-md-6">
+                                        <select  class="form-control" name="office_id">
+                                            @foreach (App\Models\Office::all() as $office)
+                                                <option value="{{ $office->id }}" {{ old('office_id') === $office->id ? 'selected' : ''}}>{{ $office->office_name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @if ($errors->has('office_id'))
+                                    　　　　<span class="invalid-feedback">
+                                        　　<strong>{{$errors->first('office_id')}}</strong>
+                                    　　　　</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
                             <div class="form-group row">
                                 <label for="last_name" class="col-md-4 col-form-label text-md-right">{{ __('messages.last_name') }}</label>
     
@@ -46,9 +61,9 @@
                                         <option value="1" {{ old('qualification') === '1' ? 'selected' : ''}}>介護福祉士</option>
                                         <option value="2" {{ old('qualification') === '2' ? 'selected' : ''}}>初任者研修修了</option>
                                         <option value="3" {{ old('qualification') === '3' ? 'selected' : ''}}>ヘルパー2級</option>
-                                        <option value="3" {{ old('qualification') === '4' ? 'selected' : ''}}>ヘルパー1級</option>
-                                        <option value="3" {{ old('qualification') === '5' ? 'selected' : ''}}>介護支援専門員</option>
-                                        <option value="3" {{ old('qualification') === '6' ? 'selected' : ''}}>なし</option>
+                                        <option value="4" {{ old('qualification') === '4' ? 'selected' : ''}}>ヘルパー1級</option>
+                                        <option value="5" {{ old('qualification') === '5' ? 'selected' : ''}}>介護支援専門員</option>
+                                        <option value="6" {{ old('qualification') === '6' ? 'selected' : ''}}>なし</option>
                                     </select>
                                     @if ($errors->has('qualification'))
                                 　　　　<span class="invalid-feedback">
@@ -93,6 +108,17 @@
                                     <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                                 </div>
                             </div>
+                            
+                            <div class="form-group row">
+                                <div class="col-md-6 offset-md-4">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="admin_flag" {{ old('remember') ? 'checked' : '' }}> 管理者として登録
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
     
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-4">
