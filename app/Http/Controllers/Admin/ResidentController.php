@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ResidentHistory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Resident;
 use Carbon\Carbon;
 
@@ -20,6 +21,7 @@ class ResidentController extends Controller
         $this->validate($request, Resident::$rules);
         $resident = new Resident;
         $form = $request->all();
+        $form['office_id'] = Auth::user()->office_id;
 
          // formに画像があれば、保存する
         if (isset($form['image'])) {
@@ -45,9 +47,14 @@ class ResidentController extends Controller
     {
         $cond_name = $request->cond_name;
         if ($cond_name != '') {
-            $residents = Resident::where('last_name', $cond_name)->get();
+            $residents = Resident::where('office_id', Auth::user()->office_id)
+                ->where('last_name', $cond_name)
+                ->get();
         } else {
-            $residents = Resident::all();
+            $residents = Resident::where('office_id', Auth::user()->office_id)
+                ->orderBy('last_name_k')
+                ->orderBy('first_name_K')
+                ->get();
         }
         return view('admin.resident.index', ['residents' => $residents, 'cond_name' => $cond_name]);
     }
@@ -93,12 +100,8 @@ class ResidentController extends Controller
         $residenthistory->resident_id = $resident->id;
         $residenthistory->edited_at = Carbon::now();
         $residenthistory->save();
-        
 
         return redirect('admin/resident/edit?id='. $request->id);
-        //return redirect('admin/resident');
-        
-        
     }
     
   public function delete(Request $request)
@@ -109,5 +112,4 @@ class ResidentController extends Controller
       $resident->delete();
       return redirect('admin/resident/');
   } 
-    
 }

@@ -9,13 +9,17 @@ use App\Models\History;
 use App\Models\User;
 use App\Models\Resident;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class VitalController extends Controller
 {
     public function add(int $residentId)
     {
-        $users = User::all();
-        $residents = Resident::all();
+        $users = User::where('office_id', Auth::user()->office_id)->orderBy('id')->get();
+        $residents = Resident::where('office_id', Auth::user()->office_id)
+            ->orderBy('last_name_k')
+            ->orderBy('first_name_k')
+            ->get();
         $residentName = $residents->where('id', $residentId)->first()->last_name . $residents->where('id', $residentId)->first()->first_name;
         /*$filteredResidents = $residents->filter(function ($resident, $key) use($residentId) {
             return $resident->id !== $residentId;
@@ -29,6 +33,7 @@ class VitalController extends Controller
         $this->validate($request, Vital::$rules);
         $vital = new Vital;
         $form = $request->all();
+        $form['office_id'] = Auth::user()->office_id;
 
         // フォームから画像が送信されてきたら、保存して、$vital->image_path に画像のパスを保存する
         if (isset($form['image'])) {
@@ -52,13 +57,15 @@ class VitalController extends Controller
 
     public function index(Request $request, $residentId)
     {
-        $residents = Resident::all();
+        $residents = Resident::where('office_id', Auth::user()->office_id)
+            ->orderBy('last_name_k')
+            ->orderBy('first_name_k')
+            ->get();
         $residentId = $request->resident_id ? (int)$request->resident_id : $residentId; 
         $residentName = $residents->where('id', $residentId)->first()->last_name . $residents->where('id', $residentId)->first()->first_name;
-        
         $date = $request->vital_ym;
         $vitals = [];
-        //$date = '202212';
+
         if ($date != '') {
             $splitedDate = explode("-", $date);
             //$splitedDate = str_split($date, 4);
@@ -87,8 +94,7 @@ class VitalController extends Controller
     
     public function edit(Request $request, $residentId, $vitalId)
     {
-        $users = User::all();
-        // Vital Modelからデータを取得する
+        $users = User::where('office_id', Auth::user()->office_id)->orderBy('id')->get();
         $vital = Vital::find($request->vitalId);
         if (empty($vital)) {
             abort(404);
@@ -98,11 +104,8 @@ class VitalController extends Controller
 
     public function update(Request $request, $residentId, $vitalId)
     {
-        // Validationをかける
         $this->validate($request, Vital::$rules);
-        // Vital Modelからデータを取得する
         $vital = Vital::find($vitalId);
-        // 送信されてきたフォームデータを格納する
         $vital_form = $request->all();
 
         if ($request->remove == 'true') {
@@ -133,10 +136,7 @@ class VitalController extends Controller
 
     public function delete(Request $request, $residentId)
     {
-        // 該当するVital Modelを取得
         $vital = Vital::find($request->id);
-
-        // 削除する
         $vital->delete();
 
         return redirect('admin/vital/');
