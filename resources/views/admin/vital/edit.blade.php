@@ -7,13 +7,13 @@
             <div class="col-md-8 mx-auto">
                 <h2>vital編集</h2>
                 <form action="{{ route('admin.vital.update',['residentId' => $vitalForm->resident_id,'vitalId' => $vitalForm->id] ) }}" method="post" enctype="multipart/form-data">
-                    @if (count($errors) > 0)
-                        <ul>
-                            @foreach($errors->all() as $e)
-                                <li>{{ $e }}</li>
-                            @endforeach
-                        </ul>
-                    @endif
+                    <div class="form-group row">
+                        <label class="w-5rem">利用者</label>
+                        <div class="col-md-4">
+                            {{ $vitalForm->resident->last_name . $vitalForm->resident->first_name }} 様
+                        </div>
+                        <input type="hidden" name="resident_id" value="{{ $vitalForm->resident_id }}">
+                    </div>
                     <div class="form-group row">
                         <input type="hidden" name="resident_id" value="{{ $vitalForm->resident_id }}">
                         <label class="col-md-1">記録者</label>
