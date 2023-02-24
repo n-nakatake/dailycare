@@ -17,6 +17,11 @@ class Vital extends Model
         'vital_time' => 'required',
      );    
 
+    public function resident()
+    {
+        return $this->belongsTo(Resident::class);
+    }
+
     // Vital Modelに関連付けを行う
     public function histories()
     {

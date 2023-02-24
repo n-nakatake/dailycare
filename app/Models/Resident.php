@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Resident extends Model
 {
@@ -30,4 +31,18 @@ class Resident extends Model
                               
     }    
     
+    public function vitals()
+    {
+        return $this->hasMany('App\Models\Vital');
+    }    
+    
+    public function meals()
+    {
+        return $this->hasMany('App\Models\Meal');
+    }    
+    
+    public function baths()
+    {
+        return $this->hasMany('App\Models\Bath');
+    }    
 }
