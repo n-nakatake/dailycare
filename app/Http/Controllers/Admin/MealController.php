@@ -84,7 +84,7 @@ class MealController extends Controller
 
     public function update(MealRequest $request, int $residentId, int $mealId)
     {
-        $meal = Meal::find($mealId);
+        $meal = $this->getValidMeal($residentId, $mealId);
         $form = $request->all();
         $form['meal_time'] = $form['meal_date'] . ' ' . $form['meal_time'];
         unset($form['_token']);
@@ -135,7 +135,7 @@ class MealController extends Controller
 
     public function delete(Request $request, int $residentId, int $mealId)
     {
-        $meal = meal::find($mealId);
+        $meal = $this->getValidMeal($residentId, $mealId);
         $mealYm = substr($meal->meal_time, 0, 7);
         $message = formatDate($meal->meal_time) . 'の' . Meal::MEAL_BLD_OPTIONS[$meal->meal_bld] . 'の食事摂取量を削除しました。';
         $meal->delete();
@@ -156,5 +156,19 @@ class MealController extends Controller
         }
 
         return $mealsByDay;
+    }
+
+    private function getValidMeal(int $residentId, int $mealId)
+    {
+        $meal = Meal::where('resident_id', $residentId)
+            ->where('office_id', Auth::user()->office_id)
+            ->where('id', $mealId)
+            ->first();
+
+        if (is_null($meal)) {
+            abort(404);
+        }
+        
+        return $meal;
     }
 }

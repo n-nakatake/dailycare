@@ -127,7 +127,7 @@ class BathController extends Controller
     public function update(Request $request, $residentId, $bathId)
     {
         $this->validate($request, Bath::$rules);
-        $bath = Bath::find($bathId);
+        $bath = this->getValidBath($residentId, $mealId);
         $form = $request->all();
         $form['bath_time'] = $form['bath_date'] . ' ' . $form['bath_time'];
 
@@ -147,12 +147,26 @@ class BathController extends Controller
     public function delete(Request $request, $residentId, $bathId)
     {
         // 該当するBath Modelを取得
-        $bath = bath::find($bathId);
+        $bath = this->getValidBath($residentId, $mealId);
         $bathYm = substr($bath->bath_time, 0, 7);
         $message = formatDatetime($bath->bath_time) . 'の入浴状況を削除しました。';
         $bath->delete();
 
         return redirect(session()->pull('fromUrl', route('admin.bath.index', ['residentId' => $residentId, 'bath_ym' => $bathYm])))
             ->with('message', $message);
+    }
+
+    private function getValidBath(int $residentId, int $bathId)
+    {
+        $bath = Bath::where('resident_id', $residentId)
+            ->where('office_id', Auth::user()->office_id)
+            ->where('id', $bathId)
+            ->first();
+
+        if (is_null($bath)) {
+            abort(404);
+        }
+
+        return $bath;
     }
 }

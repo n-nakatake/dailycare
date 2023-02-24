@@ -88,9 +88,13 @@ class AttendanceController extends Controller
         $attendanceDate = $request->attendance_date;
         $attendancesAfter = $this->formatAttendaceMembers($request);
 
+        $attendance = Attendance::where('office_id', Auth::user()->office_id)->where('attendance_date', $attendanceDate);
+        if ($attendance->get()->isEmpty()) {
+            abort(404);
+        }
         try {
             DB::beginTransaction();
-            Attendance::where('office_id', Auth::user()->office_id)->where('attendance_date', $attendanceDate)->delete();
+            $attendance->delete();
             Attendance::insert($attendancesAfter);
             DB::commit();
         } catch (Throwable $e) {

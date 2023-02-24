@@ -66,7 +66,13 @@ class MealRequest extends FormRequest
             
             // 編集時に異なる日付または食事に変更しており、変更後と同じ日付・同じ食事のデータが既にある場合エラーにする
             if (!$isCreate) {
-                $originalMeal = Meal::find($this->route('mealId'));
+                $originalMeal = Meal::where('office_id', $officeId)
+                    ->where('resident_id', $this->route('residentId'))
+                    ->where('id', $this->route('mealId'))
+                    ->first();
+                if (is_null($originalMeal)) {
+                    abort(404);
+                }
                 $isEditDate = $this->input('meal_date') !== substr($originalMeal->meal_time, 0, 10) ? true : false;
                 $isEditMealBld = (int)$this->input('meal_bld') !== $originalMeal->meal_bld ? true : false;
                 if ($isEditDate || $isEditMealBld) {
