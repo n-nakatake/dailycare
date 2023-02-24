@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('attendances', function (Blueprint $table) {
-            $table->integer('office_id');
+            $table->integer('office_id')->after('id');
         });
     }
 
@@ -25,7 +25,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('attendances', function (Blueprint $table) {
             $table->dropColumn(['office_id']);
         });
     }

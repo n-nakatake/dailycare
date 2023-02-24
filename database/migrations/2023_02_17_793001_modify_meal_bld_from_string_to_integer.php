@@ -13,9 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->integer('office_id')->after('id'); // 事業所
-            $table->smallInteger('super_admin_flag')->default(false)->after('email'); // システム管理者フラグ
+        Schema::table('meals', function (Blueprint $table) {
+            $table->integer('meal_bld')->change();
         });
     }
 
@@ -26,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['office_id', 'super_admin_flag']);
+        Schema::table('meals', function (Blueprint $table) {
+            $table->string('meal_bld')->change();
         });
     }
 };
