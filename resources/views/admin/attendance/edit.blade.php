@@ -112,6 +112,7 @@
                     </div>
                     @csrf
                     <div class="text-center mt-5">
+                        <a class="col-md-3 btn btn-secondary me-5" href="{{ session('fromUrl') ? session('fromUrl') : route('admin.top.index') }}">キャンセル</a>
                         <input type="submit" class="btn btn-primary col-md-3" value="更新">
                     </div>
                 </form>

@@ -15,7 +15,14 @@ class AttendanceController extends Controller
 {
     public function add()
     {
-        $users = User::where('office_id', Auth::user()->office_id)->get()->sortBy('id');
+        // バリデーションエラー以外で遷移してきたら、キャンセルボタン押下時または登録後にリダイレクトするURLをセッションに保存
+        $previousUrl = url()->previous();
+        $urlWithoutGetParameter = strpos($previousUrl, "?") === false ? $previousUrl : substr($previousUrl , 0 , strpos($previousUrl, "?"));
+        if ($urlWithoutGetParameter !== route('admin.attendance.add')) {
+            session(['fromUrl' => url()->previous()]);
+        }
+
+        $users = User::where('office_id', Auth::user()->office_id)->orderBy('id')->get();
 
         return view('admin.attendance.create', ['users' => $users]);
     }
@@ -23,18 +30,21 @@ class AttendanceController extends Controller
     public function create(AttendanceRequest $request)
     {
         $attendanceMembers = $this->formatAttendaceMembers($request);
-
         Attendance::insert($attendanceMembers);
-        $formattedAttendanceDate = $this->formatAttendaceDate($request->attendance_date);
 
-        return redirect(route('admin.top.index'))->with('message', $formattedAttendanceDate . 'の出勤者を登録しました。');
+        return redirect(session()->pull('fromUrl', route('admin.top.index', ['date' => $request->attendance_date])))
+            ->with('message', formatDate($request->attendance_date) . 'の出勤者を登録しました。');
     }
 
     public function edit(string $attendanceDate)
     {
+        // バリデーションエラー以外で遷移してきたら、キャンセルボタン押下時または更新後にリダイレクトするURLをセッションに保存
+        if (url()->previous() !== route('admin.attendance.edit', ['attendanceDate' => $attendanceDate])) {
+            session(['fromUrl' => url()->previous()]);
+        }
+
         $officeId = Auth::user()->office_id;
-        $users = User::where('office_id', $officeId)->get()->sortBy('id');
-        // bath Modelからデータを取得する
+        $users = User::where('office_id', $officeId)->orderBy('id')->get();
         $attendances = Attendance::where('attendance_date', $attendanceDate)
             ->where('office_id', $officeId)
             ->orderBy('id')
@@ -75,7 +85,6 @@ class AttendanceController extends Controller
 
     public function update(AttendanceRequest $request)
     {
-        // Bath Modelからデータを取得する
         $attendanceDate = $request->attendance_date;
         $attendancesAfter = $this->formatAttendaceMembers($request);
 
@@ -89,13 +98,12 @@ class AttendanceController extends Controller
             return redirect(route('admin.attendance.edit', ['attendanceDate' => $attendanceDate]));
         }
         
-        $formattedAttendanceDate = $this->formatAttendaceDate($attendanceDate);
-
-        return redirect(route('admin.top.index'))->with('message', $formattedAttendanceDate . 'の出勤者を更新しました。');
+        return redirect(session()->pull('fromUrl', route('admin.top.index', ['date' => $attendanceDate])))
+            ->with('message', formatDate($attendanceDate) . 'の出勤者を更新しました。');
     }
     
     /**
-     * DBに保存するための出勤者データを整形
+     * DBに保存するために出勤者データを整形
      */
     private function formatAttendaceMembers(Request $request)
     {
@@ -149,15 +157,5 @@ class AttendanceController extends Controller
         }
 
         return $attendanceMembers;
-    }
-    
-    /**
-     * DBに保存するための出勤者データを整形
-     */
-    private function formatAttendaceDate(string $attendanceDate)
-    {
-        return substr($attendanceDate, 0, 4) . '年'
-            . substr($attendanceDate, 5, 2) . '月'
-            . substr($attendanceDate, 8, 2) . '日';
     }
 }

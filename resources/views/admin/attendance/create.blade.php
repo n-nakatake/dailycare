@@ -16,7 +16,7 @@
                     <div class="form-group row">
                         <label class="w-5rem h5">日付</label>
                         <div class="col-md-3">
-                            <input type="date" class="form-control" name="attendance_date" value="{{ old('attendance_date') ? old('attendance_date') : date("Y-m-d") }}">
+                            <input type="date" class="form-control" name="attendance_date" value="{{ old('attendance_date') ? old('attendance_date') : request()->input('date') }}">
                         </div>
                         @if ($errors->has('attendance_date'))
                             <span class="small text-danger error">
@@ -100,6 +100,7 @@
                     </div>
                     @csrf
                     <div class="text-center mt-5">
+                        <a class="col-md-3 btn btn-secondary me-5" href="{{ session('fromUrl') ? session('fromUrl') : route('admin.top.index') }}">キャンセル</a>
                         <input type="submit" class="btn btn-primary col-md-3" value="登録">
                     </div>
                 </form>
