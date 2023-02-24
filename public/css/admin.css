@@ -68,3 +68,32 @@ body {
   margin-left: -1rem;
   padding: 0;
 }
+.h-15 {
+  height: 1.5rem;
+}
+#top td, #meal td {
+  height: 6rem;
+  padding: 0;
+}
+#top .no-link, #meal .no-link {
+  height: 6rem;
+  padding: 0.5rem;
+  vertical-align: middle;
+}
+#top td>a, #meal td a {
+  display: flex;
+  padding: 0.5rem;
+  height: 100%;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+#top td>a:hover, #meal td a:hover {
+  background-color: grey;
+}#top td>a:active, #meal td a:active {
+  background-color: grey;
+}
+.middle {
+  display: flex;
+  align-items: center;
+}
