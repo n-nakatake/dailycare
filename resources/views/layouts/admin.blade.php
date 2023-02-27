@@ -33,7 +33,11 @@
             <nav class="navbar navbar-expand-md navbar-dark navbar-laravel">
                 <div class="container">
                     <a class="navbar-brand" href="{{ url('/admin') }}">
-                        {{ config('app.name', 'Laravel') }}
+                        @if (Auth::check())
+                            {{ config('app.name', 'Daily Care') . ' | ' . Auth::user()->office->office_name }}
+                        @else
+                            {{ config('app.name', 'Daily Care') }}
+                        @endif
                     </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
