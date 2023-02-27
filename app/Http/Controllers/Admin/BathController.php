@@ -147,7 +147,7 @@ class BathController extends Controller
     public function delete(Request $request, $residentId, $bathId)
     {
         // 該当するBath Modelを取得
-        $bath = this->getValidBath($residentId, $mealId);
+        $bath = $this->getValidBath($residentId, $bathId);
         $bathYm = substr($bath->bath_time, 0, 7);
         $message = formatDatetime($bath->bath_time) . 'の入浴状況を削除しました。';
         $bath->delete();
