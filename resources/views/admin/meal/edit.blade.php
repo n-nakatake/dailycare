@@ -110,6 +110,7 @@
                         <label class="w-5rem">主食</label>
                         <div class="col-md-3">
                             <select  class="form-control" name="meal_intake_rice">
+                                <option value="">選択してください</option>
                                 @foreach ($mealIntakeOptions as $id => $name)
                                     <option value="{{ $id }}" 
                                         @if (!empty(old('meal_intake_rice')))
@@ -132,7 +133,8 @@
                     <div class="form-group row">
                         <label class="w-5rem">副食</label>
                         <div class="col-md-3">
-                             <select  class="form-control" name="meal_intake_side">
+                            <select  class="form-control" name="meal_intake_side">
+                                <option value="">選択してください</option>
                                 @foreach ($mealIntakeOptions as $id => $name)
                                     <option value="{{ $id }}" 
                                         @if (!empty(old('meal_intake_side')))
@@ -156,6 +158,7 @@
                         <label class="w-5rem">汁物</label>
                         <div class="col-md-3">
                             <select  class="form-control" name="meal_intake_soup">
+                                <option value="">選択してください</option>
                                 @foreach ($mealIntakeOptions as $id => $name)
                                     <option value="{{ $id }}" 
                                         @if (!empty(old('meal_intake_soup')))
