@@ -14,10 +14,11 @@ class Meal extends Model
     public const MEAL_BLD_OPTIONS = [
         1 => '朝食',
         2 => '昼食',
-        3 => '夜食',
+        3 => '夕食',
     ];
 
     public const MEAL_INTAKE_OPTIONS = [
+        0 => '0%',
         1 => '10%',
         2 => '20%',
         3 => '30%',

@@ -31,9 +31,9 @@ class MealRequest extends FormRequest
             'meal_date' => 'required|date_format:Y-m-d',
             'meal_time' => 'required|date_format:H:i',
             'meal_bld' => 'required|in:1,2,3',
-            'meal_intake_rice' => 'nullable|in:1,2,3,4,5,6,7,8,9,10',
-            'meal_intake_side' => 'nullable|in:1,2,3,4,5,6,7,8,9,10',
-            'meal_intake_soup' => 'nullable|in:1,2,3,4,5,6,7,8,9,10',
+            'meal_intake_rice' => 'required|in:0,1,2,3,4,5,6,7,8,9,10',
+            'meal_intake_side' => 'required|in:0,1,2,3,4,5,6,7,8,9,10',
+            'meal_intake_soup' => 'required|in:0,1,2,3,4,5,6,7,8,9,10',
             'meal_note' => 'nullable|max:2000',
         ];
     }

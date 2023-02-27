@@ -18,13 +18,14 @@
                     </div>
                     <div class="col-md-9">
                         @if ($residents->isNotEmpty())
-                            <button class="btn btn-secondary" onclick="location.href='{{ route('admin.vital.index', ['residentId' => $residents->first()->id]) }}'">バイタル一覧</button>
-                            <button class="btn btn-secondary" onclick="location.href='{{ route('admin.bath.index', ['residentId' => $residents->first()->id]) }}'">入浴一覧</button>
-                            <button class="btn btn-secondary" onclick="location.href='{{ route('admin.meal.index', ['residentId' => $residents->first()->id]) }}'">食事一覧</button>
+                            <button class="btn btn-secondary mb-1" onclick="location.href='{{ route('admin.vital.index', ['residentId' => $residents->first()->id]) }}'">バイタル一覧</button>
+                            <button class="btn btn-secondary mb-1" onclick="location.href='{{ route('admin.bath.index', ['residentId' => $residents->first()->id]) }}'">入浴一覧</button>
+                            <button class="btn btn-secondary mb-1" onclick="location.href='{{ route('admin.meal.index', ['residentId' => $residents->first()->id]) }}'">食事一覧</button>
+                            <button class="btn btn-secondary mb-1" onclick="location.href='{{ route('admin.excretion.index', ['residentId' => $residents->first()->id]) }}'">排泄一覧</button>
                         @endif
-                        <button class="btn btn-secondary" onclick="location.href='{{ route('admin.resident.index') }}'">入居者一覧</button>
+                        <button class="btn btn-secondary mb-1" onclick="location.href='{{ route('admin.resident.index') }}'">入居者一覧</button>
                         @if (Auth::user()->admin_flag || Auth::user()->super_admin_flag)
-                            <button class="btn btn-secondary" onclick="location.href='{{ route('register') }}'">ユーザー登録</button>
+                            <button class="btn btn-secondary mb-1" onclick="location.href='{{ route('register') }}'">ユーザー登録</button>
                         @endif
                     </div>
                 </div>
@@ -117,9 +118,9 @@
                                         @endphp
                                         <a href="{{ route('admin.meal.edit', ['residentId' => $resident->id, 'mealId' => $resident->meals->first()->id]) }}">
                                             {{ $mealBldOptions[$meal->meal_bld] }}
-                                            <br>主食：{{ $meal->meal_intake_rice ? $mealIntakeOptions[$meal->meal_intake_rice] : '-' }}
-                                            <br>副食：{{ $meal->meal_intake_side ? $mealIntakeOptions[$meal->meal_intake_side] : '-' }}
-                                            <br>汁物：{{ $meal->meal_intake_soup ? $mealIntakeOptions[$meal->meal_intake_soup] : '-' }}
+                                            <br>主食：{{ !is_null($meal->meal_intake_rice) ? $mealIntakeOptions[$meal->meal_intake_rice] : '-' }}
+                                            <br>副食：{{ !is_null($meal->meal_intake_side) ? $mealIntakeOptions[$meal->meal_intake_side] : '-' }}
+                                            <br>汁物：{{ !is_null($meal->meal_intake_soup) ? $mealIntakeOptions[$meal->meal_intake_soup] : '-' }}
                                         </a>
                                     @endif
                                 <td><a href="#">排尿：1<br>排便：1</a></td>
