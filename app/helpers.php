@@ -178,3 +178,18 @@ if (! function_exists('formatDatetime')) {
         return Carbon::parse($date)->format('n月j日 G:i');
     }
 }
+
+if (! function_exists('getExcretionType')){
+
+    function getExcretionType($flash, $dump)
+    {
+        if( $flash AND $dump ){
+            return "排尿、排便 ";
+        }else if( $flash ){
+            return "排尿";
+        }else{
+            return "排便";
+        }
+    }
+
+}

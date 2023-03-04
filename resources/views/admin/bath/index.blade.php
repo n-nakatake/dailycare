@@ -56,6 +56,8 @@
                                         <td>{{ formatDate($date) }}</td>
                                         <td>-</td>
                                         <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
                                         <td>
                                             <div>
                                                 <a class="btn btn-primary me-2" href="{{ route('admin.bath.add', ['residentId' => $residentId,'date' => $date]) }}">登録</a>

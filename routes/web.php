@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ResidentController;
 use App\Http\Controllers\Admin\SummaryController;
 use App\Http\Controllers\Admin\VitalController;
 use App\Http\Controllers\Admin\TopController;
+use App\Http\Controllers\Admin\ExcretionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -80,6 +81,15 @@ Route::controller(SummaryController::class)->prefix('admin')->name('admin.')->mi
 Route::controller(EditPasswordController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('password/edit', 'edit')->name('password.edit');
     Route::post('password/edit', 'update')->name('password.update');
+});
+
+Route::controller(ExcretionController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::get('excretion/create/{residentId}', 'add')->name('excretion.add');
+    Route::post('excretion/create', 'create')->name('excretion.create');
+    Route::get('excretion/{residentId}', 'index')->name('excretion.index');
+    Route::get('excretion/edit/{residentId}/{excretionId}', 'edit')->name('excretion.edit');
+    Route::post('excretion/edit/{residentId}/{excretionId}', 'update')->name('excretion.update');
+    Route::get('excretion/delete/{residentId}/{excretionId}', 'delete')->name('excretion.delete');
 });
 
 Auth::routes();

@@ -24,6 +24,11 @@ return [
     'resident_level_start' => '有効期間開始日',
     'resident_level_end' => '有効期間終了日',    
 
+    'vital_time' => '記録時間',
+    'vital_kt' => '体温',
+    'vital_bp_u' => '血圧（上）',
+    'vital_bp_d' => '血圧（下）',
+        
     'user_id' => '記録者',
     'meal_time' => '記録時間',    
     
