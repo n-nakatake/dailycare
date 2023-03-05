@@ -1,48 +1,37 @@
 @extends('layouts.admin')
-@section('title', '登録済みのresident一覧')
+@section('title', '登録済みの入居者一覧')
 
 @section('content')
     <div class="container">
+        @if (session('message'))
+            <div class="alert alert-success">
+                {{ session('message') }}
+            </div>
+        @endif
         <div class="row">
-            <h2>resident一覧</h2>
+            <h2 class="col-md-4">入居者一覧</h2>
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-12 text-end">
                 <a href="{{ route('admin.resident.add') }}" role="button" class="btn btn-primary">新規作成</a>
             </div>
-            <div class="col-md-8">
-                <form action="{{ route('admin.resident.index') }}" method="get">
-                    <div class="form-group row">
-                        <label class="col-md-2">名前</label>
-                        <div class="col-md-8">
-                            <input type="text" class="form-control" name="cond_name" value="{{ $cond_name }}">
-                        </div>
-                        <div class="col-md-2">
-                            @csrf
-                            <input type="submit" class="btn btn-primary" value="検索">
-                        </div>
-                    </div>
-                </form>
-            </div>
         </div>
         <div class="row">
-            <div class="list-resident col-md-12 mx-auto">
+            <div class="col-md-12 mx-auto">
                 <div class="row">
                     <table class="table table-dark">
                         <thead>
                             <tr>
-                                <th width="10%">ID</th>
-                                <th width="20%">名前</th>
-                                <th width="20%">性別</th>
-                                <th width="20%">誕生日（年齢）</th>
-                                <th width="20%">介護度</th>
-                                <th width="10%">操作</th>
+                                <th width="15%">名前</th>
+                                <th width="15%">性別</th>
+                                <th width="35%">誕生日（年齢）</th>
+                                <th width="15%">介護度</th>
+                                <th width="20%"></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($residents as $resident)
                                 <tr>
-                                    <th>{{ $resident->id }}</th>
                                     <td>{{ Str::limit($resident->last_name, 100) }} {{ Str::limit($resident->first_name, 100) }}</td>
                                     @if ($resident->gender == 1 )
                                         <td>男性</td>
@@ -69,11 +58,26 @@
                                     @endif                                      
                                     <td>
                                         <div>
-                                            <a href="{{ route('admin.resident.edit', ['id' => $resident->id]) }}">編集</a>
+                                            <a class="btn btn-primary me-2" href="{{ route('admin.resident.edit', ['id' => $resident->id]) }}">編集</a>
+                                            <!-- Button trigger modal -->
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal{{ $resident->id }}">
+                                              削除
+                                            </button>
+                                            <!-- Modal -->
+                                            <div class="modal fade text-dark" id="confirmModal{{ $resident->id }}" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-body">
+                                                            <p>{{ $resident->last_name }}の入居者データを削除してよろしいですか？</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                                                            <button type="button" class="btn btn-danger" onclick="location.href='{{ route('admin.resident.delete', ['id' => $resident->id]) }}'">削除</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <a href="{{ route('admin.resident.delete', ['id' => $resident->id]) }}">削除</a>
-                                        </div>                                        
                                     </td>
                                 </tr>
                             @endforeach
@@ -84,3 +88,14 @@
         </div>
     </div>
 @endsection
+
+{{--
+@section('script')
+    $('input, select').change(function() {
+        const indexUrl = "{{ trim(route('admin.resident.index', ['residentId' => $residentId]), '0123456789') }}";
+        const residentId = $('#residentId').val();
+        const residentYm = $('#residentYm').val();
+        location.href= indexUrl + residentId + '?resident_ym=' + residentYm;
+    });
+@endsection-->
+--}}
