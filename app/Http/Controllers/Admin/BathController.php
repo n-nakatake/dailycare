@@ -127,7 +127,7 @@ class BathController extends Controller
     public function update(Request $request, $residentId, $bathId)
     {
         $this->validate($request, Bath::$rules);
-        $bath = this->getValidBath($residentId, $mealId);
+        $bath = $this->getValidBath($residentId, $bathId);
         $form = $request->all();
         $form['bath_time'] = $form['bath_date'] . ' ' . $form['bath_time'];
 
