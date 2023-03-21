@@ -74,9 +74,9 @@
                                         <tr>
                                             <td>{{ formatDate($vitals[$date][0]->vital_time, 0, 10) }}</td>
                                             <td>{{ getTime($vitals[$date][0]->vital_time) }}</td>
-                                            <td>{{ $vitals[$date][0]->vital_kt}}</td>
-                                            <td>{{ $vitals[$date][0]->vital_bp_u}}</td>
-                                            <td>{{ $vitals[$date][0]->vital_bp_d}}</td>
+                                            <td>{{ !is_null($vitals[$date][0]->vital_kt) ? $vitals[$date][0]->vital_kt : '-' }}</td>
+                                            <td>{{ !is_null($vitals[$date][0]->vital_bp_u) ? $vitals[$date][0]->vital_bp_u : '-' }}</td>
+                                            <td>{{ !is_null($vitals[$date][0]->vital_bp_d) ? $vitals[$date][0]->vital_bp_d : '-' }}</td>
                                             <td>
                                                 <div>
                                                     <a class="btn btn-primary me-2" href="{{ route('admin.vital.edit', ['residentId' => $residentId,'vitalId' => $vitals[$date][0]->id]) }}">編集</a>
@@ -110,9 +110,9 @@
                                                     </td>
                                                 @endif
                                                 <td>{{ getTime($vitalTime->vital_time) }}</td>
-                                                <td>{{ $vitalTime->vital_kt}}</td>
-                                                <td>{{ $vitalTime->vital_bp_u}}</td>
-                                                <td>{{ $vitalTime->vital_bp_d}}</td>
+                                                <td>{{ !is_null($vitalTime->vital_kt) ? $vitalTime->vital_kt : '-' }}</td>
+                                                <td>{{ !is_null($vitalTime->vital_bp_u) ? $vitalTime->vital_bp_u : '-' }}</td>
+                                                <td>{{ !is_null($vitalTime->vital_bp_d) ? $vitalTime->vital_bp_d : '-' }}</td>
                                                 <td>
                                                     <div>
                                                         <a class="btn btn-primary me-2" href="{{ route('admin.vital.edit', ['residentId' => $residentId,'vitalId' =>  $vitalTime->id]) }}">編集</a>

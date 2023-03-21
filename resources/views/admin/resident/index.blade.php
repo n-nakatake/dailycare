@@ -24,7 +24,8 @@
                             <tr>
                                 <th width="15%">名前</th>
                                 <th width="15%">性別</th>
-                                <th width="35%">誕生日（年齢）</th>
+                                <th width="20%">誕生日</th>
+                                <th width="15%">年齢</th>
                                 <th width="15%">介護度</th>
                                 <th width="20%"></th>
                             </tr>
@@ -39,6 +40,7 @@
                                         <td>女性</td>
                                     @endif
                                     <td>{{toWareki('KX年m月d日', str_replace("-","",$resident->birthday))}}</td>
+                                    <td class="no-link">{{ getAge($resident->birthday) }}</td>
                                     @if ($resident->level == 1 )
                                         <td>要介護１</td>
                                     @elseif ($resident->level == 2 )
@@ -68,7 +70,7 @@
                                                 <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content">
                                                         <div class="modal-body">
-                                                            <p>{{ $resident->last_name }}の入居者データを削除してよろしいですか？</p>
+                                                            <p>{{ $resident->last_name }}{{ $resident->first_name }}さんの入居者データを削除してよろしいですか？</p>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>

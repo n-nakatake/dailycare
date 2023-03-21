@@ -49,14 +49,14 @@ class ExcretionController extends Controller
         unset($form['excretion_date']);
         unset($form['_token']);
 
-        if( isset($form['excretion_flash'])){
+        if( isset($form['excretion_flash'] )){
             if( $form['excretion_flash'] ){
                 $form['excretion_flash'] = 1;
             }else{
                 $form['excretion_flash'] = 0;
             }
         }else{
-            $form['excretion_flash'] = 0;    
+            $form['excretion_dump'] = 0;
         }
         if( isset($form['excretion_dump'] )){
             if( $form['excretion_dump'] ){
@@ -138,20 +138,38 @@ class ExcretionController extends Controller
         return view('admin.excretion.edit', [
             'excretionForm' => $excretion,
             'users' => $users,
-            'excretionMethods' => excretion::excretion_METHODS,
         ]);
     }
 
     public function update(Request $request, $residentId, $excretionId)
     {
         $this->validate($request, excretion::$rules);
-        $excretion = this->getValidexcretion($residentId, $mealId);
+        $excretion = $this->getValidexcretion($residentId, $excretionId);
         $form = $request->all();
         $form['excretion_time'] = $form['excretion_date'] . ' ' . $form['excretion_time'];
 
         // 不要な値を削除する
         unset($form['excretion_date']);
         unset($form['_token']);
+
+        if( isset($form['excretion_flash'] )){
+            if( $form['excretion_flash'] ){
+                $form['excretion_flash'] = 1;
+            }else{
+                $form['excretion_flash'] = 0;
+            }
+        }else{
+            $form['excretion_flash'] = 0;
+        }
+        if( isset($form['excretion_dump'] )){
+            if( $form['excretion_dump'] ){
+                $form['excretion_dump'] = 1;
+            }else{
+                $form['excretion_dump'] = 0;
+            }
+        }else{
+            $form['excretion_dump'] = 0;
+        }
 
         // 該当するデータを上書きして保存する
         $excretion->fill($form)->save();
@@ -165,7 +183,7 @@ class ExcretionController extends Controller
     public function delete(Request $request, $residentId, $excretionId)
     {
         // 該当するexcretion Modelを取得
-        $excretion = this->getValidexcretion($residentId, $mealId);
+        $excretion = $this->getValidexcretion($residentId, $excretionId);
         $excretionYm = substr($excretion->excretion_time, 0, 7);
         $message = formatDatetime($excretion->excretion_time) . 'の排泄状況を削除しました。';
         $excretion->delete();

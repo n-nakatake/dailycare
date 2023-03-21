@@ -103,6 +103,11 @@
                             </span>
                             <label>排便</label>
                         </div>
+                        @if ($errors->has('excretion_flash'))
+                            <span class="small text-danger error">
+                            　　<strong>{{$errors->first('excretion_flash')}}</strong>
+                            </span>
+                        @endif 
                     </div>    
 
                     <div class="form-group row">

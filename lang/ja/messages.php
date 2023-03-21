@@ -21,8 +21,8 @@ return [
     'resident_birthday' => '誕生日',
     'resident_gender' => '性別',
     'resident_level' => '介護度',
-    'resident_level_start' => '有効期間開始日',
-    'resident_level_end' => '有効期間終了日',    
+    'resident_level_start' => '開始日',
+    'resident_level_end' => '終了日',    
 
     'vital_time' => '記録時間',
     'vital_kt' => '体温',

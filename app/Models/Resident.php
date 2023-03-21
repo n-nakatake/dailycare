@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
+
 
 class Resident extends Model
 {
@@ -12,7 +14,7 @@ class Resident extends Model
 
     protected $guarded = array('id');
 
-    public static $rules = array(
+    public static $rules = [
         'last_name' => 'required',
         'first_name' => 'required',
         'last_name_k' => ['required', 'regex:/^[ア-ン゛゜ァ-ォャ-ョー]+$/u',],
@@ -22,15 +24,16 @@ class Resident extends Model
         'level' => 'required',
         'level_start' => 'required',
         'level_end' => 'required',
-    );
+    ];
+    
 
     // Modelに関連付けを行う
-    public function histories()
+/*    public function histories()
     {
         return $this->hasMany('App\Models\ResidentHistory');
                               
-    }    
-    
+    }*/    
+
     public function vitals()
     {
         return $this->hasMany('App\Models\Vital');
@@ -45,4 +48,9 @@ class Resident extends Model
     {
         return $this->hasMany('App\Models\Bath');
     }    
+    
+    public function excretions()
+    {
+        return $this->hasMany('App\Models\Excretion');
+    }      
 }

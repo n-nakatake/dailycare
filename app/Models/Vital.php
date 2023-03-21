@@ -15,9 +15,9 @@ class Vital extends Model
         'resident_id' => 'required',
         'user_id' => 'required',
         'vital_time' => 'required',
-//        'vital_kt' => 'required_without:vital_bp_u, vital_bp_d',
-//        'vital_bp_u' => 'required_without:vital_kt, vital_bp_d',
-//        'vital_bp_d' => 'required_without:vital_bp_u, vital_kt',
+        'vital_kt' => 'required_without:vital_bp_u',
+        'vital_bp_u' => 'required_with:vital_bp_d',
+        'vital_bp_d' => 'required_with:vital_bp_u',
      );    
 
     public function resident()

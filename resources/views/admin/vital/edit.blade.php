@@ -88,13 +88,27 @@
                         <div class="col-md-2">
                             <input type="number" step="0.1" class="form-control" name="vital_kt" value="{{ old('vital_kt') ? old('vital_kt') : $vitalForm->vital_kt   }}">
                         </div>
-                        <label class="w-5rem">血圧</label>
+                        <label class="w-5rem">血圧↑</label>
                         <div class="col-md-2">
                             <input type="text" inputmode="numeric" pattern="\d*" class="form-control" name="vital_bp_u" value="{{ old('vital_bp_u') ? old('vital_bp_u') : $vitalForm->vital_bp_u   }}">
                         </div>
+                        <label class="w-5rem">血圧↓</label>
                         <div class="col-md-2">
                             <input type="text" inputmode="numeric" pattern="\d*" class="form-control" name="vital_bp_d" value="{{ old('vital_bp_d') ? old('vital_bp_d') : $vitalForm->vital_bp_d   }}">
                         </div>    
+                        @if ($errors->has('vital_kt'))
+                            <span class="small text-danger error">
+                            　　<strong>{{$errors->first('vital_kt')}}</strong>
+                            </span>
+                        @elseif ($errors->has('vital_bp_u'))
+                            <span class="small text-danger error">
+                            　　<strong>{{$errors->first('vital_bp_u')}}</strong>
+                            </span>
+                        @elseif ($errors->has('vital_bp_d'))
+                            <span class="small text-danger error">
+                            　　<strong>{{$errors->first('vital_bp_d')}}</strong>
+                            </span>
+                        @endif                    
                     </div>
                     <div class="form-group row">
                         <label class="w-5rem">心拍数</label>

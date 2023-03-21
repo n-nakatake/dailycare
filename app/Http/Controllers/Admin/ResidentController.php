@@ -12,6 +12,12 @@ class ResidentController extends Controller
 {
     public function add()
     {
+        // バリデーションエラー以外で遷移してきたら、キャンセルボタン押下時または登録後にリダイレクトするURLをセッションに保存
+        $previousUrl = url()->previous();
+        $urlWithoutGetParameter = strpos($previousUrl, "?") === false ? $previousUrl : substr($previousUrl , 0 , strpos($previousUrl, "?"));
+        if ($urlWithoutGetParameter !== route('admin.resident.add')) {
+            session(['fromUrl' => url()->previous()]);
+        }
         return view('admin.resident.create');
     }
 
@@ -30,8 +36,8 @@ class ResidentController extends Controller
         } else {
             $resident->image_path = null;
         }
-      
-        // フォームから送信されてきた_tokenを削除する
+        
+        // 不要な値を削除する
         unset($form['_token']);
         unset($form['image']);
 
@@ -39,7 +45,10 @@ class ResidentController extends Controller
         $resident->fill($form);
         $resident->save();
 
-        return redirect('admin/resident/create');
+        $message = $form['last_name'] . 'さんの利用者情報を登録しました。';
+
+        return redirect(session()->pull('fromUrl', route('admin.resident.index')))
+            ->with('message', $message);
     }
 
 
@@ -61,6 +70,13 @@ class ResidentController extends Controller
 
     public function edit(Request $request)
     {
+        // バリデーションエラー以外で遷移してきたら、キャンセルボタン押下時または更新後にリダイレクトするURLをセッションに保存
+        if (url()->previous() !== route('admin.resident.edit')) {
+            session(['fromUrl' => url()->previous()]);
+        }
+
+        $officeId = Auth::user()->office_id;
+
         // Resident Modelからデータを取得する
         $resident = Resident::find($request->id);
         if (empty($resident)) {
@@ -101,15 +117,35 @@ class ResidentController extends Controller
         $residenthistory->edited_at = Carbon::now();
         $residenthistory->save();
 
-        return redirect('admin/resident/edit?id='. $request->id);
+        return redirect(session()->pull('fromUrl', route('admin.resident.index')))
+            ->with('message', $message);
     }
     
   public function delete(Request $request)
   {
-      // 該当するResident Modelを取得
-      $resident = resident::find($request->id);
-      // 削除する
-      $resident->delete();
-      return redirect('admin/resident/');
-  } 
+
+        // 該当するResident Modelを取得
+        $resident = resident::find($request->id);
+
+        $message = ($resident->last_name) . ($resident->first_name) . 'さんの入居者情報を削除しました。';
+        // 削除する
+        $resident->delete();
+
+        return redirect(session()->pull('fromUrl', route('admin.resident.index')))
+            ->with('message', $message);
+    }
+  
+    private function getValidResident(int $residentId)
+    {
+        $resident = Resident::where($residentId)
+            ->where('office_id', Auth::user()->office_id)
+            ->where($resident)
+            ->first();
+
+        if (is_null($resident)) {
+            abort(404);
+        }
+
+        return $resident;
+    }  
 }

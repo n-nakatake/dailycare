@@ -70,7 +70,7 @@
                                         <tr>
                                             <td>{{ formatDate($excretions[$date][0]->excretion_time, 0, 10) }}</td>
                                             <td>{{ getTime($excretions[$date][0]->excretion_time) }}</td>
-                                            <td>{{ getExcretionType(true,true) }}</td>
+                                            <td>{{ getExcretionType($excretions[$date][0]->excretion_flash,$excretions[$date][0]->excretion_dump) }}</td>
                                             <td>
                                                 <div>
                                                     <a class="btn btn-primary me-2" href="{{ route('admin.excretion.edit', ['residentId' => $residentId,'excretionId' => $excretions[$date][0]->id]) }}">編集</a>
@@ -83,7 +83,7 @@
                                                         <div class="modal-dialog modal-dialog-centered">
                                                             <div class="modal-content">
                                                                 <div class="modal-body">
-                                                                    <p>{{ formatDatetime($excretions[$date][0]->excretion_time, 0, 10) }}の入浴データを削除してよろしいですか？</p>
+                                                                    <p>{{ formatDatetime($excretions[$date][0]->excretion_time, 0, 10) }}の排泄データを削除してよろしいですか？</p>
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
@@ -104,7 +104,7 @@
                                                     </td>
                                                 @endif
                                                 <td>{{ getTime($excretionTime->excretion_time) }}</td>
-                                                <td>{{ getExcretionType(true,true) }}</td>
+                                                <td>{{ getExcretionType($excretionTime->excretion_flash,$excretionTime->excretion_dump) }}</td>
                                                 <td>
                                                     <div>
                                                         <a class="btn btn-primary me-2" href="{{ route('admin.excretion.edit', ['residentId' => $residentId,'excretionId' =>  $excretionTime->id]) }}">編集</a>
@@ -117,7 +117,7 @@
                                                             <div class="modal-dialog modal-dialog-centered">
                                                                 <div class="modal-content">
                                                                     <div class="modal-body">
-                                                                        <p>{{ formatDate($excretionTime->excretion_time, 0, 10) . ' ' . getTime($excretionTime->excretion_time) }}の入浴データを削除してよろしいですか？</p>
+                                                                        <p>{{ formatDate($excretionTime->excretion_time, 0, 10) . ' ' . getTime($excretionTime->excretion_time) }}の排泄データを削除してよろしいですか？</p>
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>

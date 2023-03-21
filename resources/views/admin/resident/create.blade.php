@@ -1,79 +1,85 @@
 @extends('layouts.admin')
-@section('title', '入居者の新規登録')
+@section('title', '入居者登録')
 
 {{-- admin.blade.phpの@yield('content')に以下のタグを埋め込む --}}
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-8 mx-auto">
-                <h2>入居者プロフィール</h2>
-                <form action="{{ route('admin.resident.create') }}" method="post" enctype="multipart/form-data">
-
-                    @if (count($errors) > 0)
-                        <ul>
-                            @foreach($errors->all() as $e)
-                                <li>{{ $e }}</li>
-                            @endforeach
-                        </ul>
-                    @endif
+            <div class="col-md-11 mx-auto">
+                @if ($errors->isNotEmpty())
+                    <div class="alert alert-danger">
+                        入居者の登録に失敗しました。
+                    </div> 
+                @endif
+                <h2>入居者登録</h2>
+                <form class="mt-5" action="{{ route('admin.resident.create') }}" method="post" enctype="multipart/form-data">
                     <div class="form-group row">
-                        <label class="col-md-2">氏名</label>
-                        <div class="col-md-5">
+                        <label class="w-8rem">氏名</label>
+                        <div class="col-md-2">
                             <input type="text" class="form-control" name="last_name" value="{{ old('last_name') }}">
                             @if ($errors->has('last_name'))
-                        　　　　<p style="color: red;">{{$errors->first('last_name')}}</p>
-                            @endif                        
+                                <span class="small text-danger error-left">
+                                　　<strong>{{$errors->first('last_name')}}</strong>
+                                </span>
+                            @endif                         
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-2">
                             <input type="text" class="form-control" name="first_name" value="{{ old('first_name') }}">
                             @if ($errors->has('first_name'))
-                        　　　　<p style="color: red;">{{$errors->first('first_name')}}</p>
+                                <span class="small text-danger error-left">
+                                　　<strong>{{$errors->first('first_name')}}</strong>
+                                </span>
                             @endif                        
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-2">氏名（フリガナ）</label>
-                        <div class="col-md-5">
+                        <label class="w-8rem">シメイ</label>
+                        <div class="col-md-2">
                             <input type="text" class="form-control" name="last_name_k" value="{{ old('last_name_k') }}">
-                            @if ($errors->has('last_name_K'))
-                        　　　　<p style="color: red;">{{$errors->first('last_name_K')}}</p>
+                            @if ($errors->has('last_name_k'))
+                                <span class="small text-danger error-left">
+                                　　<strong>{{$errors->first('last_name_k')}}</strong>
+                                </span>
                             @endif                        
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-2">
                             <input type="text" class="form-control" name="first_name_K" value="{{ old('first_name_K') }}">
-                            @if ($errors->has('first_name_k'))
-                        　　　　<p style="color: red;">{{$errors->first('first_name_K')}}</p>
+                            @if ($errors->has('first_name_K'))
+                                <span class="small text-danger error-left">
+                                　　<strong>{{$errors->first('first_name_K')}}</strong>
+                                </span>
                             @endif                        
                         </div> 
-                    </div>                    
-                    
+                    </div>
+
                     <div class="form-group row">
-                        <label class="col-md-2">誕生日</label>
-                        <div class="col-md-5">
-                            <input type="date" class="form-control" name="birthday" value="{{ old('birthday') }}">
+                        <label class="w-8rem">誕生日</label>
+                        <div class="col-md-2">
+                            <input type="date" min="1900-01-01" max="2200-12-31" class="form-control" name="birthday" value="{{ old('birthday') }}">
                             @if ($errors->has('birthday'))
-                        　　　　<p style="color: red;">{{$errors->first('birthday')}}</p>
+                                <span class="small text-danger error-left">
+                                　　<strong>{{$errors->first('birthday')}}</strong>
+                                </span>
                             @endif                        
                         </div>
-
-                        <label class="col-md-1">性別</label>
-                        <div class="col-md-4">
+                        <label class="w-5rem">性別</label>
+                        <div class="col-md-2">
                             <select  class="form-control" name="gender">
                                 <option value="">選択してください</option>
                                 <option value="1" {{ old('gender') === '1' ? 'selected' : ''}}>男性</option>
                                 <option value="2" {{ old('gender') === '2' ? 'selected' : ''}}>女性</option>
                             </select>
                             @if ($errors->has('gender'))
-                        　　　　<span class="invalid-feedback">
-                            　　<strong>{{$errors->first('gender')}}</strong>
-                        　　　　</span>
+                                <span class="small text-danger error-left">
+                                　　<strong>{{$errors->first('gender')}}</strong>
+                                </span>
                             @endif                        
                         </div>
-                    </div>
-                    
+                    </div>                    
+
                     <div class="form-group row">
-                        <label class="col-md-2">介護度</label>
-                        <div class="col-md-4">
+                        <label class="w-8rem">介護度</label>
+                        <div class="col-md-2">
                             <select  class="form-control" name="level">
                                 <option value="">選択してください</option>
                                 <option value="1" {{ old('level') === '1' ? 'selected' : ''}}>要介護１</option>
@@ -86,112 +92,98 @@
                                 <option value="8" {{ old('level') === '8' ? 'selected' : ''}}>該当なし</option>
                             </select>
                             @if ($errors->has('level'))
-                        　　　　<span class="invalid-feedback">
-                            　　<strong>{{$errors->first('level')}}</strong>
-                        　　　　</span>
-                            @endif                        
+                                <span class="small text-danger error-left">
+                                　　<strong>{{$errors->first('level')}}</strong>
+                                </span>
+                            @endif
                         </div>
-                    </div>                          
-                          
-                    <div class="form-group row">
-                        <label class="col-md-2">認定期間開始日</label>
-                        <div class="col-md-4">
-                            <input type="date" class="form-control" name="level_start" value="{{ old('level_start') }}">
+                        <label class="w-5rem">開始日</label>
+                        <div class="col-md-2">
+                            <input type="date" min="1900-01-01" max="2200-12-31" class="form-control" name="level_start" value="{{ old('level_start') }}">
                             @if ($errors->has('level_start'))
-                        　　　　<p style="color: red;">{{$errors->first('level_start')}}</p>
-                            @endif                        
+                                <span class="small text-danger error-left">
+                                　　<strong>{{$errors->first('level_start')}}</strong>
+                                </span>
+                            @endif  
                         </div>
-                        <label class="col-md-2">認定期間終了日</label>
-                        <div class="col-md-4">
-                            <input type="date" class="form-control" name="level_end" value="{{ old('level_end') }}">
+                        <label class="w-5rem">終了日</label>
+                        <div class="col-md-2">
+                            <input type="date" min="1900-01-01" max="2200-12-31" class="form-control" name="level_end" value="{{ old('level_end') }}">
                             @if ($errors->has('level_end'))
-                        　　　　<p style="color: red;">{{$errors->first('level_end')}}</p>
+                                <span class="small text-danger error-left">
+                                　　<strong>{{$errors->first('level_end')}}</strong>
+                                </span>
                             @endif                        
                         </div>
                     </div>    
 
                     <div class="form-group row">
-                        <label class="col-md-2">キーパーソン名</label>
-                        <div class="col-md-5">
+                        <label class="w-8rem">ｷｰﾊﾟｰｿﾝ名</label>
+                        <div class="col-md-2">
                             <input type="text" class="form-control" name="key_person_name" value="{{ old('key_person_name') }}">
                             @if ($errors->has('key_person_name'))
-                        　　　　<p style="color: red;">{{$errors->first('key_person_name')}}</p>
-                            @endif                        
+                                <span class="small text-danger error-left">
+                                　　<strong>{{$errors->first('key_person_name')}}</strong>
+                                </span>
+                            @endif
                         </div>
-                        <label class="col-md-1">続柄</label>
-                        <div class="col-md-4">
+                        <label class="w-5rem">続柄</label>
+                        <div class="col-md-2">
                             <input type="text" class="form-control" name="key_person_relation" value="{{ old('key_person_relation') }}">
                             @if ($errors->has('key_person_relation'))
-                        　　　　<p style="color: red;">{{$errors->first('key_person_relation')}}</p>
-                            @endif                        
+                                <span class="small text-danger error-left">
+                                　　<strong>{{$errors->first('key_person_relation')}}</strong>
+                                </span>
+                            @endif
                         </div>
                     </div>                        
 
                     <div class="form-group row">
-                        <label class="col-md-2">キーパーソン住所</label>
-                        <div class="col-md-10">
+                        <label class="w-8rem">ｷｰﾊﾟｰｿﾝ住所</label>
+                        <div class="col-md-9">
                             <input type="text" class="form-control" name="key_person_adress" value="{{ old('key_person_adress') }}">
-                            <!--@if ($errors->has('key_person_adress'))-->
-                        　　　　<!--<p style="color: red;">{{$errors->first('key_person_adress')}}</p>-->
-                            <!--@endif                        -->
                         </div>
                     </div>           
                     
                     <div class="form-group row">
-                        <label class="col-md-2">連絡先１</label>
+                        <label class="w-8rem">連絡先１</label>
                         <div class="col-md-4">
                             <input type="text" class="form-control" name="key_person_tel1" value="{{ old('key_person_tel1') }}">
-                            <!--@if ($errors->has('key_person_tel1'))-->
-                        　　　　<!--<p style="color: red;">{{$errors->first('key_person_tel1')}}</p>-->
-                            <!--@endif                        -->
                         </div>
-                        <label class="col-md-2">連絡先２</label>
+                        <label class="w-6rem">連絡先２</label>
                         <div class="col-md-4">
                             <input type="text" class="form-control" name="key_person_tel2" value="{{ old('key_person_tel2') }}">
-                            <!--@if ($errors->has('key_person_tel2'))-->
-                        　　　　<!--<p style="color: red;">{{$errors->first('key_person_tel2')}}</p>-->
-                            <!--@endif                        -->
                         </div>
                     </div>      
 
 
                     <div class="form-group row">
-                        <label class="col-md-2">メールアドレス</label>
-                        <div class="col-md-10">
+                        <label class=w-8rem>メールアドレス</label>
+                        <div class="col-md-9">
                             <input type="email" class="form-control" name="key_person_mail" value="{{ old('key_person_mail') }}">
-                            <!--@if ($errors->has('key_person_mail'))-->
-                        　　　　<!--<p style="color: red;">{{$errors->first('key_person_mail')}}</p>-->
-                            <!--@endif                        -->
                         </div>
                     </div>   
                     
                     <div class="form-group row">
-                        <label class="col-md-2">特記</label>
-                        <div class="col-md-10">
+                        <label class=w-8rem>特記</label>
+                        <div class="col-md-9">
                             <textarea class="form-control" name="note" rows="10">{{ old('note') }}</textarea>
-                            <!--@if ($errors->has('note'))-->
-                        　　　　<!--<p>{{$errors->first('note')}}</p>-->
-                            <!--@endif   -->
                         </div>                        
                     </div>      
                     <div class="form-group row">
-                        <label class="col-md-2" for="title">画像</label>
+                        <label class=w-8rem for="title">画像</label>
                         <div class="col-md-10">
                             <input type="file" class="form-control-file" name="image">
                         </div>
-                    </div>                    
+                    </div>  
+                    
                     @csrf
-                    <div class="col-md-3 mx-auto">
-                        <button class="btn btn-primary col-md-12" type="submit">登録</button>
+                    <div class="text-center mt-5">
+                        <a class="col-md-3 btn btn-secondary me-5" href="{{ session('fromUrl') ? session('fromUrl') : route('admin.resident.index') }}">キャンセル</a>
+                        <input type="submit" class="btn btn-primary col-md-3" value="登録">
                     </div>
-                    <!--<input type="submit" class="col-md-4 btn btn-primary"  value="更新">-->
-
                 </form>
             </div>
         </div>
     </div>
-
-
-
-
 @endsection
