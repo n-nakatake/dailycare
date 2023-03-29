@@ -135,17 +135,4 @@ class ResidentController extends Controller
             ->with('message', $message);
     }
   
-    private function getValidResident(int $residentId)
-    {
-        $resident = Resident::where($residentId)
-            ->where('office_id', Auth::user()->office_id)
-            ->where($resident)
-            ->first();
-
-        if (is_null($resident)) {
-            abort(404);
-        }
-
-        return $resident;
-    }  
 }

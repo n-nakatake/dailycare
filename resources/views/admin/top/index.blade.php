@@ -25,7 +25,10 @@
                         @endif
                         <button class="btn btn-secondary mb-1" onclick="location.href='{{ route('admin.resident.index') }}'">入居者一覧</button>
                         @if (Auth::user()->admin_flag || Auth::user()->super_admin_flag)
+                            <button class="btn btn-secondary mb-1" onclick="location.href='{{ route('admin.user.index') }}'">ユーザー一覧</button>
+<!--
                             <button class="btn btn-secondary mb-1" onclick="location.href='{{ route('register') }}'">ユーザー登録</button>
+-->
                         @endif
                     </div>
                 </div>
@@ -85,7 +88,23 @@
                         @foreach ($residents as $resident)
                             <tr>
                                 <td><a href="{{ route('admin.resident.edit', ['id' => $resident->id]) }}">{{ $resident->last_name . $resident->first_name }}</a></td>
-                                <td class="no-link">{{ $resident->level }}</td>
+                                @if ($resident->level == 1 )
+                                    <td class="no-link">要介護１</td>
+                                @elseif ($resident->level == 2 )
+                                    <td class="no-link">要介護２</td>
+                                @elseif ($resident->level == 3 )
+                                    <td class="no-link">要介護３</td>
+                                @elseif ($resident->level == 4 )
+                                    <td class="no-link">要介護４</td>
+                                @elseif ($resident->level == 5 )
+                                    <td class="no-link">要介護５</td>
+                                @elseif ($resident->level == 6 )
+                                    <td class="no-link">要支援１</td>
+                                @elseif ($resident->level == 7 )
+                                    <td class="no-link">要支援２</td>
+                                @elseif ($resident->level == 8 )
+                                    <td class="no-link">該当なし</td>
+                                @endif  
                                 <td class="no-link">{{ getAge($resident->birthday) }}</td>
                                 <td>
                                     @if ($resident->vitals->isEmpty())

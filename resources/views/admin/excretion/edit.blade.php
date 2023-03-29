@@ -97,7 +97,7 @@
                         </div>
                         <div class="col-md-2">
                             <span>
-                            @if( $excretionForm->excretion_dump == 1 ) 
+                            @if(( old('excretion_dump') ? old('excretion_dump') : $excretionForm->excretion_dump )  == 1 ) 
                                 <input type="checkbox" name="excretion_dump" checked="checked">
                             @else
                                  <input type="checkbox" name="excretion_dump">

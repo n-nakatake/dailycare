@@ -104,13 +104,13 @@
                             <select  class="form-control" name="level">
                                 <option value="">選択してください</option>
                                 <option value="1" {{ old('level') ? (old('level') === '1' ? 'selected' : '') : ($residentForm->level === '1' ? 'selected' : '')}}>要介護１</option>
-                                <option value="1" {{ old('level') ? (old('level') === '2' ? 'selected' : '') : ($residentForm->level === '2' ? 'selected' : '')}}>要介護２</option>
-                                <option value="1" {{ old('level') ? (old('level') === '3' ? 'selected' : '') : ($residentForm->level === '3' ? 'selected' : '')}}>要介護３</option>
-                                <option value="1" {{ old('level') ? (old('level') === '4' ? 'selected' : '') : ($residentForm->level === '4' ? 'selected' : '')}}>要介護４</option>
-                                <option value="1" {{ old('level') ? (old('level') === '5' ? 'selected' : '') : ($residentForm->level === '5' ? 'selected' : '')}}>要介護５</option>
-                                <option value="1" {{ old('level') ? (old('level') === '6' ? 'selected' : '') : ($residentForm->level === '6' ? 'selected' : '')}}>要支援１</option>
-                                <option value="1" {{ old('level') ? (old('level') === '7' ? 'selected' : '') : ($residentForm->level === '7' ? 'selected' : '')}}>要支援２</option>
-                                <option value="1" {{ old('level') ? (old('level') === '8' ? 'selected' : '') : ($residentForm->level === '8' ? 'selected' : '')}}>該当なし</option>
+                                <option value="2" {{ old('level') ? (old('level') === '2' ? 'selected' : '') : ($residentForm->level === '2' ? 'selected' : '')}}>要介護２</option>
+                                <option value="3" {{ old('level') ? (old('level') === '3' ? 'selected' : '') : ($residentForm->level === '3' ? 'selected' : '')}}>要介護３</option>
+                                <option value="4" {{ old('level') ? (old('level') === '4' ? 'selected' : '') : ($residentForm->level === '4' ? 'selected' : '')}}>要介護４</option>
+                                <option value="5" {{ old('level') ? (old('level') === '5' ? 'selected' : '') : ($residentForm->level === '5' ? 'selected' : '')}}>要介護５</option>
+                                <option value="6" {{ old('level') ? (old('level') === '6' ? 'selected' : '') : ($residentForm->level === '6' ? 'selected' : '')}}>要支援１</option>
+                                <option value="7" {{ old('level') ? (old('level') === '7' ? 'selected' : '') : ($residentForm->level === '7' ? 'selected' : '')}}>要支援２</option>
+                                <option value="8" {{ old('level') ? (old('level') === '8' ? 'selected' : '') : ($residentForm->level === '8' ? 'selected' : '')}}>該当なし</option>
                             </select>
                             @if ($errors->has('level'))
                                 <span class="small text-danger error-left">

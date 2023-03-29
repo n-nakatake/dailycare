@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\BathController;
 use App\Http\Controllers\Admin\EditPasswordController;
 use App\Http\Controllers\Admin\MealController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ResidentController;
 use App\Http\Controllers\Admin\SummaryController;
 use App\Http\Controllers\Admin\VitalController;
@@ -31,15 +32,22 @@ Route::controller(TopController::class)->prefix('admin')->name('admin.')->middle
     Route::get('/', 'index')->name('top.index');
 });
 
+Route::controller(UserController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::get('user/create', 'add')->name('user.add');
+    Route::post('user/create', 'create')->name('user.create');
+    Route::get('user', 'index')->name('user.index');
+    Route::get('user/edit/{userId}', 'edit')->name('user.edit');
+    Route::post('user/edit/{userId}', 'update')->name('user.update');
+    Route::get('user/delete', 'delete')->name('user.delete');
+});
+
 Route::controller(ResidentController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('resident/create', 'add')->name('resident.add');
     Route::post('resident/create', 'create')->name('resident.create');
     Route::get('resident', 'index')->name('resident.index');
-//    Route::get('resident/edit/{residentId}', 'edit')->name('resident.edit');
-//    Route::post('resident/edit/{residentId}', 'update')->name('resident.update');
     Route::get('resident/edit', 'edit')->name('resident.edit');
     Route::post('resident/edit', 'update')->name('resident.update');
-    Route::get('resident/delete}', 'delete')->name('resident.delete');
+    Route::get('resident/delete', 'delete')->name('resident.delete');
 });
 
 Route::controller(VitalController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
