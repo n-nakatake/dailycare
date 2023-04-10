@@ -33,15 +33,10 @@
                         </div>
                     </div>
                 </div>
-                <form class="mt-5" action="{{ route('admin.user.update', ['userId', $userForm->id]) }}" method="post" enctype="multipart/form-data">
-<!--
-                    <input type="hidden" class="form-control" name="user_code" value="{{ old('user_code') ? old('user_code') : $userForm->user_code }}">
-                    <input type="hidden" class="form-control" name="password" value="{{ old('password') ? old('password') : $userForm->password }}">
-                    <input type="hidden" class="form-control" name="password_confirmation" value="{{$userForm->password }}">
-                    <input type="hidden" class="form-control" name="rememberToken" value="{{$userForm->rememberToken }}">
--->                   {{ dd($errors)}}
+                <form class="mt-5" action="{{ route('admin.user.update', [$userForm, $userForm->id]) }}" method="post" enctype="multipart/form-data">
+ 
                     <div class="form-group row">
-                        <label class="w-8rem">氏名</label>
+                        <label class="w-10rem">氏名</label>
                         <div class="col-md-2">
                             <input type="text" class="form-control" name="last_name" value="{{ old('last_name') ? old('last_name') : $userForm->last_name }}">
                             @if ($errors->has('last_name'))
@@ -60,7 +55,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="w-8rem">資格</label>
+                        <label class="w-10rem">資格</label>
                         <div class="col-md-2">
                             <select  class="form-control" name="qualification">
                                 <option value="">選択してください</option>
@@ -79,11 +74,17 @@
                         </div>                        
                     </div>
                     <div class="form-group row">
-                        <label class="w-8rem">退職日</label>
-                        <div class="col-md-2">
-                            <input type="date" min="1900-01-01" max="2200-12-31" class="form-control" name="retirement_day" value="{{ old('retirement_day') ? old('retirement_day') : $userForm->retirement_day }}">
+                        <div class="checkbox w-10rem">
+                            @if((( old('admin_flag') ? old('admin_flag') : $userForm->admin_flag )  == 1 ) || ( old('super_admin_flag') ? old('super_admin_flag') : $userForm->super_admin_flag ) == 1 )
+                                <input type="checkbox" name="admin_flag" checked="checked">
+                            @else
+                                <input type="checkbox" name="admin_flag">
+                            @endif
+                            <label>管理者として登録</label>
                         </div>
-                        <div class="checkbox" "col-md-2">
+                    </div>                        
+                    <div class="form-group row">
+                        <div class="checkbox w-10rem">
                             @if(( old('retirement_flag') ? old('retirement_flag') : $userForm->retirement_flag )  == 1 ) 
                                 <input type="checkbox" name="retirement_flag" checked="checked">
                             @else
@@ -91,15 +92,8 @@
                             @endif
                             <label>退職</label>
                         </div>
-                    </div>                        
-                    <div class="form-group row">
-                        <div class="checkbox" "col-md-2">
-                            @if((( old('admin_flag') ? old('admin_flag') : $userForm->admin_flag )  == 1 ) || ( old('super_admin_flag') ? old('super_admin_flag') : $userForm->super_admin_flag ) == 1 )
-                                <input type="checkbox" name="admin_flag" checked="checked">
-                            @else
-                                <input type="checkbox" name="admin_flag">
-                            @endif
-                            <label>管理者として登録</label>
+                        <div class="col-md-2">
+                            <input type="date" min="1900-01-01" max="2200-12-31" class="form-control" name="retirement_day" value="{{ old('retirement_day') ? old('retirement_day') : $userForm->retirement_day }}">
                         </div>
                     </div>                        
                     @csrf

@@ -132,7 +132,7 @@ return [
     'doesnt_start_with' => 'The :attribute may not start with one of the following: :values.',
     'string' => ':attributeは文字列で入力してください',
     'timezone' => 'The :attribute must be a valid timezone.',
-    'unique' => 'The :attribute has already been taken.',
+    'unique' => 'この:attribute はすでに使われています',
     'uploaded' => 'The :attribute failed to upload.',
     'url' => 'The :attribute must be a valid URL.',
     'uuid' => 'The :attribute must be a valid UUID.',

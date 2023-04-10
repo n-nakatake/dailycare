@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Excretion;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Database\Eloquent\Collection;
+use App\Http\Requests\UserRequest;
 class UserController extends Controller
 {
     public function add()
@@ -69,6 +70,7 @@ class UserController extends Controller
 
     public function edit(Request $request, $userId)
     {
+        //dd($userId);
          // バリデーションエラー以外で遷移してきたら、キャンセルボタン押下時または更新後にリダイレクトするURLをセッションに保存
         if (url()->previous() !== route('admin.user.edit', ['userId' => $userId])) {
             session(['fromUrl' => url()->previous()]);
@@ -78,38 +80,42 @@ class UserController extends Controller
 
         // user Modelからデータを取得する
         $user = user::find($userId);
-//        dd($user);
+        //dd($userId);
         if (empty($user)) {
             abort(404);    
         }
         
-        return view('admin.user.edit', ['userForm' => $user]);
+        return view('admin.user.edit', ['userForm' => $user,'userId' => $userId]);
         
     }
 
-    public function update(Request $request, $userId)
+    public function update(UserRequest $request, $userId) // 河野 修正 UserRequestに修正
     {
-    //  dd($request->id);
-         // Validationをかける
-     $this->validate($request, User::$rules);
+        //dd($userId);
+        //$user = $this->getValidUser($userId);
+        // Validationをかける
+        //$this->validate($request, User::$rules);
         // user Modelからデータを取得する
         $user = user::find($userId);
+        // dd($user);
 
-     dd($user);
+
 
         // 送信されてきたフォームデータを格納する
         $user_form = $request->all();
        
         unset($user_form['remove']);
         unset($user_form['_token']);
-
+        $user_form['admin_flag'] = isset($user_form['admin_flag']) ? true : false; // 河野 修正 admin_flagに対してonという文字列がセットされていて、それがエラーを起こしていたため
         // 該当するデータを上書きして保存する
         $user->fill($user_form)->save();
+
+        $message = $user_form['last_name'] . $user_form['first_name'] . 'さんのユーザー情報を更新しました。';
 
         return redirect(session()->pull('fromUrl', route('admin.user.index')))
             ->with('message', $message);
     }
-    
+  
   public function delete(Request $request)
   {
         // 該当するuser Modelを取得
@@ -122,4 +128,5 @@ class UserController extends Controller
         return redirect(session()->pull('fromUrl', route('admin.user.index')))
             ->with('message', $message);
     }
+
  }

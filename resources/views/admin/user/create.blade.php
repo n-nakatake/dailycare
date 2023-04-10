@@ -84,7 +84,11 @@
                     </div>
                     
                     <div class="form-group row">
-                        <label class="w-10rem">退職日</label>
+                        <div class="checkbox w-10rem">
+                            <label>
+                                <input type="checkbox" name="retirement_flag" {{ old('retirement_flag') ? 'checked' : '' }}> 退職
+                            </label>
+                        </div>
                         <div class="col-md-2">
                             <input type="date" min="1900-01-01" max="2200-12-31" class="form-control" name="retirement_day" value="{{ old('retirement_day') }}">
                         </div>
@@ -93,22 +97,8 @@
                                 <strong>{{$errors->first('retirement_day')}}</strong>
                             </span>
                         @endif
-                        </div>
-
-                        <div class="checkbox" "col-md-2">
-                            <label>
-                                <input type="checkbox" name="retirement_flag" {{ old('retirement_flag') ? 'checked' : '' }}> 退職
-                            </label>
-                        </div>
                     </div>
 
-                    <div class="form-group row">
-                        <div class="checkbox" "col-md-2">
-                            <label>
-                                <input type="checkbox" name="admin_flag" {{ old('admin_flag') ? 'checked' : '' }}> 管理者として登録
-                            </label>
-                        </div>
-                    </div>
 
                     @csrf
                     <div class="text-center mt-5">
