@@ -14,8 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('residents', function (Blueprint $table) {
-            $table->smallInteger('retirement_flag')->default(false); 
-            $table->dateTime('retirement_day');   // 退職日
+            $table->dateTime('retirement_day')->nullable();   // 退職日
             $table->text('retirement_note')->nullable();   // 特記
         });
     }
@@ -28,7 +27,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('residents', function (Blueprint $table) {
-            $table->dropColumn(['retirement_flag']);
+            $table->dropColumn(['retirement_day']);
+            $table->dropColumn(['retirement_note']);
         });
     }
 };

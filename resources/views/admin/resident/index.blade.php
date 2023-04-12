@@ -11,7 +11,7 @@
         <div class="row">
             <h2 class="col-md-4">入居者一覧</h2>
         </div>
-        <div class="row">
+        <div class="row mb-4">
             <div class="col-md-12 text-end">
                 <a href="{{ route('admin.resident.add') }}" role="button" class="btn btn-primary">新規作成</a>
             </div>

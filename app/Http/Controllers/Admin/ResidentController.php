@@ -12,12 +12,6 @@ class ResidentController extends Controller
 {
     public function add()
     {
-        // バリデーションエラー以外で遷移してきたら、キャンセルボタン押下時または登録後にリダイレクトするURLをセッションに保存
-        $previousUrl = url()->previous();
-        $urlWithoutGetParameter = strpos($previousUrl, "?") === false ? $previousUrl : substr($previousUrl , 0 , strpos($previousUrl, "?"));
-        if ($urlWithoutGetParameter !== route('admin.resident.add')) {
-            session(['fromUrl' => url()->previous()]);
-        }
         return view('admin.resident.create');
     }
 

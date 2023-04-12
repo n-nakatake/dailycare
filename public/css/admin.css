@@ -49,6 +49,9 @@ body {
   background-color: #000;
 }
 
+.w-1rem {
+  width: 1rem;
+}
 .w-4rem {
   width: 4rem;
 }
@@ -102,4 +105,7 @@ body {
 .middle {
   display: flex;
   align-items: center;
+}
+.inline-table {
+  display: inline-table;
 }
