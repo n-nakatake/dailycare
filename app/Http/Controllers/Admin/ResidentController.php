@@ -1,12 +1,16 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
-use App\Models\ResidentHistory;
+use App\Http\Requests\CreateResidentRequest;
+use App\Models\Resident;
+use App\Models\CareLevel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Resident;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
 
 class ResidentController extends Controller
 {
@@ -15,14 +19,18 @@ class ResidentController extends Controller
         return view('admin.resident.create');
     }
 
-    public function create(Request $request)
+    public function create(CreateResidentRequest $request)
     {
         // Validationを行う
-        $this->validate($request, Resident::$rules);
         $resident = new Resident;
+        $careLevel = new CareLevel;
         $form = $request->all();
         $form['office_id'] = Auth::user()->office_id;
-
+    
+        $careLevel->level = $form['level'];
+        $careLevel->start_date = $form['level_start_date'];
+        $careLevel->end_date = $form['level_end_date'];
+        
          // formに画像があれば、保存する
         if (isset($form['image'])) {
             $path = Storage::disk('s3')->putFile('/',$form['image'],'public');
@@ -32,34 +40,37 @@ class ResidentController extends Controller
         }
         
         // 不要な値を削除する
-        unset($form['_token']);
-        unset($form['image']);
+        unset(
+            $form['_token'],
+            $form['image'],
+            $form['level'],
+            $form['level_start_date'],
+            $form['level_end_date']
+        );
 
         // データベースに保存する
         $resident->fill($form);
-        $resident->save();
+        DB::transaction(function () use($resident, $careLevel) {
+            $resident->save();
+            $careLevel->resident_id = $resident->id;
+            $careLevel->save();
+        });
 
-        $message = $form['last_name'] . 'さんの利用者情報を登録しました。';
+        $message = $form['last_name'] . $form['first_name'] . 'さんの利用者情報を登録しました。';
 
-        return redirect(session()->pull('fromUrl', route('admin.resident.index')))
+        return redirect(route('admin.resident.index'))
             ->with('message', $message);
     }
 
 
     public function index(Request $request)
     {
-        $cond_name = $request->cond_name;
-        if ($cond_name != '') {
-            $residents = Resident::where('office_id', Auth::user()->office_id)
-                ->where('last_name', $cond_name)
-                ->get();
-        } else {
-            $residents = Resident::where('office_id', Auth::user()->office_id)
-                ->orderBy('last_name_k')
-                ->orderBy('first_name_K')
-                ->get();
-        }
-        return view('admin.resident.index', ['residents' => $residents, 'cond_name' => $cond_name]);
+        $residents = Resident::where('office_id', Auth::user()->office_id)
+            ->orderBy('last_name_k')
+            ->orderBy('first_name_K')
+            ->get();
+        
+        return view('admin.resident.index', ['residents' => $residents, 'careLevels' => CareLevel::LEVELS]);
     }
 
     public function edit(Request $request)

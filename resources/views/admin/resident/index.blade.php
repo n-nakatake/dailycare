@@ -39,23 +39,11 @@
                                     @else
                                         <td>女性</td>
                                     @endif
-                                    <td>{{toWareki('KX年m月d日', str_replace("-","",$resident->birthday))}}</td>
+                                    <td>{{ toWareki('KX年m月d日', str_replace("-","",$resident->birthday)) }}</td>
                                     <td class="no-link">{{ getAge($resident->birthday) }}</td>
-                                    @if ($resident->level == 1 )
-                                        <td>要介護１</td>
-                                    @elseif ($resident->level == 2 )
-                                        <td>要介護２</td>
-                                    @elseif ($resident->level == 3 )
-                                        <td>要介護３</td>
-                                    @elseif ($resident->level == 4 )
-                                        <td>要介護４</td>
-                                    @elseif ($resident->level == 5 )
-                                        <td>要介護５</td>
-                                    @elseif ($resident->level == 6 )
-                                        <td>要支援１</td>
-                                    @elseif ($resident->level == 7 )
-                                        <td>要支援２</td>
-                                    @elseif ($resident->level == 8 )
+                                    @if (isset($careLevels[optional($resident->currentCarelevel)->level]))
+                                        <td>{{ $careLevels[$resident->currentCarelevel->level] }}</td>
+                                    @else
                                         <td>該当なし</td>
                                     @endif                                      
                                     <td>
@@ -90,14 +78,3 @@
         </div>
     </div>
 @endsection
-
-{{--
-@section('script')
-    $('input, select').change(function() {
-        const indexUrl = "{{ trim(route('admin.resident.index', ['residentId' => $residentId]), '0123456789') }}";
-        const residentId = $('#residentId').val();
-        const residentYm = $('#residentYm').val();
-        location.href= indexUrl + residentId + '?resident_ym=' + residentYm;
-    });
-@endsection-->
---}}

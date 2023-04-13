@@ -14,7 +14,7 @@
                 <h2>入居者登録</h2>
                 <form class="mt-5" action="{{ route('admin.resident.create') }}" method="post" enctype="multipart/form-data">
                     <div class="form-group row">
-                        <label class="col-md-3">氏名</label>
+                        <label class="col-md-3">氏名 <span class="half-size">※</span></label>
                         <div class="col-md-3">
                             <input type="text" class="form-control" name="last_name" value="{{ old('last_name') }}" placeholder="性">
                             @if ($errors->has('last_name'))
@@ -33,7 +33,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-3">氏名（カナ）</label>
+                        <label class="col-md-3">氏名（カナ） <span class="half-size">※</span></label>
                         <div class="col-md-3">
                             <input type="text" class="form-control" name="last_name_k" value="{{ old('last_name_k') }}" placeholder="セイ">
                             @if ($errors->has('last_name_k'))
@@ -44,7 +44,7 @@
                         </div>
                         <div class="col-md-3">
                             <input type="text" class="form-control" name="first_name_k" value="{{ old('first_name_k') }}" placeholder="メイ">
-                            @if ($errors->has('first_name_K'))
+                            @if ($errors->has('first_name_k'))
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('first_name_k') }}</strong>
                                 </span>
@@ -52,7 +52,7 @@
                         </div> 
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-3">誕生日</label>
+                        <label class="col-md-3">誕生日 <span class="half-size">※</span></label>
                         <div class="col-md-3">
                             <input type="date" min="1900-01-01" max="2200-12-31" class="form-control" name="birthday" value="{{ old('birthday') }}">
                             @if ($errors->has('birthday'))
@@ -63,7 +63,7 @@
                         </div>
                     </div>                    
                     <div class="form-group row">
-                        <label class="col-md-3">性別</label>
+                        <label class="col-md-3">性別 <span class="half-size">※</span></label>
                         <div class="col-md-3">
                             <select  class="form-control" name="gender">
                                 <option value="">選択してください</option>
@@ -78,7 +78,7 @@
                         </div>
                     </div>                    
                     <div class="form-group row">
-                        <label class="col-md-3">介護度</label>
+                        <label class="col-md-3">介護度 <span class="half-size">※</span></label>
                         <div class="col-md-3">
                             <select  class="form-control" name="level">
                                 <option value="">選択してください</option>
@@ -99,21 +99,21 @@
                         </div>
                     </div>    
                     <div class="form-group row">
-                        <label class="col-md-3">介護認定の有効期間</label>
+                        <label class="col-md-3">介護認定の有効期間 <span class="half-size">※</span></label>
                         <div class="col-md-3">
-                            <input type="date" min="1900-01-01" max="2200-12-31" class="form-control" name="level_start" value="{{ old('level_start') }}">
-                            @if ($errors->has('level_start'))
+                            <input type="date" min="1900-01-01" max="2200-12-31" class="form-control" name="level_start_date" value="{{ old('level_start_date') }}">
+                            @if ($errors->has('level_start_date'))
                                 <span class="small text-danger error-left">
-                                　　<strong>{{ $errors->first('level_start') }}</strong>
+                                　　<strong>{{ $errors->first('level_start_date') }}</strong>
                                 </span>
                             @endif
                         </div>
-                        <label class="w-1rem inline-table">〜</label>
+                        <label class="w-1rem inline-table" style="line-height: 2rem;">〜</label>
                         <div class="col-md-3">
-                            <input type="date" min="1900-01-01" max="2200-12-31" class="form-control" name="level_end" value="{{ old('level_end') }}">
-                            @if ($errors->has('level_end'))
+                            <input type="date" min="1900-01-01" max="2200-12-31" class="form-control" name="level_end_date" value="{{ old('level_end_date') }}">
+                            @if ($errors->has('level_end_date'))
                                 <span class="small text-danger error-left">
-                                　　<strong>{{ $errors->first('level_end') }}</strong>
+                                　　<strong>{{ $errors->first('level_end_date') }}</strong>
                                 </span>
                             @endif
                         </div>
@@ -138,17 +138,19 @@
                         </div>
                     </div>                        
                     <div class="form-group row">
-                        <div class="col-md-9 offset-md-3">
-                            <input type="text" class="form-control" name="key_person_adress" value="{{ old('key_person_adress') }}" placeholder="住所">
-                            @if ($errors->has('key_person_adress'))
+                        <label class="col-md-3">　　住所</label>
+                        <div class="col-md-9 col-md-3">
+                            <input type="text" class="form-control" name="key_person_address" value="{{ old('key_person_address') }}" placeholder="住所">
+                            @if ($errors->has('key_person_address'))
                                 <span class="small text-danger error-left">
-                                　　<strong>{{$errors->first('key_person_adress')}}</strong>
+                                　　<strong>{{$errors->first('key_person_address')}}</strong>
                                 </span>
                             @endif
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-md-4 offset-md-3">
+                        <label class="col-md-3">　　電話番号1</label>
+                        <div class="col-md-4 col-md-3">
                             <input type="tel" class="form-control" name="key_person_tel1" value="{{ old('key_person_tel1') }}" placeholder="電話番号1">
                             @if ($errors->has('key_person_tel1'))
                                 <span class="small text-danger error-left">
@@ -158,7 +160,8 @@
                         </div>
                     </div>      
                     <div class="form-group row">
-                        <div class="col-md-4 offset-md-3">
+                        <label class="col-md-3">　　電話番号2</label>
+                        <div class="col-md-4 col-md-3">
                             <input type="tel" class="form-control" name="key_person_tel2" value="{{ old('key_person_tel2') }}" placeholder="電話番号2">
                             @if ($errors->has('key_person_tel2'))
                                 <span class="small text-danger error-left">
@@ -168,7 +171,8 @@
                         </div>
                     </div>      
                     <div class="form-group row">
-                        <div class="col-md-9 offset-md-3">
+                        <label class="col-md-3">　　メールアドレス</label>
+                        <div class="col-md-9 col-md-3">
                             <input type="email" class="form-control" name="key_person_mail" value="{{ old('key_person_mail') }}" placeholder="メールアドレス">
                             @if ($errors->has('key_person_mail'))
                                 <span class="small text-danger error-left">
@@ -198,6 +202,9 @@
                                 </span>
                             @endif
                         </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class=offset-md-3 for="title">※入力必須</label>
                     </div>  
                     @csrf
                     <div class="text-center mt-5">

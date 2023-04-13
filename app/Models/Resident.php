@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Carbon\Carbon;
 
 
 class Resident extends Model
@@ -14,18 +15,7 @@ class Resident extends Model
 
     protected $guarded = array('id');
 
-    public static $rules = [
-        'last_name' => 'required',
-        'first_name' => 'required',
-        'last_name_k' => ['required', 'regex:/^[ア-ン゛゜ァ-ォャ-ョー]+$/u',],
-        'first_name_K' => ['required', 'regex:/^[ア-ン゛゜ァ-ォャ-ョー]+$/u',],
-        'birthday' => 'required',
-        'gender' => 'required',
-        'level' => 'required',
-        'level_start' => 'required',
-        'level_end' => 'required',
-    ];
-    
+
 
     // Modelに関連付けを行う
 /*    public function histories()
@@ -37,20 +27,33 @@ class Resident extends Model
     public function vitals()
     {
         return $this->hasMany('App\Models\Vital');
-    }    
+    }
     
     public function meals()
     {
         return $this->hasMany('App\Models\Meal');
-    }    
+    }
     
     public function baths()
     {
         return $this->hasMany('App\Models\Bath');
-    }    
+    }
     
     public function excretions()
     {
         return $this->hasMany('App\Models\Excretion');
-    }      
+    }
+    
+    public function careLevels()
+    {
+        return $this->hasMany('App\Models\CareLevel');
+    }
+    
+    public function getCurrentCareLevelAttribute()
+    {
+        return $this->careLevels()
+            // ->whereDate('start_date', '<=', Carbon::now())
+            // ->whereDate('end_date', '>=', Carbon::now())
+            ->first();
+    }
 }
