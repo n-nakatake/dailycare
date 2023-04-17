@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
+use App\Models\CareCertification;
 use App\Models\Meal;
 use App\Models\Resident;
 use Illuminate\Http\Request;
@@ -40,7 +41,11 @@ class TopController extends Controller
                 'baths' => function ($query) use ($targetDate) {
                     $query->where('bath_time', '>', $targetDate . ' 00:00:00')
                         ->where('bath_time', '<=', $targetDate . ' 23:59:59');
-                }
+                },
+                'excretions' => function ($query) use ($targetDate) {
+                    $query->where('excretion_time', '>', $targetDate . ' 00:00:00')
+                        ->where('excretion_time', '<=', $targetDate . ' 23:59:59');
+                },
             ])
             ->orderBy('last_name_k')
             ->orderBy('first_name_k')
@@ -52,6 +57,7 @@ class TopController extends Controller
             'residents' => $residents,
             'mealBldOptions' => Meal::MEAL_BLD_OPTIONS,
             'mealIntakeOptions' => Meal::MEAL_INTAKE_OPTIONS,
+            'careLevels' => CareCertification::LEVELS,
         ]);
     }
 }

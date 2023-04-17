@@ -87,24 +87,12 @@
                     <tbody>
                         @foreach ($residents as $resident)
                             <tr>
-                                <td><a href="{{ route('admin.resident.edit', ['id' => $resident->id]) }}">{{ $resident->last_name . $resident->first_name }}</a></td>
-                                @if ($resident->level == 1 )
-                                    <td class="no-link">要介護１</td>
-                                @elseif ($resident->level == 2 )
-                                    <td class="no-link">要介護２</td>
-                                @elseif ($resident->level == 3 )
-                                    <td class="no-link">要介護３</td>
-                                @elseif ($resident->level == 4 )
-                                    <td class="no-link">要介護４</td>
-                                @elseif ($resident->level == 5 )
-                                    <td class="no-link">要介護５</td>
-                                @elseif ($resident->level == 6 )
-                                    <td class="no-link">要支援１</td>
-                                @elseif ($resident->level == 7 )
-                                    <td class="no-link">要支援２</td>
-                                @elseif ($resident->level == 8 )
+                                <td><a href="{{ route('admin.resident.edit', ['residentId' => $resident->id]) }}">{{ $resident->last_name . $resident->first_name }}</a></td>
+                                @if (!isset($careLevels[optional($resident->current_care_certification)->level]))
                                     <td class="no-link">該当なし</td>
-                                @endif  
+                                @else
+                                    <td class="no-link">{{ $careLevels[optional($resident->current_care_certification)->level] }}</td>
+                                @endif 
                                 <td class="no-link">{{ getAge($resident->birthday) }}</td>
                                 <td>
                                     @if ($resident->vitals->isEmpty())
@@ -142,7 +130,12 @@
                                             <br>汁物：{{ !is_null($meal->meal_intake_soup) ? $mealIntakeOptions[$meal->meal_intake_soup] : '-' }}
                                         </a>
                                     @endif
-                                <td><a href="#">排尿：1<br>排便：1</a></td>
+                                <td>
+                                    <a href="{{ route('admin.excretion.index', ['residentId' => $resident->id]) }}">
+                                        排尿：{{ $resident->excretions->where('excretion_flash', true)->count() }}<br>
+                                        排便：{{ $resident->excretions->where('excretion_dump', true)->count() }}
+                                    </a>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
