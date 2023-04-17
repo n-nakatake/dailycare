@@ -45,9 +45,11 @@ Route::controller(ResidentController::class)->prefix('admin')->name('admin.')->m
     Route::get('resident/create', 'add')->name('resident.add');
     Route::post('resident/create', 'create')->name('resident.create');
     Route::get('resident', 'index')->name('resident.index');
-    Route::get('resident/edit', 'edit')->name('resident.edit');
-    Route::post('resident/edit', 'update')->name('resident.update');
-    Route::get('resident/delete', 'delete')->name('resident.delete');
+    Route::get('resident/edit/{residentId}', 'edit')->name('resident.edit');
+    Route::post('resident/edit/{residentId}', 'update')->name('resident.update');
+    Route::get('resident/leave/{residentId}', 'leaving')->name('resident.leaving');
+    Route::post('resident/leave/{residentId}', 'leave')->name('resident.leave');
+    Route::get('resident/delete/{residentId}', 'delete')->name('resident.delete');
 });
 
 Route::controller(VitalController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {

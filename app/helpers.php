@@ -155,6 +155,32 @@ if (! function_exists('getTime')) {
     }
 }
 
+if (! function_exists('getDateOnly')) {
+    /**
+     * @param string $date 日にち（yyyy-mm-dd HH:ii:ss）
+     *
+     * @return string m月d日
+     */
+    function getDateOnly(?string $date)
+    {
+        if (is_null($date)) {
+            return '';
+        }
+        return Carbon::parse($date)->format('Y-m-d');
+    }
+}
+
+if (! function_exists('formatDateWithYear')) {
+    /**
+     * @param string $date 日にち（yyyy-mm-dd || yyyy-mm-dd HH:ii）
+     *
+     * @return string m月d日
+     */
+    function formatDateWithYear(string $date)
+    {
+        return Carbon::parse($date)->format('Y年n月j日');
+    }
+}
 if (! function_exists('formatDate')) {
     /**
      * @param string $date 日にち（yyyy-mm-dd || yyyy-mm-dd HH:ii）
@@ -176,6 +202,18 @@ if (! function_exists('formatDatetime')) {
     function formatDatetime(string $date)
     {
         return Carbon::parse($date)->format('n月j日 G:i');
+    }
+}
+
+if (! function_exists('isPast')) {
+    /**
+     * @param string $date 日時（yyyy-mm-dd HH:ii）
+     *
+     * @return string 日時（m月d日 H:ii）
+     */
+    function isPast(string $date)
+    {
+        return Carbon::parse($date)->isPast();
     }
 }
 
