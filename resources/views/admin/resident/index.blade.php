@@ -48,25 +48,16 @@
                                     @endif                                      
                                     <td>
                                         <div>
-                                            <a class="btn btn-primary me-2" href="{{ route('admin.resident.edit', ['id' => $resident->id]) }}">編集</a>
-                                            <!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal{{ $resident->id }}">
-                                              削除
-                                            </button>
-                                            <!-- Modal -->
-                                            <div class="modal fade text-dark" id="confirmModal{{ $resident->id }}" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-body">
-                                                            <p>{{ $resident->last_name }}{{ $resident->first_name }}さんの入居者データを削除してよろしいですか？</p>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-                                                            <button type="button" class="btn btn-danger" onclick="location.href='{{ route('admin.resident.delete', ['id' => $resident->id]) }}'">削除</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <a class="btn btn-primary me-2" href="{{ route('admin.resident.edit', ['residentId' => $resident->id]) }}">編集</a>
+                                            <a class="btn btn-secondary me-2" href="{{ route('admin.resident.leaving', ['residentId' => $resident->id]) }}">
+                                                @if ($resident->left_date && isPast($resident->left_date))
+                                                    退所済み
+                                                @elseif ($resident->left_date && !isPast($resident->left_date))
+                                                    退所予定
+                                                @else
+                                                    退所
+                                                @endif
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>

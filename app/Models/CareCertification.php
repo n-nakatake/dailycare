@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
 
-class CareLevel extends Model
+class CareCertification extends Model
 {
     use HasFactory;
 

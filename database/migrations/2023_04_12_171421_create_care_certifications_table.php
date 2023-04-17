@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('care_levels', function (Blueprint $table) {
+        Schema::create('care_certifications', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('resident_id'); // 利用者ID
             $table->smallInteger('level'); // 介護度
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('care_levels');
+        Schema::dropIfExists('care_certifications');
     }
 };

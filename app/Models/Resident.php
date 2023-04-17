@@ -44,16 +44,16 @@ class Resident extends Model
         return $this->hasMany('App\Models\Excretion');
     }
     
-    public function careLevels()
+    public function careCertifications()
     {
-        return $this->hasMany('App\Models\CareLevel');
+        return $this->hasMany('App\Models\CareCertification');
     }
     
-    public function getCurrentCareLevelAttribute()
+    public function getCurrentCareCertificationAttribute()
     {
-        return $this->careLevels()
-            // ->whereDate('start_date', '<=', Carbon::now())
-            // ->whereDate('end_date', '>=', Carbon::now())
+        return $this->careCertifications()
+            ->whereDate('start_date', '<=', Carbon::now())
+            ->whereDate('end_date', '>=', Carbon::now())
             ->first();
     }
 }
