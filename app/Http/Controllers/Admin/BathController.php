@@ -24,14 +24,10 @@ class BathController extends Controller
 
         $officeId = Auth::user()->office_id;
         $users = User::where('office_id', $officeId)->orderBy('id')->get();
-        $residents = Resident::where('office_id', $officeId)
-            ->orderBy('last_name_k')
-            ->orderBy('first_name_k')
-            ->get();
 
         return view('admin.bath.create', [
             'users' => $users,
-            'residents' => $residents,
+            'residents' => Resident::exist()->get(), 
             'residentId' => $residentId,
             'bathMethods' => Bath::BATH_METHODS,
         ]);
@@ -63,12 +59,6 @@ class BathController extends Controller
     
     public function index(Request $request, $residentId)
     {
-        $officeId = Auth::user()->office_id;
-        $residents = Resident::where('office_id', $officeId)
-            ->orderBy('last_name_k')
-            ->orderBy('first_name_k')
-            ->get();
-
         $requestDate = $request->bath_ym;
         $dateYm = checkdate((int) substr($requestDate, 5, 2), 1, (int) substr($requestDate, 0, 4)) ? $request->bath_ym : date('Y-m');
 
@@ -96,7 +86,7 @@ class BathController extends Controller
         return view('admin.bath.index', [
             'baths' => $bathsByDay,
             'dateYm' => $dateYm,
-            'residents' => $residents,
+            'residents' => Resident::exist()->get(), 
             'residentId' => $residentId,
             'datesOfMonth' => $this->getAllDates($dateYm, $lastDay),
         ]);

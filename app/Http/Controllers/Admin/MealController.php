@@ -25,13 +25,10 @@ class MealController extends Controller
 
         $officeId = Auth::user()->office_id;
         $users = User::where('office_id', $officeId)->orderBy('id')->get();
-        $residents = Resident::where('office_id', $officeId)
-            ->orderBy('last_name_k')
-            ->orderBy('first_name_k')
-            ->get();
+
         return view('admin.meal.create', [
             'users' => $users,
-            'residents' => $residents,
+            'residents' => Resident::exist()->get(), 
             'residentId' => $residentId,
             'mealBldOptions' => Meal::MEAL_BLD_OPTIONS,
             'mealIntakeOptions' => Meal::MEAL_INTAKE_OPTIONS,
@@ -100,12 +97,6 @@ class MealController extends Controller
     
     public function index(Request $request, int $residentId)
     {
-        $officeId = Auth::user()->office_id;
-        $residents = Resident::where('office_id', $officeId)
-            ->orderBy('last_name_k')
-            ->orderBy('first_name_k')
-            ->get();
-
         $requestDate = $request->meal_ym;
         $dateYm = checkdate((int) substr($requestDate, 5, 2), 1, (int) substr($requestDate, 0, 4)) ? $request->meal_ym : date('Y-m');
         $meals = [];
@@ -125,7 +116,7 @@ class MealController extends Controller
         return view('admin.meal.index', [
             'meals' => $this->formatMeals($meals),
             'dateYm' => $dateYm,
-            'residents' => $residents,
+            'residents' => Resident::exist()->get(), 
             'residentId' => $residentId,
             'mealBldOptions' => Meal::MEAL_BLD_OPTIONS,
             'mealIntakeOptions' => Meal::MEAL_INTAKE_OPTIONS,

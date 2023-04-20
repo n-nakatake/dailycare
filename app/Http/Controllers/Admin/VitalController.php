@@ -24,15 +24,12 @@ class VitalController extends Controller
 
         $officeId = Auth::user()->office_id;
         $users = User::where('office_id', $officeId)->orderBy('id')->get();
-        $residents = Resident::where('office_id', $officeId)
-            ->orderBy('last_name_k')
-            ->orderBy('first_name_k')
-            ->get();
-        
+
         return view('admin.vital.create', [
             'users' => $users, 
-            'residents' => $residents, 
-            'residentId' => $residentId]);
+            'residents' => Resident::exist()->get(), 
+            'residentId' => $residentId
+        ]);
     }
 
     public function create(Request $request)
@@ -69,17 +66,6 @@ class VitalController extends Controller
 
     public function index(Request $request, $residentId)
     {
-        $officeId = Auth::user()->office_id;
-        $residents = Resident::where('office_id', $officeId)
-            ->orderBy('last_name_k')
-            ->orderBy('first_name_k')
-            ->get();
-            
-/*        $residentId = $request->resident_id ? (int)$request->resident_id : $residentId; 
-        $residentName = $residents->where('id', $residentId)->first()->last_name . $residents->where('id', $residentId)->first()->first_name;
-        $date = $request->vital_ym;
-        $vitals = [];*/
-        
         $requestDate = $request->vital_ym;
         $dateYm = checkdate((int) substr($requestDate, 5, 2), 1, (int) substr($requestDate, 0, 4)) ? $request->vital_ym : date('Y-m');        
 
@@ -107,7 +93,7 @@ class VitalController extends Controller
         return view('admin.vital.index', [
             'vitals' => $vitalsByDay, 
             'dateYm' => $dateYm,
-            'residents' => $residents, 
+            'residents' => Resident::exist()->get(), 
             'residentId' => $residentId, 
             'datesOfMonth' => $this->getAllDates($dateYm, $lastDay),]);
     }    

@@ -18,12 +18,6 @@ class Resident extends Model
 
 
     // Modelに関連付けを行う
-/*    public function histories()
-    {
-        return $this->hasMany('App\Models\ResidentHistory');
-                              
-    }*/    
-
     public function vitals()
     {
         return $this->hasMany('App\Models\Vital');
@@ -47,6 +41,32 @@ class Resident extends Model
     public function careCertifications()
     {
         return $this->hasMany('App\Models\CareCertification');
+    }
+    
+    public function existOnly()
+    {
+        return $this->where(function($query){
+                        $query->orWhere('left_date', 'is', null)
+                              ->orWhere('left_date', '>=', Carbon::now());
+                    });
+    }
+    
+    /**
+     * 退所していない入居者のみをアイウエオ順で取得する
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeExist()
+    {
+        return $this
+            ->where('office_id', Auth::user()->office_id)
+            ->where(function($residentQuery){
+                $residentQuery->whereNull('left_date')
+                    ->orWhere('left_date', '>=', Carbon::now());
+            })
+            ->orderBy('last_name_k')
+            ->orderBy('first_name_k');
     }
     
     public function getCurrentCareCertificationAttribute()

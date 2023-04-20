@@ -26,7 +26,7 @@ class TopController extends Controller
         $nightShiftMembers = $attendances->where('attendance_type', Attendance::ATTENDANCE_TYPE_NIGHT_SHIFT)->sortBy('id');
 
         // 利用者データ
-        $residents = Resident::where('office_id', Auth::user()->office_id)
+        $residents = Resident::exist()
             ->with([
                 'vitals' => function ($query) use ($targetDate) {
                     $query->where('vital_time', '>', $targetDate . ' 00:00:00')
@@ -47,8 +47,6 @@ class TopController extends Controller
                         ->where('excretion_time', '<=', $targetDate . ' 23:59:59');
                 },
             ])
-            ->orderBy('last_name_k')
-            ->orderBy('first_name_k')
             ->get();
 
         return view('admin.top.index', [

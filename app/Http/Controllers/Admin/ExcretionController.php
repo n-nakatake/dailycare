@@ -23,16 +23,11 @@ class ExcretionController extends Controller
 
         $officeId = Auth::user()->office_id;
         $users = User::where('office_id', $officeId)->orderBy('id')->get();
-        $residents = Resident::where('office_id', $officeId)
-            ->orderBy('last_name_k')
-            ->orderBy('first_name_k')
-            ->get();
 
         return view('admin.excretion.create', [
             'users' => $users,
-            'residents' => $residents,
+            'residents' => Resident::exist()->get(), 
             'residentId' => $residentId,
-//            'excretionMethods' => excretion::excretion_METHODS,
         ]);
     }
 
@@ -56,7 +51,7 @@ class ExcretionController extends Controller
                 $form['excretion_flash'] = 0;
             }
         }else{
-            $form['excretion_dump'] = 0;
+            $form['excretion_flash'] = 0;
         }
         if( isset($form['excretion_dump'] )){
             if( $form['excretion_dump'] ){
@@ -80,12 +75,6 @@ class ExcretionController extends Controller
     
     public function index(Request $request, $residentId)
     {
-        $officeId = Auth::user()->office_id;
-        $residents = Resident::where('office_id', $officeId)
-            ->orderBy('last_name_k')
-            ->orderBy('first_name_k')
-            ->get();
-
         $requestDate = $request->excretion_ym;
         $dateYm = checkdate((int) substr($requestDate, 5, 2), 1, (int) substr($requestDate, 0, 4)) ? $request->excretion_ym : date('Y-m');
 
@@ -114,7 +103,7 @@ class ExcretionController extends Controller
         return view('admin.excretion.index', [
             'excretions' => $excretionsByDay,
             'dateYm' => $dateYm,
-            'residents' => $residents,
+            'residents' => Resident::exist()->get(), 
             'residentId' => $residentId,
             'datesOfMonth' => $this->getAllDates($dateYm, $lastDay),
         ]);
