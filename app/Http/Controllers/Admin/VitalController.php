@@ -74,7 +74,7 @@ class VitalController extends Controller
         $month = $splitedDate[1];
         $lastDay = Carbon::create($year, $month, 1)->lastOfMonth()->day;
         // 検索されたら検索結果を取得する
-        $vitals = vital::where('office_id', $officeId)
+        $vitals = vital::where('office_id', Auth::user()->office_id)
             ->where('resident_id', $residentId)
             ->whereBetween('vital_time', [
                 $year . '-' . $month . '-01 00:00:00',

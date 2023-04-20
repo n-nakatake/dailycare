@@ -83,7 +83,7 @@ class ExcretionController extends Controller
         $month = $splitedDate[1];
         $lastDay = Carbon::create($year, $month, 1)->lastOfMonth()->day;
         // 検索されたら検索結果を取得する
-        $excretions = excretion::where('office_id', $officeId)
+        $excretions = excretion::where('office_id', Auth::user()->office_id)
             ->where('resident_id', $residentId)
             ->whereBetween('excretion_time', [
                 $year . '-' . $month . '-01 00:00:00',

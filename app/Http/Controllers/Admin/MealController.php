@@ -104,7 +104,7 @@ class MealController extends Controller
         $year = substr($dateYm, 0, 4);
         $month = substr($dateYm, 5, 2);
         $lastDay = Carbon::create($year, $month, 1)->lastOfMonth()->day;
-        $meals = Meal::where('office_id', $officeId)
+        $meals = Meal::where('office_id', Auth::user()->office_id)
             ->where('resident_id', $residentId)
             ->whereBetween('meal_time', [
                 $year . '-' . $month . '-01 00:00:00',
