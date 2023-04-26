@@ -37,12 +37,13 @@ class UpdateResidentRequest extends FormRequest
             'key_person_tel2' => 'nullable|string|min:10|max:13|regex:/^[0-9-]+$/',
             'key_person_mail' => 'nullable|email',
             'note' => 'nullable|max:2000',
-            'level' => 'required|in:1,2,3,4,5,6,7,8',
-            'level_start_date' => 'required|date',
-            'level_end_date' => 'required|date|after:level_start_date',
-            'new_level' => 'nullable|in:1,2,3,4,5,6,7,8|required_with:new_level_start_date,new_level_end_date',
+            'level' => 'nullable|in:1,2,3,4,5,6,7|required_with:level_start_date,level_end_date',
+            'level_start_date' => 'nullable|date|required_with:level,level_end_date',
+            'level_end_date' => 'nullable|date|after:level_start_date|required_with:level_start_date,level',
+            'new_level' => 'nullable|in:1,2,3,4,5,6,7|required_with:new_level_start_date,new_level_end_date',
             'new_level_start_date' => 'nullable|date|after:level_end_date|required_with:new_level,new_level_end_date',
             'new_level_end_date' => 'nullable|date|after:new_level_start_date|required_with:new_level_start_date,new_level',
+            'image' => 'nullable|file|mimes:jpeg,jpg,png|max:3000',
         ];
     }
 }

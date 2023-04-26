@@ -38,7 +38,9 @@ Route::controller(UserController::class)->prefix('admin')->name('admin.')->middl
     Route::get('user', 'index')->name('user.index');
     Route::get('user/edit/{userId}', 'edit')->name('user.edit');
     Route::post('user/edit/{userId}', 'update')->name('user.update');
-    Route::get('user/delete', 'delete')->name('user.delete');
+    Route::get('user/retire/{userId}', 'retiring')->name('user.retiring');
+    Route::post('user/retire/{userId}', 'retire')->name('user.retire');
+    Route::get('user/delete/{userId}', 'delete')->name('user.delete');
 });
 
 Route::controller(ResidentController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
@@ -102,6 +104,20 @@ Route::controller(ExcretionController::class)->prefix('admin')->name('admin.')->
     Route::get('excretion/edit/{residentId}/{excretionId}', 'edit')->name('excretion.edit');
     Route::post('excretion/edit/{residentId}/{excretionId}', 'update')->name('excretion.update');
     Route::get('excretion/delete/{residentId}/{excretionId}', 'delete')->name('excretion.delete');
+});
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/protected/{officeId}/{path?}', function (Request $request, $officeId = 0, $path = '') {
+        $ownOfficeId = \Auth::user()->office_id;
+        if ($path === '') abort(404);
+
+        $resourcePath = Storage::disk('protected')->path($officeId . '/' . $path);
+        if (File::exists($resourcePath)){
+            return response()->file($resourcePath);
+        }else{
+            abort(404);
+        }
+    })->where('path', '.*');
 });
 
 Auth::routes();

@@ -26,9 +26,6 @@
                         <button class="btn btn-secondary mb-1" onclick="location.href='{{ route('admin.resident.index') }}'">入居者一覧</button>
                         @if (Auth::user()->admin_flag || Auth::user()->super_admin_flag)
                             <button class="btn btn-secondary mb-1" onclick="location.href='{{ route('admin.user.index') }}'">ユーザー一覧</button>
-<!--
-                            <button class="btn btn-secondary mb-1" onclick="location.href='{{ route('register') }}'">ユーザー登録</button>
--->
                         @endif
                     </div>
                 </div>
@@ -88,11 +85,11 @@
                         @foreach ($residents as $resident)
                             <tr>
                                 <td><a href="{{ route('admin.resident.edit', ['residentId' => $resident->id]) }}">{{ $resident->last_name . $resident->first_name }}</a></td>
-                                @if (!isset($careLevels[optional($resident->current_care_certification)->level]))
+                                @if (!isset($careLevels[$resident->current_care_level]))
                                     <td class="no-link">該当なし</td>
                                 @else
-                                    <td class="no-link">{{ $careLevels[optional($resident->current_care_certification)->level] }}</td>
-                                @endif 
+                                    <td class="no-link">{{ $careLevels[$resident->current_care_level] }}</td>
+                                @endif
                                 <td class="no-link">{{ getAge($resident->birthday) }}</td>
                                 <td>
                                     @if ($resident->vitals->isEmpty())

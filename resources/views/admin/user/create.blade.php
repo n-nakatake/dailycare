@@ -14,9 +14,9 @@
                 <h2>ユーザー登録</h2>
                 <form class="mt-5" action="{{ route('admin.user.create') }}" method="post" enctype="multipart/form-data">
                     <div class="form-group row">
-                        <label class="w-10rem">氏名</label>
+                        <label class="col-md-3">氏名 <span class="half-size">※</span></label>
                         <div class="col-md-2">
-                            <input type="text" class="form-control" name="last_name" value="{{ old('last_name') }}">
+                            <input type="text" class="form-control" name="last_name" value="{{ old('last_name') }}" placeholder="性">
                             @if ($errors->has('last_name'))
                                 <span class="small text-danger error-left">
                                 　　<strong>{{$errors->first('last_name')}}</strong>
@@ -24,7 +24,7 @@
                             @endif                         
                         </div>
                         <div class="col-md-2">
-                            <input type="text" class="form-control" name="first_name" value="{{ old('first_name') }}">
+                            <input type="text" class="form-control" name="first_name" value="{{ old('first_name') }}" placeholder="名">
                             @if ($errors->has('first_name'))
                                 <span class="small text-danger error-left">
                                 　　<strong>{{$errors->first('first_name')}}</strong>
@@ -33,16 +33,24 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="w-10rem">資格</label>
-                        <div class="col-md-2">
+                        <label class="col-md-3">ユーザーID <span class="half-size">※</span></label>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" name="user_code" value="{{ old('user_code') }}">
+                            @if ($errors->has('user_code'))
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('user_code') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>                        
+                    <div class="form-group row">
+                        <label class="col-md-3">資格 <span class="half-size">※</span></label>
+                        <div class="col-md-4">
                             <select  class="form-control" name="qualification">
                                 <option value="">選択してください</option>
-                                <option value="1" {{ old('qualification') === '1' ? 'selected' : ''}}>介護福祉士</option>
-                                <option value="2" {{ old('qualification') === '2' ? 'selected' : ''}}>初任者研修修了</option>
-                                <option value="3" {{ old('qualification') === '3' ? 'selected' : ''}}>ヘルパー2級</option>
-                                <option value="4" {{ old('qualification') === '4' ? 'selected' : ''}}>ヘルパー1級</option>
-                                <option value="5" {{ old('qualification') === '5' ? 'selected' : ''}}>介護支援専門員</option>
-                                <option value="6" {{ old('qualification') === '6' ? 'selected' : ''}}>なし</option>
+                                @foreach ($qualifications as $key => $qualification)
+                                    <option value="{{ $key }}" {{ old('qualification') === "$key" ? 'selected' : ''}}>{{ $qualification }}</option>
+                                @endforeach
                             </select>
                             @if ($errors->has('qualification'))
                                 <span class="small text-danger error-left">
@@ -51,55 +59,34 @@
                             @endif
                         </div>
                     </div>    
-
                     <div class="form-group row">
-                        <label class="w-10rem">ユーザーID</label>
-                        <div class="col-md-2">
-                            <input type="text" class="form-control" name="user_code" value="{{ old('user_code') }}">
-                            @if ($errors->has('user_code'))
+                        <label class="col-md-3">パスワード <span class="half-size">※</span></label>
+                        <div class="col-md-3">
+                            <input type="password" class="form-control" name="password" autocomplete="new-password">
+                            @if ($errors->has('password'))
                                 <span class="small text-danger error-left">
-                                　　<strong>{{$errors->first('user_code')}}</strong>
+                                　　<strong>{{ $errors->first('password') }}</strong>
                                 </span>
                             @endif
                         </div>
                     </div>                        
-
                     <div class="form-group row">
-                        <label class="w-10rem">パスワード</label>
-                        <div class="col-md-2">
-                            <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
-                            @if ($errors->has('password'))
-                                <span class="small text-danger error-left">
-                                    <strong>{{$errors->first('password')}}</strong>
-                                </span>
-                            @endif
-                        </div>
-                    </div>   
-
-                    <div class="form-group row">
-                        <label class="w-10rem">パスワード（確認）</label>
-                        <div class="col-md-2">
-                            <input type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                        <label class="col-md-3">パスワード（確認） <span class="half-size">※</span></label>
+                        <div class="col-md-3">
+                            <input type="password" class="form-control" name="password_confirmation" autocomplete="new-password">
                         </div>
                     </div>
-                    
                     <div class="form-group row">
-                        <div class="checkbox w-10rem">
+                        <label class="col-md-3">管理者権限</label>
+                        <div class="checkbox col-md-6">
                             <label>
-                                <input type="checkbox" name="retirement_flag" {{ old('retirement_flag') ? 'checked' : '' }}> 退職
+                                <input type="checkbox" name="admin_flag" {{ old('admin_flag') ? 'checked' : '' }}> 管理者として登録する
                             </label>
                         </div>
-                        <div class="col-md-2">
-                            <input type="date" min="1900-01-01" max="2200-12-31" class="form-control" name="retirement_day" value="{{ old('retirement_day') }}">
-                        </div>
-                        @if ($errors->has('retirement_day'))
-                            <span class="small text-danger error-left">
-                                <strong>{{$errors->first('retirement_day')}}</strong>
-                            </span>
-                        @endif
                     </div>
-
-
+                    <div class="form-group row">
+                        <label class=offset-md-3><span class="half-size">※</span>入力必須</label>
+                    </div>  
                     @csrf
                     <div class="text-center mt-5">
                         <a class="col-md-3 btn btn-secondary me-5" href="{{ session('fromUrl') ? session('fromUrl') : route('admin.user.index') }}">キャンセル</a>

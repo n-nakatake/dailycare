@@ -24,10 +24,9 @@ class MealController extends Controller
         }
 
         $officeId = Auth::user()->office_id;
-        $users = User::where('office_id', $officeId)->orderBy('id')->get();
 
         return view('admin.meal.create', [
-            'users' => $users,
+            'users' => User::exist()->get(),
             'residents' => Resident::exist()->get(), 
             'residentId' => $residentId,
             'mealBldOptions' => Meal::MEAL_BLD_OPTIONS,
@@ -64,7 +63,6 @@ class MealController extends Controller
         }
 
         $officeId = Auth::user()->office_id;
-        $users = User::where('office_id', $officeId)->orderBy('id')->get();
         $meal = Meal::where('office_id', $officeId)->where('id', $mealId)->first();
 
         if (empty($meal)) {
@@ -73,7 +71,7 @@ class MealController extends Controller
 
         return view('admin.meal.edit', [
             'mealForm' => $meal,
-            'users' => $users,
+            'users' => User::exist()->get(),
             'mealBldOptions' => Meal::MEAL_BLD_OPTIONS,
             'mealIntakeOptions' => Meal::MEAL_INTAKE_OPTIONS,
         ]);

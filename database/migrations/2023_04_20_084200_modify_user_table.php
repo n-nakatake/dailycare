@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dateTime('retirement_day')->nullable();   // 退職日
-            $table->text('retirement_note')->nullable();   // 特記
+            $table->renameColumn('retirement_day', 'retirement_date');
+            $table->integer('qualification')->change();
         });
     }
 
@@ -27,8 +27,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['retirement_day']);
-            $table->dropColumn(['retirement_note']);
+            $table->renameColumn('retirement_date', 'retirement_day');
+            $table->string('qualification')->change();
         });
     }
 };

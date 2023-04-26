@@ -22,10 +22,9 @@ class ExcretionController extends Controller
         }
 
         $officeId = Auth::user()->office_id;
-        $users = User::where('office_id', $officeId)->orderBy('id')->get();
 
         return view('admin.excretion.create', [
-            'users' => $users,
+            'users' => User::exist()->get(),
             'residents' => Resident::exist()->get(), 
             'residentId' => $residentId,
         ]);
@@ -117,7 +116,6 @@ class ExcretionController extends Controller
         }
 
         $officeId = Auth::user()->office_id;
-        $users = User::where('office_id', $officeId)->orderBy('id')->get();
         // excretion Modelからデータを取得する
         $excretion = excretion::where('office_id', $officeId)->where('id', $excretionId)->first();
         if (empty($excretion)) {
@@ -126,7 +124,7 @@ class ExcretionController extends Controller
 
         return view('admin.excretion.edit', [
             'excretionForm' => $excretion,
-            'users' => $users,
+            'users' => User::exist()->get(),
         ]);
     }
 

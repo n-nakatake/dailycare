@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use Carbon\Carbon;
 
 
 class Resident extends Model
@@ -69,11 +69,13 @@ class Resident extends Model
             ->orderBy('first_name_k');
     }
     
-    public function getCurrentCareCertificationAttribute()
+    public function getCurrentCareLevelAttribute()
     {
-        return $this->careCertifications()
+        $careCertification = $this->careCertifications()
             ->whereDate('start_date', '<=', Carbon::now())
             ->whereDate('end_date', '>=', Carbon::now())
             ->first();
+        
+        return $careCertification ? $careCertification->level : null;
     }
 }

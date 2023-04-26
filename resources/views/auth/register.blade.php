@@ -75,10 +75,8 @@
     
                             <div class="form-group row">
                                 <label for="user_code" class="col-md-4 col-form-label text-md-right">{{ __('messages.user_code') }}</label>
-    
                                 <div class="col-md-6">
                                     <input id="user_code" type="text" class="form-control @error('user_code') is-invalid @enderror" name="user_code" value="{{ old('user_code') }}" required autocomplete="user_code">
-    
                                     @error('user_code')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -89,10 +87,8 @@
     
                             <div class="form-group row">
                                 <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('messages.password') }}</label>
-    
                                 <div class="col-md-6">
                                     <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
-    
                                     @error('password')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -113,13 +109,12 @@
                                 <div class="col-md-6 offset-md-4">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="admin_flag" {{ old('remember') ? 'checked' : '' }}> 管理者として登録
+                                            <input type="checkbox" name="admin_flag" {{ old('admin_flag') ? 'checked' : '' }}> 管理者として登録
                                         </label>
                                     </div>
                                 </div>
                             </div>
 
-    
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-4">
                                     <button type="submit" class="btn btn-primary">

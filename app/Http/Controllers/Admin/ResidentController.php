@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ResidentController extends Controller
 {
@@ -23,23 +24,23 @@ class ResidentController extends Controller
     public function create(CreateResidentRequest $request)
     {
         $resident = new Resident;
-        $careLevel = new CareCertification;
+        $careCertification = new CareCertification;
         $form = $request->all();
         $form['office_id'] = Auth::user()->office_id;
         $form['key_person_address'] = encrypt($form['key_person_address']);
         $form['key_person_tel1'] = encrypt($form['key_person_tel1']);
         $form['key_person_tel2'] = encrypt($form['key_person_tel2']);
         $form['key_person_mail'] = encrypt($form['key_person_mail']);
-        $careLevel->level = $form['level'];
-        $careLevel->start_date = $form['level_start_date'];
-        $careLevel->end_date = $form['level_end_date'];
-        
-         // formに画像があれば、保存する
-        if (isset($form['image'])) {
-            $path = Storage::disk('s3')->putFile('/',$form['image'],'public');
-            $resident->image_path = Storage::disk('s3')->url($path);
-        } else {
-            $resident->image_path = null;
+        $careCertification->level = $form['level'];
+        $careCertification->start_date = $form['level_start_date'] . ' 00:00:00';
+        $careCertification->end_date = $form['level_end_date'] . ' 23:59:59';
+        $resident->image_path = null;
+
+        // formに画像があれば、保存する
+        if ($request->file('image')) {
+            $officeId = Auth::user()->office_id;
+            $imagePath = $request->file('image')->store("protected/$officeId/residents");
+            $resident->image_path = $imagePath;
         }
         
         // 不要な値を削除する
@@ -52,10 +53,12 @@ class ResidentController extends Controller
         );
 
         // データベースに保存する
-        DB::transaction(function () use($form, $resident, $careLevel) {
+        DB::transaction(function () use($form, $resident, $careCertification) {
             $resident->fill($form)->save();
-            $careLevel->resident_id = $resident->id;
-            $careLevel->save();
+            if ($careCertification->level > 0) {
+                $careCertification->resident_id = $resident->id;
+                $careCertification->save();
+            }
         });
 
         $message = $form['last_name'] . $form['first_name'] . 'さんの利用者情報を登録しました。';
@@ -96,7 +99,7 @@ class ResidentController extends Controller
         // Resident Modelからデータを取得する
         $resident = Resident::where('office_id', Auth::user()->office_id)->where('id', $residentId)->first();
         $careCertification = CareCertification::find($request->care_certification_id);
-        if (is_null($resident) || is_null($careCertification)) {
+        if (is_null($resident)) {
             abort(404);
         }
 
@@ -107,25 +110,34 @@ class ResidentController extends Controller
         $form['key_person_tel2'] = encrypt($form['key_person_tel2']);
         $form['key_person_mail'] = encrypt($form['key_person_mail']);
 
-        if ($request->remove == 'true') {
-           $resident['image_path'] = null;
-        } elseif ($request->file('image')) {
-            $path = Storage::disk('s3')->putFile('/',$form['image'],'public');
-            $resident->image_path = Storage::disk('s3')->url($path);
-        } else {
-            $resident['image_path'] = $resident->image_path;
+        $deleteImagePath = '';
+        if ($request->remove) {
+            $deleteImagePath = $resident->image_path;
+            $resident->image_path = null;
+        }
+        if ($request->file('image')) {
+            $deleteImagePath = $resident->image_path;
+            $officeId = Auth::user()->office_id;
+            $imagePath = $request->file('image')->store("protected/$officeId/residents");
+            $resident->image_path = $imagePath;
         }
 
-        $careCertification->level = $form['level'];
-        $careCertification->start_date = $form['level_start_date'];
-        $careCertification->end_date = $form['level_end_date'];
+        if (is_null($careCertification) && $form['level'] > 0) {
+            $careCertification = new CareCertification; // 要介護認定データを作成するパターン
+            $careCertification->resident_id = $residentId;
+        } 
+        if ($careCertification) {
+            $careCertification->level = $form['level'];
+            $careCertification->start_date = $form['level_start_date'] . ' 00:00:00';
+            $careCertification->end_date = $form['level_end_date'] . ' 23:59:59';
+        }
         $newCareCertification = null;
-        if (isset($form['new_level'])) {
+        if ($form['new_level'] > 0) {
             $newCareCertification = new CareCertification;
             $newCareCertification->resident_id = $residentId;
             $newCareCertification->level = $form['new_level'];
-            $newCareCertification->start_date = $form['new_level_start_date'];
-            $newCareCertification->end_date = $form['new_level_end_date'];
+            $newCareCertification->start_date = $form['new_level_start_date'] . ' 00:00:00';
+            $newCareCertification->end_date = $form['new_level_end_date'] . ' 23:59:59';
         }
         
         unset(
@@ -138,16 +150,21 @@ class ResidentController extends Controller
             $form['new_level_start_date'],
             $form['new_level_end_date']
         );
-        
+
         DB::transaction(function () use($form, $resident, $careCertification, $newCareCertification) {
             $resident->fill($form)->save();
-            $careCertification->resident_id = $resident->id;
-            $careCertification->save();
+            if ($careCertification) {
+                $careCertification->resident_id = $resident->id;
+                $careCertification->save();
+            }
             if ($newCareCertification) {
-            // dd($newCareCertification);
                 $newCareCertification->save();
             }
         });
+        if (!empty($deleteImagePath)) {
+            Storage::delete($deleteImagePath); //画像ファイルの削除
+        }
+
         $message = $form['last_name'] . $form['first_name'] . 'さんの利用者情報を更新しました。';
 
         return redirect(session()->pull('fromUrl', route('admin.resident.index')))
@@ -173,26 +190,30 @@ class ResidentController extends Controller
         }
 
         // 退所情報を登録する
-        $resident->left_date = $request->left_date;
+        $resident->left_date = $request->left_date . ' 23:59:59';
         $resident->leaving_note = $request->leaving_note;
         $resident->save();
 
         $message = ($resident->last_name) . ($resident->first_name) . 'さんは退所しました。';
 
-        return redirect(session()->pull('fromUrl', route('admin.resident.index')))
-            ->with('message', $message);
+        return redirect(route('admin.resident.index'))->with('message', $message);
     }
     
-   public function delete(Request $request)
+   public function delete(Request $request, int $residentId)
    {
         // 該当するResident Modelを取得
-        $resident = resident::find($request->id);
+        $resident = resident::find($residentId);
+        if (is_null($resident)) {
+            abort(404);
+        }
 
-        $message = ($resident->last_name) . ($resident->first_name) . 'さんの入居者情報を削除しました。';
-        // 削除する
+        if ($resident->image_path) {
+            Storage::delete($resident->image_path); //画像ファイルの削除
+        }
         $resident->delete();
 
-        return redirect(session()->pull('fromUrl', route('admin.resident.index')))
-            ->with('message', $message);
+        $message = ($resident->last_name) . ($resident->first_name) . 'さんの入居者情報を削除しました。';
+
+        return redirect(route('admin.resident.index'))->with('message', $message);
     }
 }

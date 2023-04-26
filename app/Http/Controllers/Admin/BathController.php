@@ -22,11 +22,8 @@ class BathController extends Controller
             session(['fromUrl' => url()->previous()]);
         }
 
-        $officeId = Auth::user()->office_id;
-        $users = User::where('office_id', $officeId)->orderBy('id')->get();
-
         return view('admin.bath.create', [
-            'users' => $users,
+            'users' => User::exist()->get(),
             'residents' => Resident::exist()->get(), 
             'residentId' => $residentId,
             'bathMethods' => Bath::BATH_METHODS,
@@ -100,8 +97,6 @@ class BathController extends Controller
         }
 
         $officeId = Auth::user()->office_id;
-        $users = User::where('office_id', $officeId)->orderBy('id')->get();
-        // bath Modelからデータを取得する
         $bath = Bath::where('office_id', $officeId)->where('id', $bathId)->first();
         if (empty($bath)) {
             abort(404);
@@ -109,7 +104,7 @@ class BathController extends Controller
 
         return view('admin.bath.edit', [
             'bathForm' => $bath,
-            'users' => $users,
+            'users' => User::exist()->get(),
             'bathMethods' => Bath::BATH_METHODS,
         ]);
     }

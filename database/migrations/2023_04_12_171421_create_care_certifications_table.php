@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('resident_id'); // 利用者ID
             $table->smallInteger('level'); // 介護度
-            $table->dateTime('start_date'); // 介護認定の有効開始日
-            $table->dateTime('end_date'); // 介護認定の有効終了日
+            $table->dateTime('start_date')->nullable(); // 介護認定の有効開始日
+            $table->dateTime('end_date')->nullable(); // 介護認定の有効終了日
             $table->timestamps();
         });
     }

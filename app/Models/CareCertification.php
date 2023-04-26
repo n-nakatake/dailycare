@@ -20,7 +20,6 @@ class CareCertification extends Model
         5 => '要介護５',  
         6 => '要支援１',  
         7 => '要支援２',  
-        8 => '該当なし',  
     ];
 
     public function resident()

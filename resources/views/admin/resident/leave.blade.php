@@ -53,7 +53,7 @@
                         </div>
                     @else
                         <div class="form-group row">
-                            <label class=offset-md-3>※入力必須</label>
+                            <label class=offset-md-3><span class="half-size">※</span>入力必須</label>
                         </div>  
                         @csrf
                         <div class="text-center mt-5">
@@ -61,7 +61,6 @@
                             <input type="submit" class="btn btn-danger col-md-3" value="退所">
                         </div>
                     @endif
-
                 </form>
             </div>
         </div>

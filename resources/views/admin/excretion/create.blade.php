@@ -14,7 +14,7 @@
                 <h2>排泄状況の登録</h2>
                 <form class="mt-5" action="{{ route('admin.excretion.create') }}" method="post" enctype="multipart/form-data">
                     <div class="form-group row">
-                        <label class="w-5rem">利用者</label>
+                        <label class="col-md-3">利用者 <span class="half-size">※</span></label>
                         <div class="col-md-4">
                             <select  class="form-control" name="resident_id">
                                 @foreach($residents as $resident)
@@ -29,16 +29,16 @@
                                     </option>
                                 @endforeach
                             </select>
+                            @if ($errors->has('resident_id'))
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('resident_id') }}</strong>
+                                </span>
+                            @endif
                         </div>
-                        <label class="col-md-1">様</label>
-                        @if ($errors->has('resident_id'))
-                            <span class="small text-danger error">
-                            　　<strong>{{ $errors->first('resident_id') }}</strong>
-                            </span>
-                        @endif
+                        <label class="w-1rem inline-table ps-0">様</label>
                     </div>
                     <div class="form-group row">
-                        <label class="w-5rem">記録者</label>
+                        <label class="col-md-3">記録者 <span class="half-size">※</span></label>
                         <div class="col-md-3">
                             <select  class="form-control" name="user_id">
                                 <option value="">選択してください</option>
@@ -46,15 +46,15 @@
                                     <option value="{{ $user->id }}" {{ (int) old('user_id') === $user->id ? 'selected' : ''}}>{{ $user->last_name . $user->first_name }}</option>
                                 @endforeach
                             </select>
+                            @if ($errors->has('user_id'))
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('user_id') }}</strong>
+                                </span>
+                            @endif
                         </div>
-                        @if ($errors->has('user_id'))
-                            <span class="small text-danger error">
-                            　　<strong>{{ $errors->first('user_id') }}</strong>
-                            </span>
-                        @endif
                     </div>
                     <div class="form-group row">
-                        <label class="w-5rem">日時</label>
+                        <label class="col-md-3">日時 <span class="half-size">※</span></label>
                         <div class="col-md-3">
                             <input type="date" class="form-control" name="excretion_date" value=
                                  @if(old('excretion_date'))
@@ -70,52 +70,65 @@
                             <input type="time" class="form-control" name="excretion_time" value="{{ old('excretion_time') ? old('excretion_time') : date("H:i")}}">
                         </div>
                         @if ($errors->has('excretion_date'))
-                            <span class="small text-danger error">
-                            　　<strong>{{$errors->first('excretion_date')}}</strong>
-                            </span>
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('excretion_date') }}</strong>
+                                </span>
+                            </div>
                         @endif
                         @if ($errors->has('excretion_time'))
-                            <span class="small text-danger error">
-                            　　<strong>{{$errors->first('excretion_time')}}</strong>
-                            </span>
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('excretion_time') }}</strong>
+                                </span>
+                            </div>
                         @endif
                     </div>
-
                     <div class="form-group row">
-                        <label class="w-5rem">状況</label>
+                        <label class="col-md-3">状況 <span class="half-size">※</span></label>
                         <div class="col-md-2">
-                            <span>
-                            @if( old('excretion_flash') == 1 ) {
-                                <input type="checkbox" name="excretion_flash" checked="checked">
-                            @else
-                                <input type="checkbox" name="excretion_flash">
-                            @endif
-                            <label>排尿</label>
-                            </span>
+                            <label>
+                                @if( old('excretion_flash') === 'on' )
+                                    <input type="checkbox" name="excretion_flash" checked="checked">
+                                @else
+                                    <input type="checkbox" name="excretion_flash">
+                                @endif
+                                排尿
+                            </label>
                         </div>
                         <div class="col-md-2">
-                            <span>
-                            @if( old('excretion_dump') == 1 ) {
-                                <input type="checkbox" name="excretion_dump" checked="checked">
-                            @else
-                              <input type="checkbox" name="excretion_dump">
-                            @endif
-                            </span>
-                            <label>排便</label>
+                            <label>
+                                @if( old('excretion_dump') === 'on' )
+                                    <input type="checkbox" name="excretion_dump" checked="checked">
+                                @else
+                                    <input type="checkbox" name="excretion_dump">
+                                @endif
+                                排便
+                            </label>
                         </div>
                         @if ($errors->has('excretion_flash'))
-                            <span class="small text-danger error">
-                            　　<strong>{{$errors->first('excretion_flash')}}</strong>
-                            </span>
-                        @endif 
+                            <div class="offset-md-3">
+                                <span class="d-block small text-danger error-left">
+                                　　<strong>{{ $errors->first('excretion_flash') }}</strong>
+                                </span>
+                            </div>
+                        @endif
                     </div>    
 
                     <div class="form-group row">
-                        <label class="w-5rem">特記</label>
-                        <div class="col-md-10">
+                        <label class="col-md-3">特記</label>
+                        <div class="col-md-9">
                             <textarea class="form-control" name="excretion_note" rows="5">{{ old('excretion_note') }}</textarea>
+                            @if ($errors->has('excretion_note'))
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('excretion_note') }}</strong>
+                                </span>
+                            @endif
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="offset-md-3"><span class="half-size">※</span>入力必須</label>
+                    </div>  
                     @csrf
                     <div class="text-center mt-5">
                         <a class="col-md-3 btn btn-secondary me-5" href="{{ session('fromUrl') ? session('fromUrl') : route('admin.excretion.index', ['residentId' => $residentId]) }}">キャンセル</a>

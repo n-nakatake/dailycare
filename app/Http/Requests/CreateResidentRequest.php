@@ -37,9 +37,10 @@ class CreateResidentRequest extends FormRequest
             'key_person_tel2' => 'nullable|string|min:10|max:13|regex:/^[0-9-]+$/',
             'key_person_mail' => 'nullable|email',
             'note' => 'nullable|max:2000',
-            'level' => 'required|in:1,2,3,4,5,6,7,8',
-            'level_start_date' => 'required|date',
-            'level_end_date' => 'required|date|after:level_start_date',
+            'level' => 'nullable|in:1,2,3,4,5,6,7',
+            'level_start_date' => 'nullable|date',
+            'level_end_date' => 'nullable|date|after:level_start_date',
+            'image' => 'nullable|file|mimes:jpeg,jpg,png|max:3000',
         ];
     }
 }

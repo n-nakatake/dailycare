@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\RetireUserRequest;
 class UserController extends Controller
 {
     public function add()
@@ -21,23 +22,20 @@ class UserController extends Controller
         if ($urlWithoutGetParameter !== route('admin.user.add')) {
             session(['fromUrl' => url()->previous()]);
         }
-        return view('admin.user.create');
+        return view('admin.user.create', ['qualifications' => User::QUALIFICATIONS]);
     }
 
     public function create(Request $request)
     {
         // Validationを行う
-        //dd($request);
-        $this->validate($request, user::$rules);
+        $this->validate($request, User::$rules);
         $user = new user;
         $form = $request->all();
         $form['office_id'] = Auth::user()->office_id;
-        $form['email'] = $form['user_code'];
+        $form['email'] = $form['user_code']; // user_codeでログインさせるためemailに同じ値をセットしている
         $form['password'] = Hash::make($form['password']);
         $form['admin_flag'] = isset($form['admin_flag']) ? true : false;
-        $form['retirement_flag'] = isset($form['retirement_flag']) ? true : false;
-            
-            
+
         // 不要な値を削除する
         unset($form['_token']);
 
@@ -51,82 +49,94 @@ class UserController extends Controller
             ->with('message', $message);
     }
 
-
     public function index(Request $request)
     {
-        $cond_name = $request->cond_name;
-        if ($cond_name != '') {
-            $users = user::where('office_id', Auth::user()->office_id)
-                ->where('last_name', $cond_name)
-                ->get();
-        } else {
-            $users = user::where('office_id', Auth::user()->office_id)
-                ->orderBy('last_name')
-                ->orderBy('first_name')
-                ->get();
-        }
-        return view('admin.user.index', ['users' => $users, 'cond_name' => $cond_name]);
+        return view('admin.user.index', [
+            'users' => User::exist()->get(),
+            'qualifications' => User::QUALIFICATIONS,
+        ]);
     }
 
-    public function edit(Request $request, $userId)
+    public function edit(Request $request, int $userId)
     {
-        //dd($userId);
          // バリデーションエラー以外で遷移してきたら、キャンセルボタン押下時または更新後にリダイレクトするURLをセッションに保存
         if (url()->previous() !== route('admin.user.edit', ['userId' => $userId])) {
             session(['fromUrl' => url()->previous()]);
         }
 
-        $officeId = Auth::user()->office_id;
-
-        // user Modelからデータを取得する
-        $user = user::find($userId);
-        //dd($userId);
-        if (empty($user)) {
-            abort(404);    
-        }
+        $user = $this->getValidUser($userId);
         
-        return view('admin.user.edit', ['userForm' => $user,'userId' => $userId]);
+        return view('admin.user.edit', [
+            'user' => $user,
+            'qualifications' => User::QUALIFICATIONS,
+        ]);
         
     }
 
-    public function update(UserRequest $request, $userId) // 河野 修正 UserRequestに修正
+    public function update(UserRequest $request, int $userId)
     {
-        //dd($userId);
-        //$user = $this->getValidUser($userId);
-        // Validationをかける
-        //$this->validate($request, User::$rules);
-        // user Modelからデータを取得する
-        $user = user::find($userId);
-        // dd($user);
-
-
-
-        // 送信されてきたフォームデータを格納する
-        $user_form = $request->all();
+        $user = $this->getValidUser($userId);
+        $form = $request->all();
        
-        unset($user_form['remove']);
-        unset($user_form['_token']);
-        $user_form['admin_flag'] = isset($user_form['admin_flag']) ? true : false; // 河野 修正 admin_flagに対してonという文字列がセットされていて、それがエラーを起こしていたため
-        // 該当するデータを上書きして保存する
-        $user->fill($user_form)->save();
+        unset($form['remove']);
+        unset($form['_token']);
+        $form['admin_flag'] = isset($form['admin_flag']) ? true : false;
+        
+        $user->fill($form)->save();
 
-        $message = $user_form['last_name'] . $user_form['first_name'] . 'さんのユーザー情報を更新しました。';
+        $message = $form['last_name'] . $form['first_name'] . 'さんのユーザー情報を更新しました。';
 
         return redirect(session()->pull('fromUrl', route('admin.user.index')))
             ->with('message', $message);
     }
   
-  public function delete(Request $request)
+  public function retiring(Request $request, int $userId)
   {
-        // 該当するuser Modelを取得
-        $user = user::find($request->id);
+         // バリデーションエラー以外で遷移してきたら、キャンセルボタン押下時または更新後にリダイレクトするURLをセッションに保存
+        if (url()->previous() !== route('admin.user.retire', ['userId' => $userId])) {
+            session(['fromUrl' => url()->previous()]);
+        }
 
-        $message = ($user->last_name) . ($user->first_name) . 'さんのユーザー情報を削除しました。';
-        // 削除する
+        $user = $this->getValidUser($userId);
+
+        return view('admin.user.retire', ['user' => $user]);
+    }
+  
+  public function retire(RetireUserRequest $request, int $userId)
+  {
+        $user = $this->getValidUser($userId);
+        $form = $request->all();
+        $form['retirement_date'] = $form['retirement_date'] . ' 23:59:59'; // 退職日の終わりまでは在籍しているようにする
+        unset($form['_token']);
+        $user->fill($form);
+        $user->save();
+
+        $message = ($user->last_name) . ($user->first_name) . 'さんの退職情報を登録しました。';
+
+        return redirect(route('admin.user.index'))->with('message', $message);
+    }
+  
+  public function delete(Request $request, int $userId)
+  {
+        $user = $this->getValidUser($userId);
+
         $user->delete();
+        $message = ($user->last_name) . ($user->first_name) . 'さんのユーザー情報を削除しました。';
 
         return redirect(session()->pull('fromUrl', route('admin.user.index')))
             ->with('message', $message);
     }
+     
+    private function getValidUser(int $userId)
+    {
+        $user = User::where('office_id', Auth::user()->office_id)
+            ->where('id', $userId)
+            ->first();
 
- }
+        if (is_null($user)) {
+            abort(404);
+        }
+        
+        return $user;
+    }
+}

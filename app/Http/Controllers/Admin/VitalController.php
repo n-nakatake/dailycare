@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Vital;
 use App\Models\History;
 use App\Models\User;
 use App\Models\Resident;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class VitalController extends Controller
 {
@@ -22,11 +23,8 @@ class VitalController extends Controller
             session(['fromUrl' => url()->previous()]);
         }
 
-        $officeId = Auth::user()->office_id;
-        $users = User::where('office_id', $officeId)->orderBy('id')->get();
-
         return view('admin.vital.create', [
-            'users' => $users, 
+            'users' => User::exist()->get(),
             'residents' => Resident::exist()->get(), 
             'residentId' => $residentId
         ]);
@@ -41,16 +39,16 @@ class VitalController extends Controller
         $form['vital_time'] = $form['vital_date'] . ' ' . $form['vital_time'];
         $form['office_id'] = Auth::user()->office_id;
 
-        // フォームから画像が送信されてきたら、保存して、$vital->image_path に画像のパスを保存する
-        if (isset($form['image'])) {
-            $path = $request->file('image')->store('public/image');
-            $vital->vital_image_path = basename($path);
-        } else {
-            $vital->vital_image_path = null;
+        // formに画像があれば、保存する
+        if ($request->file('image')) {
+            $officeId = Auth::user()->office_id;
+            $imagePath = $request->file('image')->store("protected/$officeId/vitals");
+            $vital->vital_image_path = $imagePath;
         }
 
         // 不要な値を削除する
         unset($form['vital_date']);
+        unset($form['image']);
         unset($form['_token']);
 
         // データベースに保存する
@@ -95,17 +93,25 @@ class VitalController extends Controller
             'dateYm' => $dateYm,
             'residents' => Resident::exist()->get(), 
             'residentId' => $residentId, 
-            'datesOfMonth' => $this->getAllDates($dateYm, $lastDay),]);
+            'datesOfMonth' => $this->getAllDates($dateYm, $lastDay),
+        ]);
     }    
     
     public function edit(Request $request, $residentId, $vitalId)
     {
-        $users = User::where('office_id', Auth::user()->office_id)->orderBy('id')->get();
-        $vital = Vital::find($request->vitalId);
-        if (empty($vital)) {
-            abort(404);
+        // バリデーションエラー以外で遷移してきたら、キャンセルボタン押下時または登録後にリダイレクトするURLをセッションに保存
+        $previousUrl = url()->previous();
+        $urlWithoutGetParameter = strpos($previousUrl, "?") === false ? $previousUrl : substr($previousUrl , 0 , strpos($previousUrl, "?"));
+        if ($urlWithoutGetParameter !== route('admin.vital.edit', ['residentId' => $residentId, 'vitalId' => $vitalId])) {
+            session(['fromUrl' => url()->previous()]);
         }
-        return view('admin.vital.edit', ['vitalForm' => $vital, 'users' => $users]);
+
+        $vital = $this->getValidVital($residentId, $vitalId);
+        
+        return view('admin.vital.edit', [
+            'vitalForm' => $vital,
+            'users' => User::exist()->get(),
+        ]);
     }
 
     public function update(Request $request, $residentId, $vitalId)
@@ -116,23 +122,29 @@ class VitalController extends Controller
         $form = $request->all();
         $form['vital_time'] = $form['vital_date'] . ' ' . $form['vital_time'];
         
-        if ($request->remove == 'true') {
-            $form['image_path'] = null;
-        } elseif ($request->file('image')) {
-            $path = $request->file('image')->store('public/image');
-            $form['image_path'] = basename($path);
-        } else {
-            $form['image_path'] = $vital->vital_image_path;
+        $deleteImagePath = '';
+        if ($request->remove) {
+            $deleteImagePath = $vital->vital_image_path;
+            $vital->vital_image_path = null;
+        }
+        if ($request->file('image')) {
+            $deleteImagePath = $vital->vital_image_path;
+            $officeId = Auth::user()->office_id;
+            $imagePath = $request->file('image')->store("protected/$officeId/vitals");
+            $vital->vital_image_path = $imagePath;
         }
 
-        unset($form['image']);
-
         // 不要な値を削除する
+        unset($form['image']);
         unset($form['vital_date']);
         unset($form['_token']);
 
         // 該当するデータを上書きして保存する
         $vital->fill($form)->save();
+        if (!empty($deleteImagePath)) {
+            Storage::delete($deleteImagePath); //画像ファイルの削除
+        }
+
         $vitalYm = substr($form['vital_time'], 0, 7);
         $message = formatDatetime($form['vital_time']) . 'のバイタルを更新しました。';
 
@@ -145,8 +157,12 @@ class VitalController extends Controller
         // 該当するvital Modelを取得
         $vital = $this->getValidVital($residentId, $vitalId);
         $vitalYm = substr($vital->vital_time, 0, 7);
-        $message = formatDatetime($vital->vital_time) . 'のバイタルを削除しました。';
+
+        if ($vital->vital_image_path) {
+            Storage::delete($vital->vital_image_path); //画像ファイルの削除
+        }
         $vital->delete();
+        $message = formatDatetime($vital->vital_time) . 'のバイタルを削除しました。';
 
         return redirect(session()->pull('fromUrl', route('admin.vital.index', ['residentId' => $residentId, 'vital_ym' => $vitalYm])))
             ->with('message', $message);
@@ -165,5 +181,4 @@ class VitalController extends Controller
         
         return $vital;
     }
-    
 }

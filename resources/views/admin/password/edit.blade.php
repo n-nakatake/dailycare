@@ -14,7 +14,7 @@
                 <h2>パスワード変更</h2>
                 <form class="mt-5" action="{{ route('admin.password.update') }}" method="post" enctype="multipart/form-data">
                     <div class="form-group row">
-                        <label class="col-md-3">現在のパスワード</label>
+                        <label class="col-md-3">現在のパスワード <span class="half-size">※</span></label>
                         <div class="col-md-4">
                             <input type="password" class="form-control" name="current_password">
                         </div>
@@ -23,7 +23,7 @@
                         @endif
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-3">新しいパスワード</label>
+                        <label class="col-md-3">新しいパスワード <span class="half-size">※</span></label>
                         <div class="col-md-4">
                             <input type="password" class="form-control" name="password">
                         </div>
@@ -32,11 +32,14 @@
                         @endif
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-3">新しいパスワード（確認）</label>
+                        <label class="col-md-3">新しいパスワード（確認） <span class="half-size">※</span></label>
                         <div class="col-md-4">
                             <input type="password" class="form-control" name="password_confirmation">
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class=offset-md-3><span class="half-size">※</span>入力必須</label>
+                    </div>  
                     @csrf
                     <div class="text-center mt-5">
                         <a class="col-md-3 btn btn-secondary me-5" href="{{ route('admin.top.index') }}">キャンセル</a>

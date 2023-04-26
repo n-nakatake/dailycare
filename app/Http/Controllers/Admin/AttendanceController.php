@@ -22,9 +22,7 @@ class AttendanceController extends Controller
             session(['fromUrl' => url()->previous()]);
         }
 
-        $users = User::where('office_id', Auth::user()->office_id)->orderBy('id')->get();
-
-        return view('admin.attendance.create', ['users' => $users]);
+        return view('admin.attendance.create', ['users' => User::exist()->get()]);
     }
 
     public function create(AttendanceRequest $request)
@@ -44,7 +42,6 @@ class AttendanceController extends Controller
         }
 
         $officeId = Auth::user()->office_id;
-        $users = User::where('office_id', $officeId)->orderBy('id')->get();
         $attendances = Attendance::where('attendance_date', $attendanceDate)
             ->where('office_id', $officeId)
             ->orderBy('id')
@@ -79,7 +76,7 @@ class AttendanceController extends Controller
             'dayShiftUsers' => $dayShiftUsers,
             'partTimeMembers' => $partTimeMembers,
             'nightShiftUsers' => $nightShiftUsers,
-            'users' => $users,
+            'users' => User::exist()->get(),
         ]);
     }
 

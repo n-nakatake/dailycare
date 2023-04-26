@@ -23,11 +23,11 @@
                         <thead>
                             <tr>
                                 <th width="15%">名前</th>
-                                <th width="15%">性別</th>
+                                <th width="10%">性別</th>
                                 <th width="20%">誕生日</th>
                                 <th width="15%">年齢</th>
                                 <th width="15%">介護度</th>
-                                <th width="20%"></th>
+                                <th width="25%"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -41,8 +41,8 @@
                                     @endif
                                     <td>{{ toWareki('KX年m月d日', str_replace("-","",$resident->birthday)) }}</td>
                                     <td class="no-link">{{ getAge($resident->birthday) }}</td>
-                                    @if (isset($careLevels[optional($resident->currentCarelevel)->level]))
-                                        <td>{{ $careLevels[$resident->currentCarelevel->level] }}</td>
+                                    @if (isset($careLevels[$resident->currentCarelevel]))
+                                        <td>{{ $careLevels[$resident->currentCarelevel] }}</td>
                                     @else
                                         <td>該当なし</td>
                                     @endif                                      

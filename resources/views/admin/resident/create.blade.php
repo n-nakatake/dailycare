@@ -17,39 +17,47 @@
                         <label class="col-md-3">氏名 <span class="half-size">※</span></label>
                         <div class="col-md-3">
                             <input type="text" class="form-control" name="last_name" value="{{ old('last_name') }}" placeholder="性">
-                            @if ($errors->has('last_name'))
-                                <span class="small text-danger error-left">
-                                　　<strong>{{ $errors->first('last_name') }}</strong>
-                                </span>
-                            @endif                         
                         </div>
                         <div class="col-md-3">
                             <input type="text" class="form-control" name="first_name" value="{{ old('first_name') }}" placeholder="名">
-                            @if ($errors->has('first_name'))
+                        </div>
+                        @if ($errors->has('last_name'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('last_name') }}</strong>
+                                </span>
+                            </div>
+                        @endif
+                        @if ($errors->has('first_name'))
+                            <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('first_name') }}</strong>
                                 </span>
-                            @endif                        
-                        </div>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3">氏名（カナ） <span class="half-size">※</span></label>
                         <div class="col-md-3">
                             <input type="text" class="form-control" name="last_name_k" value="{{ old('last_name_k') }}" placeholder="セイ">
-                            @if ($errors->has('last_name_k'))
-                                <span class="small text-danger error-left">
-                                　　<strong>{{ $errors->first('last_name_k') }}</strong>
-                                </span>
-                            @endif                        
                         </div>
                         <div class="col-md-3">
                             <input type="text" class="form-control" name="first_name_k" value="{{ old('first_name_k') }}" placeholder="メイ">
-                            @if ($errors->has('first_name_k'))
+                        </div> 
+                        @if ($errors->has('last_name_k'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('last_name_k') }}</strong>
+                                </span>
+                            </div>
+                        @endif
+                        @if ($errors->has('first_name_k'))
+                            <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('first_name_k') }}</strong>
                                 </span>
-                            @endif
-                        </div> 
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3">誕生日 <span class="half-size">※</span></label>
@@ -78,7 +86,7 @@
                         </div>
                     </div>                    
                     <div class="form-group row">
-                        <label class="col-md-3">介護認定 <span class="half-size">※</span></label>
+                        <label class="col-md-3">要介護認定</label>
                         <div class="col-md-3">
                             <select  class="form-control" name="level">
                                 <option value="">選択してください</option>
@@ -94,43 +102,51 @@
                         </div>
                     </div>    
                     <div class="form-group row">
-                        <label class="col-md-3">介護認定の有効期間 <span class="half-size">※</span></label>
+                        <label class="col-md-3">要介護認定の有効期間</span></label>
                         <div class="col-md-3">
                             <input type="date" min="1900-01-01" max="2200-12-31" class="form-control" name="level_start_date" value="{{ old('level_start_date') }}">
-                            @if ($errors->has('level_start_date'))
-                                <span class="small text-danger error-left">
-                                　　<strong>{{ $errors->first('level_start_date') }}</strong>
-                                </span>
-                            @endif
                         </div>
                         <label class="w-1rem inline-table" style="line-height: 2rem;">〜</label>
                         <div class="col-md-3">
                             <input type="date" min="1900-01-01" max="2200-12-31" class="form-control" name="level_end_date" value="{{ old('level_end_date') }}">
-                            @if ($errors->has('level_end_date'))
+                        </div>
+                        @if ($errors->has('level_start_date'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('level_start_date') }}</strong>
+                                </span>
+                            </div>
+                        @endif
+                        @if ($errors->has('level_end_date'))
+                            <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('level_end_date') }}</strong>
                                 </span>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </div>    
                     <div class="form-group row">
                         <label class="col-md-3">キーパーソン</label>
                         <div class="col-md-4">
                             <input type="text" class="form-control" name="key_person_name" value="{{ old('key_person_name') }}" placeholder="氏名">
-                            @if ($errors->has('key_person_name'))
-                                <span class="small text-danger error-left">
-                                　　<strong>{{ $errors->first('key_person_name') }}</strong>
-                                </span>
-                            @endif
                         </div>
                         <div class="col-md-2">
                             <input type="text" class="form-control" name="key_person_relation" value="{{ old('key_person_relation') }}" placeholder="続柄">
-                            @if ($errors->has('key_person_relation'))
+                        </div>
+                        @if ($errors->has('key_person_name'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('key_person_name') }}</strong>
+                                </span>
+                            </div>
+                        @endif
+                        @if ($errors->has('key_person_relation'))
+                            <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('key_person_relation') }}</strong>
                                 </span>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </div>                        
                     <div class="form-group row">
                         <label class="col-md-3">　　住所</label>
@@ -191,15 +207,17 @@
                         <label class=col-md-3 for="title">画像</label>
                         <div class="col-md-9">
                             <input type="file" class="form-control-file" name="image">
-                            @if ($errors->has('image'))
+                        </div>
+                        @if ($errors->has('image'))
+                            <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('image') }}</strong>
                                 </span>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
-                        <label class=offset-md-3>※入力必須</label>
+                        <label class=offset-md-3><span class="half-size">※</span>入力必須</label>
                     </div>  
                     @csrf
                     <div class="text-center mt-5">
