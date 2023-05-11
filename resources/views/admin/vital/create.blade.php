@@ -29,13 +29,15 @@
                                     </option>
                                 @endforeach
                             </select>
-                            @if ($errors->has('resident_id'))
+                        </div>
+                        <label class="w-1rem inline-table ps-0" style="line-height: 2rem;">様</label>
+                        @if ($errors->has('resident_id'))
+                            <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('resident_id') }}</strong>
                                 </span>
-                            @endif
-                        </div>
-                        <label class="w-1rem inline-table ps-0" style="line-height: 2rem;">様</label>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3">記録者 <span class="half-size">※</span></label>
@@ -46,12 +48,14 @@
                                     <option value="{{ $user->id }}" {{ (int) old('user_id') === $user->id ? 'selected' : ''}}>{{ $user->last_name . $user->first_name }}</option>
                                 @endforeach
                             </select>
-                            @if ($errors->has('user_id'))
+                        </div>
+                        @if ($errors->has('user_id'))
+                            <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('user_id') }}</strong>
                                 </span>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3">日時 <span class="half-size">※</span></label>
@@ -65,106 +69,131 @@
                                     "{{ date("Y-m-d") }}"
                                  @endif
                             >
-                            @if ($errors->has('vital_date'))
-                                <span class="small text-danger error-left">
-                                　　<strong>{{$errors->first('vital_date')}}</strong>
-                                </span>
-                            @endif
                         </div>
                         <div class="col-md-3">
                             <input type="time" class="form-control" name="vital_time" value="{{ old('vital_time') ? old('vital_time') : date("H:i")}}">
-                            @if ($errors->has('vital_time'))
-                                <span class="small text-danger error-left">
-                                　　<strong>{{$errors->first('vital_time')}}</strong>
-                                </span>
-                            @endif
                         </div>
+                        @if ($errors->has('vital_date'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('vital_date') }}</strong>
+                                </span>
+                            </div>
+                        @endif
+                        @if ($errors->has('vital_time'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('vital_time') }}</strong>
+                                </span>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3">体温</label>
                         <div class="col-md-2">
-                            <input type="number" step="0.1" class="form-control" name="vital_kt" value="{{ old('vital_kt') }}">
-                            @if ($errors->has('vital_kt'))
+                            <input type="number" step="0.1" class="form-control" name="vital_kt" value="{{ old('vital_kt') }}" autocomplete="off">
+                        </div>
+                        <label class="col-md-7 inline-table ps-0" style="line-height: 2rem;">度（小数点第１位まで）</label>
+                        @if ($errors->has('vital_kt'))
+                            <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('vital_kt') }}</strong>
                                 </span>
-                            @endif
-                        </div>
-                        <label class="w-1rem inline-table ps-0" style="line-height: 2rem;">度</label>
+                            </div>
+                        @endif ($errors->has('vital_bp_u'))
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3">血圧</label>
                         <div class="col-md-3">
-                            <input type="text" inputmode="numeric" pattern="\d*" class="form-control" name="vital_bp_u" value="{{ old('vital_bp_u') }}" placeholder="血圧↑">
-                            @if ($errors->has('vital_bp_u'))
-                                <span class="small text-danger error-left">
-                                　　<strong>{{$errors->first('vital_bp_u')}}</strong>
-                                </span>
-                            @endif
+                            <input type="text" inputmode="numeric" pattern="\d*" class="form-control" name="vital_bp_u" value="{{ old('vital_bp_u') }}" placeholder="血圧↑" autocomplete="off">
                         </div>
                         <div class="col-md-3">
-                            <input type="text" inputmode="numeric" pattern="\d*" class="form-control" name="vital_bp_d" value="{{ old('vital_bp_d') }}" placeholder="血圧↓">
-                            @if ($errors->has('vital_bp_d'))
-                                <span class="small text-danger error-left">
-                                　　<strong>{{$errors->first('vital_bp_d')}}</strong>
-                                </span>
-                            @endif
+                            <input type="text" inputmode="numeric" pattern="\d*" class="form-control" name="vital_bp_d" value="{{ old('vital_bp_d') }}" placeholder="血圧↓" autocomplete="off">
                         </div>
+                        @if ($errors->has('vital_kt'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('vital_kt') }}</strong>
+                                </span>
+                            </div>
+                        @elseif ($errors->has('vital_bp_u'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('vital_bp_u') }}</strong>
+                                </span>
+                            </div>
+                        @elseif ($errors->has('vital_bp_d'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('vital_bp_d') }}</strong>
+                                </span>
+                            </div>
+                        @endif                    
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3">心拍数</label>
                         <div class="col-md-2">
-                            <input type="text" class="form-control" name="vital_hr" value="{{ old('vital_hr') }}">
-                            @if ($errors->has('vital_hr'))
-                                <span class="small text-danger error-left">
-                                　　<strong>{{$errors->first('vital_hr')}}</strong>
-                                </span>
-                            @endif
+                            <input type="text" class="form-control" name="vital_hr" value="{{ old('vital_hr') }}" autocomplete="off">
                         </div>
                         <label class="w-1rem inline-table ps-0" style="line-height: 2rem;">bpm</label>
+                        @if ($errors->has('vital_hr'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('vital_hr') }}</strong>
+                                </span>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3">身長・体重</label>
                         <div class="col-md-2">
-                            <input type="number" step="0.1" class="form-control" name="vital_height" value="{{ old('vital_height') }}" placeholder="身長">
-                            @if ($errors->has('vital_height'))
-                                <span class="small text-danger error-left">
-                                　　<strong>{{$errors->first('vital_height')}}</strong>
-                                </span>
-                            @endif
+                            <input type="number" step="0.1" class="form-control" name="vital_height" value="{{ old('vital_height') }}" placeholder="身長" autocomplete="off">
                         </div>
                         <label class="w-1rem inline-table ps-0" style="line-height: 2rem;">cm</label>
                         <div class="col-md-2">
-                            <input type="number" step="0.1" class="form-control" name="vital_weight" value="{{ old('vital_weight') }}" placeholder="体重">
-                            @if ($errors->has('vital_weight'))
-                                <span class="small text-danger error-left">
-                                　　<strong>{{$errors->first('vital_weight')}}</strong>
-                                </span>
-                            @endif
+                            <input type="number" step="0.1" class="form-control" name="vital_weight" value="{{ old('vital_weight') }}" placeholder="体重" autocomplete="off">
                         </div>
                         <label class="w-1rem inline-table ps-0" style="line-height: 2rem;">kg</label>
+                        @if ($errors->has('vital_height'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('vital_height') }}</strong>
+                                </span>
+                            </div>
+                        @endif
+                        @if ($errors->has('vital_weight'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('vital_weight') }}</strong>
+                                </span>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3">特記</label>
                         <div class="col-md-9">
                             <textarea class="form-control" name="vital_note" rows="5">{{ old('vital_note') }}</textarea>
-                            @if ($errors->has('vital_note'))
-                                <span class="small text-danger error-left">
-                                　　<strong>{{$errors->first('vital_note')}}</strong>
-                                </span>
-                            @endif
                         </div>
+                        @if ($errors->has('vital_note'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('vital_note') }}</strong>
+                                </span>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3">画像</label>
                         <div class="col-md-9">
                             <input type="file" class="form-control-file d-block" name="image">
-                            @if ($errors->has('image'))
-                                <span class="small text-danger error-left">
-                                　　<strong>{{$errors->first('image')}}</strong>
-                                </span>
-                            @endif
                         </div>
+                        @if ($errors->has('image'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('image') }}</strong>
+                                </span>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class=offset-md-3><span class="half-size">※</span>入力必須</label>

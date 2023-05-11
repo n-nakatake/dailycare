@@ -16,32 +16,38 @@
                     <div class="form-group row">
                         <label class="col-md-3">氏名 <span class="half-size">※</span></label>
                         <div class="col-md-2">
-                            <input type="text" class="form-control" name="last_name" value="{{ old('last_name') }}" placeholder="性">
-                            @if ($errors->has('last_name'))
-                                <span class="small text-danger error-left">
-                                　　<strong>{{$errors->first('last_name')}}</strong>
-                                </span>
-                            @endif                         
+                            <input type="text" class="form-control" name="last_name" value="{{ old('last_name') }}" placeholder="性" autocomplete="off">
                         </div>
                         <div class="col-md-2">
-                            <input type="text" class="form-control" name="first_name" value="{{ old('first_name') }}" placeholder="名">
-                            @if ($errors->has('first_name'))
-                                <span class="small text-danger error-left">
-                                　　<strong>{{$errors->first('first_name')}}</strong>
-                                </span>
-                            @endif                        
+                            <input type="text" class="form-control" name="first_name" value="{{ old('first_name') }}" placeholder="名" autocomplete="off">
                         </div>
+                        @if ($errors->has('last_name'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('last_name') }}</strong>
+                                </span>
+                            </div>
+                        @endif
+                        @if ($errors->has('first_name'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('first_name') }}</strong>
+                                </span>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3">ユーザーID <span class="half-size">※</span></label>
                         <div class="col-md-3">
-                            <input type="text" class="form-control" name="user_code" value="{{ old('user_code') }}">
-                            @if ($errors->has('user_code'))
+                            <input type="text" class="form-control" name="user_code" value="{{ old('user_code') }}" autocomplete="off">
+                        </div>
+                        @if ($errors->has('user_code'))
+                            <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('user_code') }}</strong>
                                 </span>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </div>                        
                     <div class="form-group row">
                         <label class="col-md-3">資格 <span class="half-size">※</span></label>
@@ -52,23 +58,27 @@
                                     <option value="{{ $key }}" {{ old('qualification') === "$key" ? 'selected' : ''}}>{{ $qualification }}</option>
                                 @endforeach
                             </select>
-                            @if ($errors->has('qualification'))
-                                <span class="small text-danger error-left">
-                                　　<strong>{{$errors->first('qualification')}}</strong>
-                                </span>
-                            @endif
                         </div>
+                        @if ($errors->has('qualification'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('qualification') }}</strong>
+                                </span>
+                            </div>
+                        @endif
                     </div>    
                     <div class="form-group row">
                         <label class="col-md-3">パスワード <span class="half-size">※</span></label>
                         <div class="col-md-3">
                             <input type="password" class="form-control" name="password" autocomplete="new-password">
-                            @if ($errors->has('password'))
+                        </div>
+                        @if ($errors->has('password'))
+                            <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('password') }}</strong>
                                 </span>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </div>                        
                     <div class="form-group row">
                         <label class="col-md-3">パスワード（確認） <span class="half-size">※</span></label>

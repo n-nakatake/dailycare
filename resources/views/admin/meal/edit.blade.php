@@ -57,12 +57,14 @@
                                     </option>
                                 @endforeach
                             </select>
-                            @if ($errors->has('user_id'))
+                        </div>
+                        @if ($errors->has('user_id'))
+                            <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('user_id') }}</strong>
                                 </span>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3">日時 <span class="half-size">※</span></label>
@@ -75,7 +77,7 @@
                         @if ($errors->has('meal_date'))
                             <div class="offset-md-3">
                                 <span class="small text-danger error-left">
-                                　　<strong>{{ $errors->first('meal_date') }}</strong>
+                                　　<strong>{!! $errors->first('meal_date') !!}</strong>
                                 </span>
                             </div>
                         @endif
@@ -103,12 +105,14 @@
                                     </option>
                                 @endforeach
                             </select>
-                            @if ($errors->has('meal_bld'))
-                                <span class="small text-danger error-left">
-                                　　<strong>{{ $errors->first('meal_bld') }}</strong>
-                                </span>
-                            @endif
                         </div>
+                        @if ($errors->has('meal_bld'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{!! $errors->first('meal_bld') !!}</strong>
+                                </span>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3">主食</label>
@@ -127,12 +131,14 @@
                                     </option>
                                 @endforeach
                             </select>
-                            @if ($errors->has('meal_intake_rice'))
+                        </div>
+                        @if ($errors->has('meal_intake_rice'))
+                            <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('meal_intake_rice') }}</strong>
                                 </span>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3">副食</label>
@@ -157,6 +163,13 @@
                                 </span>
                             @endif
                        </div>
+                        @if ($errors->has('meal_intake_side'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('meal_intake_side') }}</strong>
+                                </span>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3">汁物</label>
@@ -175,23 +188,27 @@
                                     </option>
                                 @endforeach
                             </select>
-                            @if ($errors->has('meal_intake_soup'))
+                        </div>
+                        @if ($errors->has('meal_intake_soup'))
+                            <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('meal_intake_soup') }}</strong>
                                 </span>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3">特記</label>
                         <div class="col-md-9">
                             <textarea class="form-control" name="meal_note" rows="5">{{ old('meal_note') ? old('meal_note') : $mealForm->meal_note}}</textarea>
-                            @if ($errors->has('meal_note'))
-                        　　　　<span class="small text-danger error-left">
-                                　　<strong>{{ $errors->first('meal_note') }}</strong>
-                        　　　　</span>
-                            @endif                        
                         </div>
+                        @if ($errors->has('meal_note'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('meal_note') }}</strong>
+                                </span>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class=offset-md-3><span class="half-size">※</span>入力必須</label>

@@ -59,9 +59,11 @@
                             </select>
                         </div>
                         @if ($errors->has('user_id'))
-                            <span class="small text-danger error">
-                            　　<strong>{{ $errors->first('user_id') }}</strong>
-                            </span>
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('user_id') }}</strong>
+                                </span>
+                            </div>
                         @endif
                     </div>
                     <div class="form-group row">
@@ -105,9 +107,11 @@
                             </select>
                         </div>
                         @if ($errors->has('bath_method'))
-                            <span class="small text-danger error">
-                            　　<strong>{{$errors->first('bath_method')}}</strong>
-                            </span>
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('bath_method') }}</strong>
+                                </span>
+                            </div>
                         @endif
                     </div>
                     <div class="form-group row">
@@ -115,6 +119,13 @@
                         <div class="col-md-9">
                             <textarea class="form-control" name="bath_note" rows="5">{{ old('bath_note') ? old('bath_note') : $bathForm->bath_note }}</textarea>
                         </div>
+                        @if ($errors->has('bath_note'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('bath_note') }}</strong>
+                                </span>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class=offset-md-3><span class="half-size">※</span>入力必須</label>

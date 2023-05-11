@@ -66,8 +66,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <a href="{{ route('admin.meal.edit', ['residentId' => $meals[$date]['朝食']->resident_id, 'mealId' => $meals[$date]['朝食']->id]) }}">
-                                                            朝食
-                                                            <br>主食：{{ !is_null($meals[$date]['朝食']->meal_intake_rice) ? $mealIntakeOptions[$meals[$date]['朝食']->meal_intake_rice] : '-' }}
+                                                            主食：{{ !is_null($meals[$date]['朝食']->meal_intake_rice) ? $mealIntakeOptions[$meals[$date]['朝食']->meal_intake_rice] : '-' }}
                                                             <br>副食：{{ !is_null($meals[$date]['朝食']->meal_intake_side) ? $mealIntakeOptions[$meals[$date]['朝食']->meal_intake_side] : '-' }}
                                                             <br>汁物：{{ !is_null($meals[$date]['朝食']->meal_intake_soup) ? $mealIntakeOptions[$meals[$date]['朝食']->meal_intake_soup] : '-' }}
                                                         </a>
@@ -103,8 +102,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <a href="{{ route('admin.meal.edit', ['residentId' => $meals[$date]['昼食']->resident_id, 'mealId' => $meals[$date]['昼食']->id]) }}">
-                                                            昼食
-                                                            <br>主食：{{ !is_null($meals[$date]['昼食']->meal_intake_rice) ? $mealIntakeOptions[$meals[$date]['昼食']->meal_intake_rice] : '-' }}
+                                                            主食：{{ !is_null($meals[$date]['昼食']->meal_intake_rice) ? $mealIntakeOptions[$meals[$date]['昼食']->meal_intake_rice] : '-' }}
                                                             <br>副食：{{ !is_null($meals[$date]['昼食']->meal_intake_side) ? $mealIntakeOptions[$meals[$date]['昼食']->meal_intake_side] : '-' }}
                                                             <br>汁物：{{ !is_null($meals[$date]['昼食']->meal_intake_soup) ? $mealIntakeOptions[$meals[$date]['昼食']->meal_intake_soup] : '-' }}
                                                         </a>
@@ -140,8 +138,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <a href="{{ route('admin.meal.edit', ['residentId' => $meals[$date]['夕食']->resident_id, 'mealId' => $meals[$date]['夕食']->id]) }}">
-                                                            夕食
-                                                            <br>主食：{{ !is_null($meals[$date]['夕食']->meal_intake_rice) ? $mealIntakeOptions[$meals[$date]['夕食']->meal_intake_rice] : '-' }}
+                                                            主食：{{ !is_null($meals[$date]['夕食']->meal_intake_rice) ? $mealIntakeOptions[$meals[$date]['夕食']->meal_intake_rice] : '-' }}
                                                             <br>副食：{{ !is_null($meals[$date]['夕食']->meal_intake_side) ? $mealIntakeOptions[$meals[$date]['夕食']->meal_intake_side] : '-' }}
                                                             <br>汁物：{{ !is_null($meals[$date]['夕食']->meal_intake_soup) ? $mealIntakeOptions[$meals[$date]['夕食']->meal_intake_soup] : '-' }}
                                                         </a>

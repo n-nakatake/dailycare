@@ -24,13 +24,15 @@
                                 <p>{{ formatDateWithYear($resident->left_date) }}</p>
                             @else
                                 <input type="date" min="2000-01-01" max="2200-12-31" class="form-control" name="left_date" value="{{ old('left_date') ? old('left_date') : getDateOnly($resident->left_date) }}">
-                                @if ($errors->has('left_date'))
-                                    <span class="small text-danger error-left">
-                                    　　<strong>{{ $errors->first('left_date') }}</strong>
-                                    </span>
-                                @endif
                             @endif
                         </div>
+                        @if ($errors->has('left_date'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('left_date') }}</strong>
+                                </span>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class=col-md-3>退所理由 <span class="half-size">※</label>
@@ -39,13 +41,15 @@
                                 <p>{!! nl2br(e($resident->leaving_note)) !!}</p>
                             @else
                                 <textarea class="form-control" name="leaving_note" rows="5">{{ old('leaving_note') ? old('leaving_note') : $resident->leaving_note }}</textarea>
-                                @if ($errors->has('leaving_note'))
-                                    <span class="small text-danger error-left">
-                                    　　<strong>{{ $errors->first('leaving_note') }}</strong>
-                                    </span>
-                                @endif
                             @endif
                         </div>                        
+                        @if ($errors->has('leaving_note'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('leaving_note') }}</strong>
+                                </span>
+                            </div>
+                        @endif
                     </div>
                     @if ($resident->left_date && isPast($resident->left_date))
                         <div class="text-center mt-5">

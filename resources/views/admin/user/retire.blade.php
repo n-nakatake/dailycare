@@ -18,19 +18,21 @@
                         <div class="col-md-3">{{ $user->last_name }} {{ $user->first_name }}</div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-3">退職日<span class="half-size">※</span></label>
+                        <label class="col-md-3">退職日 <span class="half-size">※</span></label>
                         <div class="col-md-3">
                             @if ($user->retirement_date && isPast($user->retirement_date))
                                 <p>{{ formatDateWithYear($user->retirement_date) }}</p>
                             @else
                                 <input type="date" min="2000-01-01" max="2200-12-31" class="form-control" name="retirement_date" value="{{ old('retirement_date') ? old('retirement_date') : getDateOnly($user->retirement_date) }}">
-                                @if ($errors->has('retirement_date'))
-                                    <span class="small text-danger error-left">
-                                    　　<strong>{{ $errors->first('retirement_date') }}</strong>
-                                    </span>
-                                @endif
                             @endif
                         </div>
+                        @if ($errors->has('retirement_date'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('retirement_date') }}</strong>
+                                </span>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class=col-md-3>退職理由 <span class="half-size">※</label>
@@ -39,13 +41,15 @@
                                 <p>{!! nl2br(e($user->retirement_note)) !!}</p>
                             @else
                                 <textarea class="form-control" name="retirement_note" rows="5">{{ old('retirement_note') ? old('retirement_note') : $user->retirement_note }}</textarea>
-                                @if ($errors->has('retirement_note'))
-                                    <span class="small text-danger error-left">
-                                    　　<strong>{{ $errors->first('retirement_note') }}</strong>
-                                    </span>
-                                @endif
                             @endif
-                        </div>                        
+                        </div>
+                        @if ($errors->has('retirement_note'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('retirement_note') }}</strong>
+                                </span>
+                            </div>
+                        @endif
                     </div>
                     @if ($user->retirement_date && isPast($user->retirement_date))
                         <div class="text-center mt-5">

@@ -29,13 +29,15 @@
                                     </option>
                                 @endforeach
                             </select>
-                            @if ($errors->has('resident_id'))
+                        </div>
+                        <label class="w-1rem inline-table ps-0">様</label>
+                        @if ($errors->has('resident_id'))
+                            <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('resident_id') }}</strong>
                                 </span>
-                            @endif
-                        </div>
-                        <label class="w-1rem inline-table ps-0">様</label>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3">記録者 <span class="half-size">※</span></label>
@@ -46,12 +48,14 @@
                                     <option value="{{ $user->id }}" {{ (int) old('user_id') === $user->id ? 'selected' : ''}}>{{ $user->last_name . $user->first_name }}</option>
                                 @endforeach
                             </select>
-                            @if ($errors->has('user_id'))
+                        </div>
+                        @if ($errors->has('user_id'))
+                            <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('user_id') }}</strong>
                                 </span>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3">日時 <span class="half-size">※</span></label>
@@ -119,12 +123,14 @@
                         <label class="col-md-3">特記</label>
                         <div class="col-md-9">
                             <textarea class="form-control" name="excretion_note" rows="5">{{ old('excretion_note') }}</textarea>
-                            @if ($errors->has('excretion_note'))
-                                <span class="small text-danger error-left">
+                        </div>
+                        @if ($errors->has('excretion_note'))
+                            <div class="offset-md-3">
+                                <span class="d-block small text-danger error-left">
                                 　　<strong>{{ $errors->first('excretion_note') }}</strong>
                                 </span>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="offset-md-3"><span class="half-size">※</span>入力必須</label>

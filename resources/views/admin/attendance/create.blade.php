@@ -14,7 +14,7 @@
                 <h2>出勤者の登録</h2>
                 <form class="mt-5" action="{{ route('admin.attendance.create') }}" method="post" enctype="multipart/form-data">
                     <div class="form-group row">
-                        <label class="w-5rem h5">日付</label>
+                        <label class="col-md-2 h5">日付</label>
                         <div class="col-md-3">
                             <input type="date" class="form-control" name="attendance_date" value="{{ old('attendance_date') ? old('attendance_date') : request()->input('date') }}">
                         </div>
@@ -26,7 +26,7 @@
                     </div>
                     <hr>
                     <div class="form-group row">
-                        <label class="w-5rem h5">日勤</label>
+                        <label class="col-md-2 h5">日勤</label>
                         <div class="col-md-10 row">
                             @if ($errors->has('all_attendance_member'))
                                 <span class="small text-danger error-left">
@@ -57,8 +57,8 @@
                     </div>
                     @for ($i = 0; $i < 3; $i++)
                         <div class="form-group row">
-                            <label class="w-5rem"></label>
-                            <div class="col-md-3">
+                            <!--<label class="w-5rem"></label>-->
+                            <div class="offset-md-2 col-md-3">
                                 <input type="text" class="form-control" name="part_time_member[{{ $i }}]" value="{{ old('part_time_member.' . $i) ?? old('part_time_member.' . $i) }}" placeholder="非常勤{{ $i + 1 }}">
                             </div>
                             @if (old('part_time_member.' . $i))
@@ -73,7 +73,7 @@
 
                     <hr>
                     <div class="form-group row">
-                        <label class="w-5rem h5">夜勤</label>
+                        <label class="col-md-2 h5">夜勤</label>
                         <div class="col-md-10 row">
                             @if ($errors->has('all_attendance_member'))
                                 <span class="small text-danger error-left">

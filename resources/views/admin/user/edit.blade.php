@@ -37,21 +37,25 @@
                     <div class="form-group row">
                         <label class="w-10rem">氏名 <span class="half-size">※</span></label>
                         <div class="col-md-2">
-                            <input type="text" class="form-control" name="last_name" value="{{ old('last_name') ? old('last_name') : $user->last_name }}">
-                            @if ($errors->has('last_name'))
-                                <span class="small text-danger error-left">
-                                　　<strong>{{$errors->first('last_name')}}</strong>
-                                </span>
-                            @endif  
+                            <input type="text" class="form-control" name="last_name" value="{{ old('last_name') ? old('last_name') : $user->last_name }}" autocomplete="off">
                         </div>
                         <div class="col-md-2">
-                            <input type="text" class="form-control" name="first_name" value="{{ old('first_name') ? old('first_name') : $user->first_name }}">
-                            @if ($errors->has('first_name'))
+                            <input type="text" class="form-control" name="first_name" value="{{ old('first_name') ? old('first_name') : $user->first_name }}" autocomplete="off">
+                        </div>
+                        @if ($errors->has('last_name'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('last_name') }}</strong>
+                                </span>
+                            </div>
+                        @endif
+                        @if ($errors->has('first_name'))
+                            <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('first_name') }}</strong>
                                 </span>
-                            @endif                        
-                        </div>
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="w-10rem">ユーザーID</span></label>
@@ -65,12 +69,14 @@
                                     <option value="{{ $key }}" {{ old('qualification') ? (old('qualification') === "$key" ? 'selected' : '') : ($user->qualification === $key ? 'selected' : '') }}>{{ $qualification }}</option>
                                 @endforeach
                             </select>
-                            @if ($errors->has('qualification'))
+                        </div>                        
+                        @if ($errors->has('qualification'))
+                            <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('qualification') }}</strong>
                                 </span>
-                            @endif                        
-                        </div>                        
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group row">
                         <label class="w-10rem"></label>
