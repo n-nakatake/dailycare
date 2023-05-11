@@ -14,9 +14,14 @@ class Vital extends Model
     public static $rules = array(
         'resident_id' => 'required|exists:residents,id',
         'user_id' => 'required|exists:users,id',
-        'vital_date' => 'required|date_format:Y-m-d',
+        'vital_date' => 'required|date_format:Y-m-d|before_or_equal:today',
         'vital_time' => 'required|date_format:H:i',
-        'vital_kt' => 'nullable|required_without:vital_bp_u,vital_bp_d|numeric',
+        'vital_kt' => [
+            'nullable',
+            'numeric',
+            'regex:/(^[0-9]{2})(\.[0-9]{0,1}$)/',
+            'required_without:vital_bp_u,vital_bp_d',
+        ],
         'vital_bp_u' => 'nullable|required_without:vital_kt|required_with:vital_bp_d|integer',
         'vital_bp_d' => 'nullable|required_without:vital_kt|required_with:vital_bp_u|integer',
         'vital_hr' => 'nullable|integer',

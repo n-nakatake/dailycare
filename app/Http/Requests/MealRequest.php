@@ -28,7 +28,7 @@ class MealRequest extends FormRequest
         return [
             'resident_id' => 'required|exists:residents,id',
             'user_id' => 'required|exists:users,id',
-            'meal_date' => 'required|date_format:Y-m-d',
+            'meal_date' => 'required|date_format:Y-m-d|before_or_equal:today',
             'meal_time' => 'required|date_format:H:i',
             'meal_bld' => 'required|in:1,2,3',
             'meal_intake_rice' => 'required|in:0,1,2,3,4,5,6,7,8,9,10',

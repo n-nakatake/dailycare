@@ -15,7 +15,7 @@ class Excretion extends Model
     public static $rules = [
         'resident_id' => 'required|exists:residents,id',
         'user_id' => 'required|exists:users,id',
-        'excretion_date' => 'required|date_format:Y-m-d',
+        'excretion_date' => 'required|date_format:Y-m-d|before_or_equal:today',
         'excretion_time' => 'required|date_format:H:i',
         'excretion_flash' => 'required_without:excretion_dump',
         'excretion_dump' => 'required_without:excretion_flash',

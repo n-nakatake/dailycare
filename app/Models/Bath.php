@@ -25,7 +25,7 @@ class Bath extends Model
     public static $rules = [
         'resident_id' => 'required|exists:residents,id',
         'user_id' => 'required|exists:users,id',
-        'bath_date' => 'required|date_format:Y-m-d',
+        'bath_date' => 'required|date_format:Y-m-d|before_or_equal:today',
         'bath_time' => 'required|date_format:H:i',
         'bath_method' => 'required|in:1,2,3,4,5,6,7',
         'bath_note' => 'nullable|max:2000',
