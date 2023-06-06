@@ -106,24 +106,19 @@
                     <div class="form-group row">
                         <label class="col-md-3">血圧</label>
                         <div class="col-md-2">
-                            <input type="text" inputmode="numeric" pattern="\d*" class="form-control" name="vital_bp_u" value="{{ old('vital_bp_u') ? old('vital_bp_u') : $vitalForm->vital_bp_u }}" placeholder="血圧↑" autocomplete="off">
+                            <input type="number" inputmode="numeric" pattern="\d*" class="form-control" name="vital_bp_u" value="{{ old('vital_bp_u') ? old('vital_bp_u') : $vitalForm->vital_bp_u }}" placeholder="血圧↑" autocomplete="off">
                         </div>
                         <div class="col-md-2">
-                            <input type="text" inputmode="numeric" pattern="\d*" class="form-control" name="vital_bp_d" value="{{ old('vital_bp_d') ? old('vital_bp_d') : $vitalForm->vital_bp_d }}" placeholder="血圧↓" autocomplete="off">
+                            <input type="number" inputmode="numeric" pattern="\d*" class="form-control" name="vital_bp_d" value="{{ old('vital_bp_d') ? old('vital_bp_d') : $vitalForm->vital_bp_d }}" placeholder="血圧↓" autocomplete="off">
                         </div>    
-                        @if ($errors->has('vital_kt'))
-                            <div class="offset-md-3">
-                                <span class="small text-danger error-left">
-                                　　<strong>{{ $errors->first('vital_kt') }}</strong>
-                                </span>
-                            </div>
-                        @elseif ($errors->has('vital_bp_u'))
+                        @if ($errors->has('vital_bp_u'))
                             <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('vital_bp_u') }}</strong>
                                 </span>
                             </div>
-                        @elseif ($errors->has('vital_bp_d'))
+                        @endif
+                        @if ($errors->has('vital_bp_d'))
                             <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('vital_bp_d') }}</strong>
@@ -134,8 +129,9 @@
                     <div class="form-group row">
                         <label class="col-md-3">心拍数</label>
                         <div class="col-md-2">
-                            <input type="text" inputmode="numeric" pattern="\d*" class="form-control" name="vital_hr" value="{{ old('vital_hr') ? old('vital_hr') : $vitalForm->vital_hr }}" autocomplete="off">
+                            <input type="number" inputmode="numeric" pattern="\d*" class="form-control" name="vital_hr" value="{{ old('vital_hr') ? old('vital_hr') : $vitalForm->vital_hr }}" autocomplete="off">
                         </div>
+                        <label class="w-1rem inline-table ps-0" style="line-height: 2rem;">bpm</label>
                         @if ($errors->has('vital_hr'))
                             <div class="offset-md-3">
                                 <span class="small text-danger error-left">
@@ -148,11 +144,11 @@
                         <label class="col-md-3">身長・体重
                         </label>
                         <div class="col-md-2">
-                            <input type="text" inputmode="numeric" pattern="\d*" class="form-control" name="vital_height" value="{{ old('vital_height') ? old('vital_height') : $vitalForm->vital_height }}" placeholder="身長" autocomplete="off">
+                            <input type="number" inputmode="numeric" pattern="\d*" class="form-control" name="vital_height" value="{{ old('vital_height') ? old('vital_height') : $vitalForm->vital_height }}" placeholder="身長" autocomplete="off">
                         </div>
                         <label class="w-1rem inline-table" style="line-height: 2rem;">cm</label>
                         <div class="col-md-2">
-                            <input type="text" inputmode="numeric" pattern="\d*" class="form-control" name="vital_weight" value="{{ old('vital_weight') ? old('vital_weight') : $vitalForm->vital_weight }}" placeholder="体重" autocomplete="off">
+                            <input type="number" inputmode="numeric" pattern="\d*" class="form-control" name="vital_weight" value="{{ old('vital_weight') ? old('vital_weight') : $vitalForm->vital_weight }}" placeholder="体重" autocomplete="off">
                         </div>
                         <label class="w-1rem inline-table" style="line-height: 2rem;">kg</label>
                         @if ($errors->has('vital_height'))

@@ -91,7 +91,7 @@
                     <div class="form-group row">
                         <label class="col-md-3">体温</label>
                         <div class="col-md-2">
-                            <input type="number" step="0.1" class="form-control" name="vital_kt" value="{{ old('vital_kt') }}" autocomplete="off">
+                            <input type="number" inputmode="numeric" step="0.1" class="form-control" name="vital_kt" value="{{ old('vital_kt') }}" autocomplete="off">
                         </div>
                         <label class="col-md-7 inline-table ps-0" style="line-height: 2rem;">度（小数点第１位まで）</label>
                         @if ($errors->has('vital_kt'))
@@ -105,24 +105,19 @@
                     <div class="form-group row">
                         <label class="col-md-3">血圧</label>
                         <div class="col-md-3">
-                            <input type="text" inputmode="numeric" pattern="\d*" class="form-control" name="vital_bp_u" value="{{ old('vital_bp_u') }}" placeholder="血圧↑" autocomplete="off">
+                            <input type="number" inputmode="numeric" pattern="\d*" class="form-control" name="vital_bp_u" value="{{ old('vital_bp_u') }}" placeholder="血圧↑" autocomplete="off">
                         </div>
                         <div class="col-md-3">
-                            <input type="text" inputmode="numeric" pattern="\d*" class="form-control" name="vital_bp_d" value="{{ old('vital_bp_d') }}" placeholder="血圧↓" autocomplete="off">
+                            <input type="number" inputmode="numeric" pattern="\d*" class="form-control" name="vital_bp_d" value="{{ old('vital_bp_d') }}" placeholder="血圧↓" autocomplete="off">
                         </div>
-                        @if ($errors->has('vital_kt'))
-                            <div class="offset-md-3">
-                                <span class="small text-danger error-left">
-                                　　<strong>{{ $errors->first('vital_kt') }}</strong>
-                                </span>
-                            </div>
-                        @elseif ($errors->has('vital_bp_u'))
+                        @if ($errors->has('vital_bp_u'))
                             <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('vital_bp_u') }}</strong>
                                 </span>
                             </div>
-                        @elseif ($errors->has('vital_bp_d'))
+                        @endif
+                        @if ($errors->has('vital_bp_d'))
                             <div class="offset-md-3">
                                 <span class="small text-danger error-left">
                                 　　<strong>{{ $errors->first('vital_bp_d') }}</strong>
@@ -133,7 +128,7 @@
                     <div class="form-group row">
                         <label class="col-md-3">心拍数</label>
                         <div class="col-md-2">
-                            <input type="text" class="form-control" name="vital_hr" value="{{ old('vital_hr') }}" autocomplete="off">
+                            <input type="number" class="form-control" name="vital_hr" value="{{ old('vital_hr') }}" autocomplete="off">
                         </div>
                         <label class="w-1rem inline-table ps-0" style="line-height: 2rem;">bpm</label>
                         @if ($errors->has('vital_hr'))
