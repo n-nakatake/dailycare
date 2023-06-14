@@ -14,6 +14,19 @@
                 <h2>ユーザー登録</h2>
                 <form class="mt-5" action="{{ route('admin.user.create') }}" method="post" enctype="multipart/form-data">
                     <div class="form-group row">
+                        <label class="col-md-3">ユーザーID <span class="half-size">※</span></label>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" name="user_code" value="{{ old('user_code') }}" autocomplete="off">
+                        </div>
+                        @if ($errors->has('user_code'))
+                            <div class="offset-md-3">
+                                <span class="small text-danger error-left">
+                                　　<strong>{{ $errors->first('user_code') }}</strong>
+                                </span>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="form-group row">
                         <label class="col-md-3">氏名 <span class="half-size">※</span></label>
                         <div class="col-md-2">
                             <input type="text" class="form-control" name="last_name" value="{{ old('last_name') }}" placeholder="性" autocomplete="off">
@@ -36,19 +49,6 @@
                             </div>
                         @endif
                     </div>
-                    <div class="form-group row">
-                        <label class="col-md-3">ユーザーID <span class="half-size">※</span></label>
-                        <div class="col-md-3">
-                            <input type="text" class="form-control" name="user_code" value="{{ old('user_code') }}" autocomplete="off">
-                        </div>
-                        @if ($errors->has('user_code'))
-                            <div class="offset-md-3">
-                                <span class="small text-danger error-left">
-                                　　<strong>{{ $errors->first('user_code') }}</strong>
-                                </span>
-                            </div>
-                        @endif
-                    </div>                        
                     <div class="form-group row">
                         <label class="col-md-3">資格 <span class="half-size">※</span></label>
                         <div class="col-md-4">

@@ -107,22 +107,6 @@
                             </div>
                         @endif
                     </div>
-                    @if ($careCertifications->count() > 1)
-                        <div class="form-group row">
-                            <label class="col-md-3">過去の介護認定</span></label>
-                            <div class="col-md-9">
-                                @foreach ($careCertifications as $careCertification)
-                                    @if (! $loop->last)
-                                        <p>{{ $careLevels[$careCertification->level] }}：
-                                            @if ($careCertification->start_date && $careCertification->end_date)
-                                                {{ formatDateWithYear($careCertification->start_date) }} 〜 {{ formatDateWithYear($careCertification->end_date) }}
-                                            @endif
-                                        </p>
-                                    @endif
-                                @endforeach
-                            </div>
-                        </div>
-                    @endif
                     <div class="form-group row">
                         <label class="col-md-3">要介護認定</label>
                         <div class="col-md-3">
@@ -208,6 +192,22 @@
                             </div>
                         @endif
                     </div>
+                    @if ($careCertifications->count() > 1)
+                        <div class="form-group row">
+                            <label class="col-md-3">過去の介護認定</span></label>
+                            <div class="col-md-9">
+                                @foreach ($careCertifications as $careCertification)
+                                    @if (! $loop->last)
+                                        <p>{{ $careLevels[$careCertification->level] }}：
+                                            @if ($careCertification->start_date && $careCertification->end_date)
+                                                {{ formatDateWithYear($careCertification->start_date) }} 〜 {{ formatDateWithYear($careCertification->end_date) }}
+                                            @endif
+                                        </p>
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
                     <div class="form-group row">
                         <label class="col-md-3">キーパーソン</label>
                         <div class="col-md-4">

@@ -74,7 +74,10 @@
                                         <tr>
                                             <td>{{ formatDate($vitals[$date][0]->vital_time, 0, 10) }}</td>
                                             <td>{{ getTime($vitals[$date][0]->vital_time) }}</td>
-                                            <td>{{ !is_null($vitals[$date][0]->vital_kt) ? $vitals[$date][0]->vital_kt : '-' }}</td>
+                                            <td @if (!is_null($vitals[$date][0]->vital_kt) && $vitals[$date][0]->vital_kt * 10 >= 375) class="bg-danger" @endif
+                                            >
+                                                {{ !is_null($vitals[$date][0]->vital_kt) ? $vitals[$date][0]->vital_kt : '-' }}
+                                            </td>
                                             <td>{{ !is_null($vitals[$date][0]->vital_bp_u) ? $vitals[$date][0]->vital_bp_u : '-' }}</td>
                                             <td>{{ !is_null($vitals[$date][0]->vital_bp_d) ? $vitals[$date][0]->vital_bp_d : '-' }}</td>
                                             <td>
@@ -110,7 +113,9 @@
                                                     </td>
                                                 @endif
                                                 <td>{{ getTime($vitalTime->vital_time) }}</td>
-                                                <td>{{ !is_null($vitalTime->vital_kt) ? $vitalTime->vital_kt : '-' }}</td>
+                                                <td @if (!is_null($vitalTime->vital_kt) && $vitalTime->vital_kt * 10 >= 375) class="bg-danger" @endif>
+                                                    {{ !is_null($vitalTime->vital_kt) ? $vitalTime->vital_kt : '-' }}
+                                                </td>
                                                 <td>{{ !is_null($vitalTime->vital_bp_u) ? $vitalTime->vital_bp_u : '-' }}</td>
                                                 <td>{{ !is_null($vitalTime->vital_bp_d) ? $vitalTime->vital_bp_d : '-' }}</td>
                                                 <td>

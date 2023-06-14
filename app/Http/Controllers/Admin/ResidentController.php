@@ -85,7 +85,7 @@ class ResidentController extends Controller
         if (empty($resident)) {
             abort(404);
         }
-        $careCertifications = $resident->careCertifications()->orderBy('start_date')->get();
+        $careCertifications = $resident->careCertifications()->orderBy('start_date', 'desc')->get();
 
         return view('admin.resident.edit', [
             'residentForm' => $resident,

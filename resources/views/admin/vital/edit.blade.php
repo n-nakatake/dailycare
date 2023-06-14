@@ -144,11 +144,11 @@
                         <label class="col-md-3">身長・体重
                         </label>
                         <div class="col-md-2">
-                            <input type="number" inputmode="numeric" pattern="\d*" class="form-control" name="vital_height" value="{{ old('vital_height') ? old('vital_height') : $vitalForm->vital_height }}" placeholder="身長" autocomplete="off">
+                            <input type="number" step="0.1" class="form-control" name="vital_height" value="{{ old('vital_height') ? old('vital_height') : $vitalForm->vital_height }}" placeholder="身長" autocomplete="off">
                         </div>
                         <label class="w-1rem inline-table" style="line-height: 2rem;">cm</label>
                         <div class="col-md-2">
-                            <input type="number" inputmode="numeric" pattern="\d*" class="form-control" name="vital_weight" value="{{ old('vital_weight') ? old('vital_weight') : $vitalForm->vital_weight }}" placeholder="体重" autocomplete="off">
+                            <input type="number" step="0.1" class="form-control" name="vital_weight" value="{{ old('vital_weight') ? old('vital_weight') : $vitalForm->vital_weight }}" placeholder="体重" autocomplete="off">
                         </div>
                         <label class="w-1rem inline-table" style="line-height: 2rem;">kg</label>
                         @if ($errors->has('vital_height'))

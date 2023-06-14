@@ -35,7 +35,11 @@
                 </div>
                 <form class="mt-5" action="{{ route('admin.user.update', ['userId' => $user->id]) }}" method="post" enctype="multipart/form-data">
                     <div class="form-group row">
-                        <label class="w-10rem">氏名 <span class="half-size">※</span></label>
+                        <label class="col-md-3">ユーザーID</span></label>
+                        <div class="col-md-3">{{ $user->user_code }}</div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3">氏名 <span class="half-size">※</span></label>
                         <div class="col-md-2">
                             <input type="text" class="form-control" name="last_name" value="{{ old('last_name') ? old('last_name') : $user->last_name }}" autocomplete="off">
                         </div>
@@ -58,11 +62,7 @@
                         @endif
                     </div>
                     <div class="form-group row">
-                        <label class="w-10rem">ユーザーID</span></label>
-                        <div class="col-md-3">{{ $user->user_code }}</div>
-                    </div>                        
-                    <div class="form-group row">
-                        <label class="w-10rem">資格</label>
+                        <label class="col-md-3">資格</label>
                         <div class="col-md-4">
                             <select  class="form-control" name="qualification">
                                 @foreach ($qualifications as $key => $qualification)
@@ -79,7 +79,7 @@
                         @endif
                     </div>
                     <div class="form-group row">
-                        <label class="w-10rem"></label>
+                        <label class="col-md-3"></label>
                         <div class="checkbox col-md-6">
                             <label>
                                 <input type="checkbox" name="admin_flag" 
