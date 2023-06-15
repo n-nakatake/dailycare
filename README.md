@@ -1,63 +1,33 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# パスワードを忘れた場合の再設定手順
 
-## About Laravel
+1. 以下の手順で対象ユーザーのパスワードを変更する
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+```
+### tinkerを起動する
+$ cd ~/environment/dailycare
+$ php artisan tinker
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### ユーザーIDがわかる場合、ユーザーIDで指定してパスワードを'abcd1234'に設定する
+>>> User::where('user_code', 'sato')->update(['password' => Hash::make('abcd1234')])
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### ユーザーIDがわからない場合、全ユーザーを表示してユーザーのユーザーIDを確認し、パスワードを'abcd1234'に設定する
+>>> User::all();
+>>> User::where('user_code', 'sato')->update(['password' => Hash::make('abcd1234')])
+```
 
-## Learning Laravel
+2. パスワードを忘れたユーザーに、仮パスワード'abcd1234'でログインしてもらい、自分でパスワード変更してもらう
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# バックアップからのEC2作り直し手順
 
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. AWSのコンソール画面にアクセスする
+2. EC2一覧画面に遷移
+3. リージョンを大阪に変更（既に大阪なら4へ）
+4. 左メニューのAMIをクリック
+5. 最新の、またはEC2を復元したい日に作成されたAMIを選択する
+6. 右上の`AMIからインスタンスを起動`ボタンを押す
+7. インスタンスの設定画面で名前に`dc360_production`、アプリケーションおよび OS イメージに`自分のAMI`を選択し、復元したいAMIを選択する
+8. インスタンスタイプはそのまま、キーペアは`dc360_production_osaka`を使用
+9. セキュリティグループは`既存のセキュリティグループを利用`を選択し、共通のセキュリティグループで`launch-wizard-1`を選択
+10. ストレージ設定はそのままで、右下の`インスタンスを起動`ボタンを押す
+11. 自動的にEC2インスタンスとEBSボリュームが作成されるので、不要になったEC2とEBSボリュームがあれば削除する
