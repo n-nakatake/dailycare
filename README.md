@@ -8,11 +8,11 @@ $ cd ~/environment/dailycare
 $ php artisan tinker
 
 ### ユーザーIDがわかる場合、ユーザーIDで指定してパスワードを'abcd1234'(他のパスワードでもよい)に設定する
->>> User::where('user_code', 'sato')->update(['password' => Hash::make('abcd1234')])
+>>> User::where('user_code', 'sato')->update(['password' => Hash::make('abcd1234')]);
 
 ### ユーザーIDがわからない場合、全ユーザーを表示してユーザーのユーザーIDを確認し、パスワードを'abcd1234'(他のパスワードでもよい)に設定する
 >>> User::all();
->>> User::where('user_code', 'sato')->update(['password' => Hash::make('abcd1234')])
+>>> User::where('user_code', 'sato')->update(['password' => Hash::make('abcd1234')]);
 ```
 
 2. パスワードを忘れたユーザーに、仮パスワード'abcd1234'でログインしてもらい、自分でパスワード変更してもらう
