@@ -3,6 +3,10 @@
 1. 以下の手順で対象ユーザーのパスワードを変更する
 
 ```
+### 鍵ファイルの場所まで移動してEC2に接続する
+cd [鍵ファイル（dc360_production_osaka.cer）のあるディレクトリ]
+ssh ec2-user@15.168.22.101 -i ./dc360_production_osaka.cer
+
 ### tinkerを起動する
 $ cd ~/environment/dailycare
 $ php artisan tinker
