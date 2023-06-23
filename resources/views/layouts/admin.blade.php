@@ -36,7 +36,7 @@
                     <a class="navbar-brand" href="{{ url('/admin') }}">
                         <img src="{{ secure_asset('images/logo.png') }}" width=100 alt="logo">
                         @if (Auth::check())
-                            {{ '| ' . Auth::user()->office->office_name }}
+                            {{ '| ' . Auth::user()->office->office_name . '(' . Auth::user()->office->office_number . ')' }}
                         @endif
                     </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
