@@ -113,10 +113,10 @@
                             <select  class="form-control" name="level">
                                 <option value="">選択してください</option>
                                 @foreach ($careLevels as $level => $name)
-                                    <option value="{{ $level }}" {{ old('level') ? (old('level') === "$level" ? 'selected' : '') : (optional($careCertifications->last())->level === $level ? 'selected' : '') }}>{{ $name }}</option>
+                                    <option value="{{ $level }}" {{ old('level') ? (old('level') === "$level" ? 'selected' : '') : (optional($careCertifications->first())->level === $level ? 'selected' : '') }}>{{ $name }}</option>
                                 @endforeach
                             </select>
-                            <input type="hidden" name="care_certification_id" value="{{ optional($careCertifications->last())->id }}">
+                            <input type="hidden" name="care_certification_id" value="{{ optional($careCertifications->first())->id }}">
                         </div>
                         @if ($errors->has('level'))
                             <div class="offset-md-3">
@@ -129,11 +129,11 @@
                     <div class="form-group row">
                         <label class="col-md-3">要介護認定の有効期間</span></label>
                         <div class="col-md-3">
-                            <input type="date" min="1900-01-01" max="2200-12-31" class="form-control" name="level_start_date" value="{{ old('level_start_date') ? old('level_start_date') : getDateOnly(optional($careCertifications->last())->start_date) }}">
+                            <input type="date" min="1900-01-01" max="2200-12-31" class="form-control" name="level_start_date" value="{{ old('level_start_date') ? old('level_start_date') : getDateOnly(optional($careCertifications->first())->start_date) }}">
                         </div>
                         <label class="w-1rem inline-table" style="line-height: 2rem;">〜</label>
                         <div class="col-md-3">
-                            <input type="date" min="1900-01-01" max="2200-12-31" class="form-control" name="level_end_date" value="{{ old('level_end_date') ? old('level_end_date') : getDateOnly(optional($careCertifications->last())->end_date) }}">
+                            <input type="date" min="1900-01-01" max="2200-12-31" class="form-control" name="level_end_date" value="{{ old('level_end_date') ? old('level_end_date') : getDateOnly(optional($careCertifications->first())->end_date) }}">
                         </div>
                         @if ($errors->has('level_start_date'))
                             <div class="offset-md-3">
@@ -197,7 +197,7 @@
                             <label class="col-md-3">過去の介護認定</span></label>
                             <div class="col-md-9">
                                 @foreach ($careCertifications as $careCertification)
-                                    @if (! $loop->last)
+                                    @if (! $loop->first)
                                         <p>{{ $careLevels[$careCertification->level] }}：
                                             @if ($careCertification->start_date && $careCertification->end_date)
                                                 {{ formatDateWithYear($careCertification->start_date) }} 〜 {{ formatDateWithYear($careCertification->end_date) }}
