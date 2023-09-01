@@ -169,7 +169,7 @@
                     <div class="form-group row">
                         <label class="col-md-3">特記</label>
                         <div class="col-md-9">
-                            <textarea class="form-control" name="vital_note" rows="5">{{ old('vital_note') }}</textarea>
+                            <textarea class="form-control" name="vital_note" rows="5">{{ old('vital_note') ? old('vital_note') : $vitalForm->vital_note }}</textarea>
                         </div>
                         @if ($errors->has('vital_note'))
                             <div class="offset-md-3">
